@@ -1,0 +1,8 @@
+# OSx files that should not be added to the repository
+.DS_Store
+
+# Xcode user settings
+Project/Project.xcodeproj/project.xcworkspace/xcuserdata/taqtile.xcuserdatad/UserInterfaceState.xcuserstate
+
+
+
