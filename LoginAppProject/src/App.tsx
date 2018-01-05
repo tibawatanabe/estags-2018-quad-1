@@ -1,57 +1,65 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+import React, { Component } from 'react'
+import { Text, TextInput, View, StyleSheet, Button, Alert } from 'react-native'
 
-import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+type MyProps = {}
+type MyState = { user: string , password: string}
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu holy that was hard',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+export default class PizzaTranslator extends Component<MyProps, MyState> {
+  constructor(props) {
+    super(props)
+    this.state = {user: '',
+                  password: ''}
+  }
 
-export default class App extends Component<{}> {
+  _onPressButton() {
+    Alert.alert('do something')
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
+        <Text style = {{fontSize: 30}}>
+          Welcome to BestApp
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+        <TextInput
+          style={{height: 40, width: 200}}
+          placeholder='User'
+          onChangeText={(user) => this.setState({user})}
+        />
+        <TextInput style={{height: 40, width: 200}}
+          placeholder='Password'
+          secureTextEntry = {true}
+          onChangeText={(password) => this.setState({password})}
+        />
+        <Button
+          onPress = {this._onPressButton}
+          title = 'Login'
+        />
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 10,
+    flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    alignItems: 'center'
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  sectionHeader: {
+    paddingTop: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 2,
+    fontSize: 14,
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(247,247,247,1.0)'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44
+  }
+})
