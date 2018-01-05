@@ -9,7 +9,7 @@
 import UIKit
 import Foundation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController{
     //MARK: Properties
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -17,6 +17,11 @@ class ViewController: UIViewController {
     //MARK: Actions
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.clearTextFields()
     }
     
     @IBAction func didPressLoginButton(_ sender: UIButton) {
@@ -29,7 +34,7 @@ class ViewController: UIViewController {
         
         executeLogin(username!, password!)
     }
-    
+    //MARK: Login functions
     func executeLogin(_ user:String,_ password:String){
         let url = URL(string: "http://tq-template-node.herokuapp.com/authenticate")
         let session = URLSession.shared
@@ -89,16 +94,27 @@ class ViewController: UIViewController {
                 DispatchQueue.main.async(execute: self.loginSucceeded)
             }
             else{
-                print("Could not login")
+                DispatchQueue.main.async(execute: self.loginFailed)
             }
         })
         
         task.resume()
-        
+
     }
     
     func loginSucceeded(){
-        print("Login realizado com sucesso")
+        performSegue(withIdentifier: "loginToList", sender: self)
+    }
+    
+    func loginFailed(){
+        let alert = UIAlertController(title: "Error", message: "Could not login", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func clearTextFields(){
+        userNameTextField.text = ""
+        passwordTextField.text = ""
     }
 
 }
