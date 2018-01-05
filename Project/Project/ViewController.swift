@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     //MARK: Actions
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     @IBAction func didPressLoginButton(_ sender: UIButton) {
@@ -28,59 +27,69 @@ class ViewController: UIViewController {
             return
         }
         
-        ExecuteLogin(username!, password!)
+        executeLogin(username!, password!)
     }
     
-    func ExecuteLogin(_ user:String,_ password:String){
-        let url = URL(string: "http://www.kaleidosblog.com/tutorial/login/api/login")
+    func executeLogin(_ user:String,_ password:String){
+        let url = URL(string: "http://tq-template-node.herokuapp.com/authenticate")
         let session = URLSession.shared
         let rememberMe = false
         
         let request = NSMutableURLRequest(url: url!)
-        request.httpMethod = "POST"
         
-        /*
-        let param = "{\"email\" : \(user), \"password\" : \(password), \"rememberMe\" : \(rememberMe)}"
-        */
         
-        let param = "email=" + user + "&password=" + password //+ "&rememberMe=false"
-        
-        request.httpBody = param.data(using: String.Encoding.utf8)
+        let loginParameters: [String: Any] = ["email": user, "password": password, "rememberMe": rememberMe]
+        let jsonParameters: Data
+        do {
+            jsonParameters = try JSONSerialization.data(withJSONObject: loginParameters, options: [])
+            
+            request.httpMethod = "POST"
+            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request.httpBody = jsonParameters
+        }
+        catch{
+            print("Could not create json")
+            print(Thread.callStackSymbols)
+            return
+        }
         
         let task = session.dataTask(with: request as URLRequest, completionHandler: {
             (data, response, error) in
+            guard error == nil else {
+                print("error calling POST method")
+                print(error!)
+                return
+            }
             
-            guard let _:Data = data
+            guard let responseData:Data = data
             else {
+                print("Could not get data")
                 return
             }
         
         
-            let json: Any?
+            let jsonResponse: Any?
             do
             {
-                json = try JSONSerialization.jsonObject(with: data!, options: [])
+                jsonResponse = try JSONSerialization.jsonObject(with: responseData, options: [])
             }
             catch{
-                print("Erro 1")
+                print("Could not create json response")
+                print(Thread.callStackSymbols)
                 return
-                //TODO: tratar erro de forma mais inteligente
             }
             
-            guard let serverResponse = json as? NSDictionary else{
-                print("Erro 2")
+            guard let serverResponse = jsonResponse as? NSDictionary else{
+                print("Could not get server reponse")
+                print(Thread.callStackSymbols)
                 return
             }
             
             if let dataBlock = serverResponse["data"] as? NSDictionary{
-                if let sessionData = dataBlock["session"] as? String{
-                    let preferences = UserDefaults.standard
-                    preferences.set(sessionData, forKey: "session")
-                    
-                    DispatchQueue.main.async(
-                        execute: self.LoginDone
-                    )
-                }
+                DispatchQueue.main.async(execute: self.loginSucceeded)
+            }
+            else{
+                print("Could not login")
             }
         })
         
@@ -88,10 +97,7 @@ class ViewController: UIViewController {
         
     }
     
-    func LoginDone(){
-        userNameTextField.isEnabled = false
-        passwordTextField.isEnabled = false
-        
+    func loginSucceeded(){
         print("Login realizado com sucesso")
     }
 
