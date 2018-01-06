@@ -3,8 +3,6 @@ import { Alert } from 'react-native';
 import { View, Title, Tile, Text, TextInput, Button } from '@shoutem/ui';
 import axios from 'axios';
 
-import UserInfo from '../artifacts/UserInfo';
-
 interface Props {}
 interface State {
     email: string,
@@ -12,39 +10,40 @@ interface State {
     rememberMe: boolean
 }
 
-let loggedIn: boolean = false
-
 export default class Login extends React.Component<Props, State> {
-
-    state = {
-        email: '',
-        password: '',
-        rememberMe: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: '',
+            password: '',
+            rememberMe: false
+        }
     }
 
-    async onButtonPress() {
-        await axios.post('http://tq-template-node.herokuapp.com/authenticate',
+    onButtonPress() {
+        let success = false;
+        axios.post('http://tq-template-node.herokuapp.com/authenticate',
                     {
                         email: this.state.email,
                         password: this.state.password,
                         rememberMe: this.state.rememberMe
-                    }
-                    )
+                    },
+                    { headers: 
+                        {'Content-Type': 'application/json' }
+                    })
                     .then(function (response) {
-                        loggedIn = true;
+                        success = true;
                     })
                     .catch(function (error) {
                         Alert.alert('Invalid Email or Password!');
+                    })
+                    .then(() => {
+                        if (success) this.props.onLoginPress();
                     });
     }
 
     render() {
-        if (loggedIn === true) {
-            return (
-                <UserInfo />
-            );
-        } else {
-            return (
+        return (
                 <View>
                     <Tile styleName={'text-centric inflexible'}>
                         <Title>
@@ -54,12 +53,12 @@ export default class Login extends React.Component<Props, State> {
                     <TextInput
                         returnKeyType='next'
                         placeholder='Email'
-                        onChangeText={(text) => this.setState({email: text})}
+                        onChangeText={(email) => this.setState({email})}
                     />
                     <TextInput
                         placeholder='Password'
                         secureTextEntry
-                        onChangeText={(text) => this.setState({password: text})}
+                        onChangeText={(password) => this.setState({password})}
                     />
                     <Button
                         disabled={!this.state.email || !this.state.password}
@@ -68,7 +67,6 @@ export default class Login extends React.Component<Props, State> {
                         <Text>Log in</Text>
                     </Button>
                 </View>
-            );
-        }
+        );
     }
 }
