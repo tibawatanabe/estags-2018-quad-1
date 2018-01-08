@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import { StackNavigator } from 'react-navigation'
-import { Text, TextInput, View, StyleSheet, Button, ListViewDataSource, ListView, ActivityIndicator, Alert } from 'react-native'
+// tslint:disable-next-line:max-line-length
+import { Text, TextInput, View, StyleSheet, Button, ListViewDataSource, ListView, ActivityIndicator, Alert, FlatList, TouchableHighlight } from 'react-native'
 
-type MyProps = {
+// Screens
+
+type LoginScreenProps = {
+  navigation: any
 }
-type MyState = {
+type LoginScreenStates = {
   email: string ,
   password: string,
   isLoading: boolean,
@@ -12,7 +16,7 @@ type MyState = {
   name: any
 }
 
-class LoginScreen extends Component<MyProps, MyState> {
+class LoginScreen extends Component<LoginScreenProps, LoginScreenStates> {
   constructor(props) {
     super(props)
     this.state = {
@@ -47,7 +51,7 @@ class LoginScreen extends Component<MyProps, MyState> {
             name: responseJson.data.user.name
           })
           const { navigate } = this.props.navigation
-          navigate('Profile', {name: responseJson.data.user.name})
+          navigate('Profile', {data: responseJson.data})
         } else {
           Alert.alert('Wrong Email or Password')
           this.setState({isLoading: false})
@@ -92,15 +96,89 @@ class LoginScreen extends Component<MyProps, MyState> {
   }
 }
 
-class ProfileScreen extends Component {
+type ProfileScreenProps = {
+  navigation: any
+}
+type ProfileScreenStates = {
+  isLoading: boolean,
+  list: any
+}
+
+class ProfileScreen extends Component <ProfileScreenProps, ProfileScreenStates> {
   static navigationOptions = {
     title: 'Your profile'
   }
+  constructor(props) {
+    super(props)
+    this.state = {
+      isLoading: false,
+      list: []
+    }
+  }
+
+  componentDidMount() {
+    return fetch('https://facebook.github.io/react-native/movies.json')
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        isLoading: false,
+        list: responseJson.movies
+      }, function() {
+        // do something with new state
+      })
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+  }
+
+  render() {
+    const {navigate} = this.props.navigation
+    const {params} = this.props.navigation.state
+    if (this.state.isLoading) {
+      return(
+       <View style = {{flex: 1, paddingTop: 20}}>
+            <ActivityIndicator />
+        </View>
+      )
+    } else {
+      // console.warn(this.state.list)
+      return (
+        <View>
+          <Text>Welcome {params.data.user.name}</Text>
+          <Text>These are the movies you watched last month</Text>
+          <FlatList
+            data = {this.state.list}
+            renderItem = {({item}) =>
+            <TouchableHighlight
+              onPress={() => navigate('Description', {data: item})}
+              underlayColor = 'white'>
+              <Text style={{padding: 20}}> {item.title} </Text>
+          </TouchableHighlight>}
+          />
+        </View>
+      )
+    }
+  }
+}
+
+type DescriptionScreenProps = {
+  navigation: any
+}
+type DescriptionScreenStates = {
+}
+
+class DescriptionScreen extends Component <DescriptionScreenProps, DescriptionScreenStates> {
+  static navigationOptions = {
+    title: `Movie description`
+  }
+
   render() {
     const {params} = this.props.navigation.state
-    return (
+    return(
       <View>
-        <Text>Welcome {params.name}</Text>
+        <Text> Title: {params.data.title} </Text>
+        <Text> Release date: {params.data.releaseYear} </Text>
       </View>
     )
   }
@@ -112,11 +190,15 @@ export default class App extends React.Component {
   }
 }
 
+// Screen Manager
+// tslint:disable-next-line:variable-name LoginApp must start with upper case to be called as a function
 const LoginApp = StackNavigator({
   Home: { screen: LoginScreen },
-  Profile: { screen: ProfileScreen }
+  Profile: { screen: ProfileScreen },
+  Description: { screen: DescriptionScreen }
 })
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
