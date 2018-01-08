@@ -1,28 +1,33 @@
 import * as React from 'react';
 import { AppRegistry } from 'react-native';
-import { ScrollView, Title, Tile, Text, TextInput, Button } from '@shoutem/ui'
 
-export default class LoginApp extends React.Component {
+import Login from '../artifacts/Login';
+import UserInfo from '../artifacts/UserInfo';
+
+interface Props {}
+interface State {
+    loggedIn: boolean
+}
+
+export default class LoginApp extends React.Component<Props, State> {
+    state = {
+        loggedIn: false
+    }
+    
     render() {
-           return (
-            <ScrollView>
-                <Tile styleName={'text-centric inflexible'}>
-                    <Title>
-                        LoginApp
-                    </Title>
-                </Tile>
-                <TextInput
-                    placeholder='Email'
+        if (this.state.loggedIn) {
+            return (
+                <UserInfo
+                    onLogoutPress={() => this.setState({loggedIn: false})}
                 />
-                <TextInput
-                    placeholder='Password'
-                    secureTextEntry
+            );
+        } else {
+            return (
+                <Login
+                    onLoginPress={() => this.setState({loggedIn: true})}
                 />
-                <Button>
-                    <Text>Log in</Text>
-                </Button>
-            </ScrollView>
-        );
+            );
+        }
     }
 }
 
