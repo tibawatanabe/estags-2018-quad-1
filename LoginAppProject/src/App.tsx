@@ -1,30 +1,31 @@
 import React, { Component } from 'react'
+import { StackNavigator } from 'react-navigation'
 import { Text, TextInput, View, StyleSheet, Button, ListViewDataSource, ListView, ActivityIndicator, Alert } from 'react-native'
 
-type MyProps = {}
+type MyProps = {
+}
 type MyState = {
   email: string ,
   password: string,
   isLoading: boolean,
-  doneLoading: boolean,
   dataSource: ListViewDataSource,
   name: any
 }
 
-export default class LoginApp extends Component<MyProps, MyState> {
+class LoginScreen extends Component<MyProps, MyState> {
   constructor(props) {
     super(props)
     this.state = {
       email: '',
       password: '',
       isLoading: false,
-      doneLoading: false,
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
       name: ''
     }
   }
 
   _onPressButton() {
+    this.setState({isLoading: true})
     return fetch('https://tq-template-node.herokuapp.com/authenticate', {
       method: 'POST',
       headers: {
@@ -42,12 +43,14 @@ export default class LoginApp extends Component<MyProps, MyState> {
         if (responseJson.data !== null) {
           this.setState({
             isLoading: false,
-            doneLoading: true,
             dataSource: ds.cloneWithRows(responseJson.data),
             name: responseJson.data.user.name
           })
+          const { navigate } = this.props.navigation
+          navigate('Profile', {name: responseJson.data.user.name})
         } else {
-          Alert.alert('Wrong Email/Password')
+          Alert.alert('Wrong Email or Password')
+          this.setState({isLoading: false})
         }
       })
       .catch((error) => {
@@ -62,18 +65,6 @@ export default class LoginApp extends Component<MyProps, MyState> {
           <ActivityIndicator />
         </View>
       )
-    } else if (this.state.doneLoading) {
-      console.warn(this.state.dataSource)
-      return(
-        <View style = {{padding: 10}}>
-          <Text> Welcome {this.state.name} </Text>
-        </View>
-        /*
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow = {(rowData) => <Text> {rowData.token} </Text>}
-        /> */
-      )
     } else {
       return (
         <View style={styles.container}>
@@ -81,24 +72,50 @@ export default class LoginApp extends Component<MyProps, MyState> {
             Welcome to BestApp
           </Text>
           <TextInput
-            style={{height: 40, width: 200}}
+            style={styles.inputBox}
             placeholder='Email'
             onChangeText={(email) => this.setState({email})}
           />
-          <TextInput style={{height: 40, width: 200}}
+          <TextInput style={styles.inputBox}
             placeholder='Password'
             secureTextEntry = {true}
             onChangeText={(password) => this.setState({password})}
           />
           <Button
-             onPress = {this._onPressButton.bind(this)}
+            onPress = {this._onPressButton.bind(this)}
             title = 'Login'
+            // onPress = {() => navigate('Profile')}
           />
         </View>
       )
     }
   }
 }
+
+class ProfileScreen extends Component {
+  static navigationOptions = {
+    title: 'Your profile'
+  }
+  render() {
+    const {params} = this.props.navigation.state
+    return (
+      <View>
+        <Text>Welcome {params.name}</Text>
+      </View>
+    )
+  }
+}
+
+export default class App extends React.Component {
+  render() {
+    return <LoginApp />
+  }
+}
+
+const LoginApp = StackNavigator({
+  Home: { screen: LoginScreen },
+  Profile: { screen: ProfileScreen }
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -108,14 +125,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  sectionHeader: {
-    paddingTop: 2,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 2,
-    fontSize: 14,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(247,247,247,1.0)'
+  inputBox: {
+    height: 40,
+    width: 200
   },
   item: {
     padding: 10,
