@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".ListingActivity"
-            android:label="Lista"
+            android:label="Lista de Usuários"
             android:parentActivityName=".MainActivity">
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
