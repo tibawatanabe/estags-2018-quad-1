@@ -29,6 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:onClick="authenticate"
+        android:id="@+id/confirmation_button"
         android:text="Entrar"/>
 </LinearLayout>
