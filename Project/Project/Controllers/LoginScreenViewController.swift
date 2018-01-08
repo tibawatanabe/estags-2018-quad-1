@@ -9,7 +9,7 @@
 import UIKit
 import Foundation
 
-class ViewController: UIViewController{
+class LoginScreenViewController: UIViewController{
     //MARK: Properties
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -103,7 +103,7 @@ class ViewController: UIViewController{
     }
     
     func loginSucceeded(){
-        performSegue(withIdentifier: "loginToList", sender: self)
+        performSegue(withIdentifier: "fromLoginToUserList", sender: self)
     }
     
     func loginFailed(){

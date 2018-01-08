@@ -15,7 +15,11 @@ class User{
     
     //MARK: Initialization
     init?(name: String, role: String){
-        if name.isEmpty || role.isEmpty {
+        guard !name.isEmpty else{
+            return nil
+        }
+        
+        guard !role.isEmpty else{
             return nil
         }
         

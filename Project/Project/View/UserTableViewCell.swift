@@ -10,9 +10,8 @@ import UIKit
 
 class UserTableViewCell: UITableViewCell {
     //MARK: Properties
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var role: UILabel!
-    
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var roleLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
