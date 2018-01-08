@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { Alert } from 'react-native';
-import { View, Title, Tile, Text, TextInput, Button } from '@shoutem/ui';
+import { StackNavigator } from 'react-navigation';
+import { View, Title, Tile, Caption, Divider, Text, TextInput, Button } from '@shoutem/ui';
 import axios from 'axios';
+
+import UserInfo from '../artifacts/UserInfo';
 
 interface Props {}
 interface State {
@@ -10,7 +13,7 @@ interface State {
     rememberMe: boolean
 }
 
-export default class Login extends React.Component<Props, State> {
+class LoginScreen extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -38,7 +41,14 @@ export default class Login extends React.Component<Props, State> {
                         Alert.alert('Invalid Email or Password!');
                     })
                     .then(() => {
-                        if (success) this.props.onLoginPress();
+                        if (success) {
+                            this.props.navigation.navigate('Logged', 
+                                { 
+                                    email: this.state.email,
+                                    password: this.state.password,
+                                    rememberMe: this.state.rememberMe
+                                });
+                        }
                     });
     }
 
@@ -50,13 +60,19 @@ export default class Login extends React.Component<Props, State> {
                             LoginApp
                         </Title>
                     </Tile>
+                    <Divider styleName={'section-header'}>
+                        <Caption>E-mail</Caption>
+                    </Divider>
                     <TextInput
                         returnKeyType='next'
-                        placeholder='Email'
+                        placeholder='Type here'
                         onChangeText={(email) => this.setState({email})}
                     />
+                    <Divider styleName={'section-header'}>
+                        <Caption>Password</Caption>
+                    </Divider>
                     <TextInput
-                        placeholder='Password'
+                        placeholder='Type here'
                         secureTextEntry
                         onChangeText={(password) => this.setState({password})}
                     />
@@ -70,3 +86,18 @@ export default class Login extends React.Component<Props, State> {
         );
     }
 }
+
+export default Login = StackNavigator({
+    Login: {
+        screen: LoginScreen,
+        navigationOptions: {
+            header: null
+        }
+    },
+    Logged: {
+        screen: UserInfo,
+        navigationOptions: {
+            header: null
+        }
+    }
+});
