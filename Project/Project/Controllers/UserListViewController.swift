@@ -76,5 +76,12 @@ class UserListViewController: UITableViewController {
         }
         
         users += [user1, user2, user3]
+        
+        for _ in 1...10 {
+            guard let user = User.init(name: "Testing", role: "test") else {
+                return
+            }
+            users += [user]
+        }
     }
 }

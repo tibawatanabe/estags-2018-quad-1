@@ -13,6 +13,8 @@ class LoginScreenViewController: UIViewController{
     //MARK: Properties
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var rememberMeSwitch: UISwitch!
+    
     
     //MARK: Actions
     override func viewDidLoad() {
@@ -25,23 +27,25 @@ class LoginScreenViewController: UIViewController{
     }
     
     @IBAction func didPressLoginButton(_ sender: UIButton) {
-        let username = userNameTextField.text
-        let password = passwordTextField.text
-        
-        if (username?.isEmpty)! || (password?.isEmpty)! {
+        guard let username = userNameTextField.text else {
             return
         }
+        guard let password = passwordTextField.text else {
+            return
+        }
+        let rememberMe = rememberMeSwitch.isOn
         
-        executeLogin(username!, password!)
+        executeLogin(username, password, rememberMe)
     }
+    
+    
+    
     //MARK: Login functions
-    func executeLogin(_ user:String,_ password:String){
+    func executeLogin(_ user:String,_ password:String, _ rememberMe: Bool){
         let url = URL(string: "http://tq-template-node.herokuapp.com/authenticate")
         let session = URLSession.shared
-        let rememberMe = false
         
         let request = NSMutableURLRequest(url: url!)
-        
         
         let loginParameters: [String: Any] = ["email": user, "password": password, "rememberMe": rememberMe]
         let jsonParameters: Data
@@ -71,8 +75,7 @@ class LoginScreenViewController: UIViewController{
                 print("Could not get data")
                 return
             }
-        
-        
+            
             let jsonResponse: Any?
             do
             {
@@ -90,7 +93,7 @@ class LoginScreenViewController: UIViewController{
                 return
             }
             
-            if let dataBlock = serverResponse["data"] as? NSDictionary{
+            if (serverResponse["data"] as? NSDictionary) != nil{
                 DispatchQueue.main.async(execute: self.loginSucceeded)
             }
             else{

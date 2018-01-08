@@ -51,26 +51,44 @@
                                     <action selector="didPressLoginButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FD2-Wm-Hwc"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M0m-Bw-St5">
+                                <rect key="frame" x="163" y="347.5" width="51" height="31"/>
+                                <connections>
+                                    <action selector="rememberMeSwitch:" destination="sUF-ce-GRU" eventType="valueChanged" id="yUR-nm-1uf"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remember Me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rfz-UV-plG">
+                                <rect key="frame" x="149" y="326" width="76" height="13.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
+                                <nil key="textColor"/>
+                                <color key="highlightedColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="06J-WN-qfN" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-170" id="Hsi-a2-zbz"/>
+                            <constraint firstItem="Rfz-UV-plG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="J51-sH-Vvb"/>
+                            <constraint firstItem="M0m-Bw-St5" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Nqi-Np-zBm"/>
+                            <constraint firstItem="M0m-Bw-St5" firstAttribute="top" secondItem="Rfz-UV-plG" secondAttribute="bottom" constant="8" id="Qy4-4X-lle"/>
                             <constraint firstAttribute="trailingMargin" secondItem="KGg-8B-3Zf" secondAttribute="trailing" id="VQA-6a-ThZ"/>
                             <constraint firstItem="KGg-8B-3Zf" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dpg-kr-hot"/>
                             <constraint firstItem="h6h-nY-XeO" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="80" id="fRa-My-3XA"/>
                             <constraint firstItem="KGg-8B-3Zf" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-80" id="iNF-rH-F4e"/>
                             <constraint firstItem="06J-WN-qfN" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="mNF-mV-MiE"/>
+                            <constraint firstItem="h6h-nY-XeO" firstAttribute="top" secondItem="M0m-Bw-St5" secondAttribute="bottom" constant="20" id="mxc-52-G9s"/>
                             <constraint firstItem="h6h-nY-XeO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ql6-dE-1TL"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="s3D-Rm-2WV"/>
                     <connections>
                         <outlet property="passwordTextField" destination="X2I-AX-049" id="eQc-WK-4hb"/>
+                        <outlet property="rememberMeSwitch" destination="M0m-Bw-St5" id="NnY-O1-PMa"/>
                         <outlet property="userNameTextField" destination="7YC-mJ-xFR" id="WWf-Yl-Xtl"/>
                         <segue destination="1Cy-1R-eZJ" kind="show" identifier="fromLoginToUserList" id="6oI-eY-BCU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <exit id="sUF-ce-GRU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="841" y="116"/>
         </scene>
