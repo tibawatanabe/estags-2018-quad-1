@@ -124,10 +124,58 @@
                             <outlet property="delegate" destination="1Cy-1R-eZJ" id="7um-ZW-zUb"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <segue destination="Zop-lE-IlH" kind="show" identifier="fromListToDetail" id="pbm-cw-bCf"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="32J-r9-aUw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2113" y="116"/>
+            <point key="canvasLocation" x="1783" y="116"/>
+        </scene>
+        <!--User View Controller-->
+        <scene sceneID="J8R-xe-Dz0">
+            <objects>
+                <viewController id="Zop-lE-IlH" customClass="UserViewController" customModule="Project" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3jE-ud-C0l"/>
+                        <viewControllerLayoutGuide type="bottom" id="mHw-rf-xzt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jnO-GR-Zu9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="KcT-mP-U2d">
+                                <rect key="frame" x="154.5" y="264" width="66.5" height="58.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcX-xF-MzG">
+                                        <rect key="frame" x="0.0" y="0.0" width="66.5" height="31.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Role" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nMa-Yx-OKv">
+                                        <rect key="frame" x="18.5" y="40.5" width="30" height="18"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="KcT-mP-U2d" firstAttribute="top" secondItem="3jE-ud-C0l" secondAttribute="bottom" constant="200" id="xmy-hg-MLH"/>
+                            <constraint firstItem="KcT-mP-U2d" firstAttribute="centerX" secondItem="jnO-GR-Zu9" secondAttribute="centerX" id="znw-jH-J0i"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="nameLabel" destination="gcX-xF-MzG" id="0ak-IV-ngs"/>
+                        <outlet property="roleLabel" destination="nMa-Yx-OKv" id="hiw-c0-mfu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HrT-O4-OIF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2816.8000000000002" y="115.59220389805098"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="9KB-m0-Lkp">

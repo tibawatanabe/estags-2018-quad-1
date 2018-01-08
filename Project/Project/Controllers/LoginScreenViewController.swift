@@ -103,6 +103,7 @@ class LoginScreenViewController: UIViewController{
     }
     
     func loginSucceeded(){
+        dismiss(animated: true, completion: nil)
         performSegue(withIdentifier: "fromLoginToUserList", sender: self)
     }
     

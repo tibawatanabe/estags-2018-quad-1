@@ -15,6 +15,7 @@
 		4D3627421FFE813100342117 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D3627401FFE813100342117 /* Main.storyboard */; };
 		4D3627441FFE813100342117 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D3627431FFE813100342117 /* Assets.xcassets */; };
 		4D3627501FFE817100342117 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D36274E1FFE817100342117 /* LaunchScreen.storyboard */; };
+		4D433D7220039FF90055FF09 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D433D7120039FF90055FF09 /* UserViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		4D3627431FFE813100342117 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4D3627481FFE813100342117 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D36274F1FFE817100342117 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4D433D7120039FF90055FF09 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +48,7 @@
 			children = (
 				4D1FDF84200015040087AE59 /* UserListViewController.swift */,
 				4D36273E1FFE813100342117 /* LoginScreenViewController.swift */,
+				4D433D7120039FF90055FF09 /* UserViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D36273F1FFE813100342117 /* LoginScreenViewController.swift in Sources */,
+				4D433D7220039FF90055FF09 /* UserViewController.swift in Sources */,
 				4D1FDF85200015040087AE59 /* UserListViewController.swift in Sources */,
 				4D1FDF8020000D6A0087AE59 /* UserTableViewCell.swift in Sources */,
 				4D1FDF8820001CCC0087AE59 /* User.swift in Sources */,

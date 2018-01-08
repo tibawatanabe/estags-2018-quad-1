@@ -11,10 +11,13 @@ import UIKit
 class UserListViewController: UITableViewController {
     //MARK: Properties
     var users = [User]()
+    var currentUser: User?
     
+    //MARK: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //TODO: Instead of loading sample users, get them from server
         self.loadSampleUsers()
     }
     
@@ -22,6 +25,7 @@ class UserListViewController: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
+    //MARK: UITableViewController
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -37,12 +41,26 @@ class UserListViewController: UITableViewController {
             fatalError("The dequeued cell is not a instance of UserTableViewCell")
         }
         
-        let user = users[indexPath.row]
+        cell.nameLabel.text = users[indexPath.row].name
+        cell.roleLabel.text = users[indexPath.row].role
         
-        cell.nameLabel.text = user.name
-        cell.roleLabel.text = user.role
-    
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        currentUser = users[indexPath.row]
+        dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "fromListToDetail", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "fromListToDetail") {
+            let nextController = segue.destination as? UserViewController
+            guard currentUser != nil else {
+                return
+            }
+            nextController?.user = currentUser!
+        }
     }
     
     //MARK: Private Methods
@@ -59,16 +77,4 @@ class UserListViewController: UITableViewController {
         
         users += [user1, user2, user3]
     }
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
