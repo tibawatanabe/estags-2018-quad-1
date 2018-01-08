@@ -8,7 +8,9 @@ export default class UserInfo extends React.Component<Props, State> {
     render() {
         return (
             <ScrollView>
-                <Button>
+                <Button
+                    onPress={this.props.onLogoutPress}
+                >
                     <Text>Log out</Text>
                 </Button>
             </ScrollView>
