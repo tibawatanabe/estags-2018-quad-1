@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Alert } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { View, Title, Tile, Caption, Divider, Text, TextInput, Button } from '@shoutem/ui';
+import { View, Heading, Icon, Tile, Caption, Divider, Text, TextInput, Button } from '@shoutem/ui';
 import axios from 'axios';
 
 import UserInfo from '../artifacts/UserInfo';
@@ -11,6 +11,7 @@ interface State {
     email: string,
     password: string,
     rememberMe: boolean
+    data: any
 }
 
 class LoginScreen extends React.Component<Props, State> {
@@ -19,7 +20,8 @@ class LoginScreen extends React.Component<Props, State> {
         this.state = {
             email: '',
             password: '',
-            rememberMe: false
+            rememberMe: false,
+            data: {}
         }
     }
 
@@ -34,19 +36,18 @@ class LoginScreen extends React.Component<Props, State> {
                     { headers: 
                         {'Content-Type': 'application/json' }
                     })
-                    .then(function (response) {
+                    .then( (response) => {
+                        this.setState({data: response.data});
                         success = true;
                     })
-                    .catch(function (error) {
+                    .catch( (error) => {
                         Alert.alert('Invalid Email or Password!');
                     })
                     .then(() => {
                         if (success) {
                             this.props.navigation.navigate('Logged', 
                                 { 
-                                    email: this.state.email,
-                                    password: this.state.password,
-                                    rememberMe: this.state.rememberMe
+                                    data: this.state.data.data
                                 });
                         }
                     });
@@ -54,11 +55,19 @@ class LoginScreen extends React.Component<Props, State> {
 
     render() {
         return (
-                <View>
-                    <Tile styleName={'text-centric inflexible'}>
-                        <Title>
-                            LoginApp
-                        </Title>
+                <View 
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'white'
+                    }}
+                >
+                    <Tile 
+                        styleName={'text-centric inflexible'}
+                        style={{flexDirection: 'row'}}    
+                    >
+                        <Heading>Log</Heading>
+                        <Icon name="linkedin" />
+                        <Heading>App</Heading>
                     </Tile>
                     <Divider styleName={'section-header'}>
                         <Caption>E-mail</Caption>
@@ -76,12 +85,13 @@ class LoginScreen extends React.Component<Props, State> {
                         secureTextEntry
                         onChangeText={(password) => this.setState({password})}
                     />
+                    <Divider styleName="line"/>
                     <Button
-                        disabled={!this.state.email || !this.state.password}
                         onPress={() => this.onButtonPress()}
                     >
                         <Text>Log in</Text>
                     </Button>
+                    <Divider styleName="line"/>
                 </View>
         );
     }

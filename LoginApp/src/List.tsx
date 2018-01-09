@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { ActivityIndicator, ScrollView } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { ListView, Tile, Title, Divider, View, Subtitle } from '@shoutem/ui';
+import { Screen, TouchableOpacity, ListView, Icon, Row, Text, Divider, View } from '@shoutem/ui';
 import axios from 'axios';
 
 import UserDetail from '../artifacts/UserDetail';
@@ -13,6 +13,10 @@ interface State {
 }
 
 class UserList extends React.Component<Props, State> {
+    static navigationOptions = {
+        tabBarLabel: <Icon name="sidebar"/>
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -23,9 +27,21 @@ class UserList extends React.Component<Props, State> {
     componentWillMount = async () => {
         let success = false
         let data = [];
-        axios.get('http://pokeapi.co/api/v2/pokemon-form/?limit=10')
+        let pagination={
+            page: 0,
+            window: 10
+        };
+        axios.get('http://tq-template-node.herokuapp.com/users',
+                    {   headers: {
+                            Authorization: this.props.screenProps.token
+                        },
+                        params: {
+                            pagination: pagination
+                        }
+                    })
                     .then(function (response) {
-                        data = response.data.results;
+                        data = response.data.data;
+                        pagination= response.data.pagination;
                         success = true;
                     })
                     .catch(function (error) {
@@ -38,15 +54,17 @@ class UserList extends React.Component<Props, State> {
                     });
     }
 
-    renderItem = ({url, name}) => {
+    renderItem = ({name}) => {
         return (
-            <View>
-                <Tile styleName={'text-centric clear'}>
-                    <Title styleName="md-gutter-bottom">{name}</Title>
-                    <Subtitle styleName="sm-gutter-horizontal"></Subtitle>
-                </Tile>
+            <TouchableOpacity
+            >
+                <Row styleName="small">
+                    <Icon name="user-profile" />
+                    <Text>{name}</Text>
+                    <Icon styleName="disclosure" name="right-arrow"/>
+                </Row>
                 <Divider styleName="line" />
-            </View>
+            </TouchableOpacity>
         );
     }
 
@@ -55,33 +73,22 @@ class UserList extends React.Component<Props, State> {
             return (
                 <View
                     style={{alignItems: 'center',
-                    justifyContent: 'space-between'}}
+                            flex: 1,
+                            justifyContent: 'space-around'}}
                 >
-                    <Tile styleName={'text-centric inflexible'}>
-                        <Title>
-                            LoginApp
-                        </Title>
-                    </Tile>
-                    <View>
-                        <ActivityIndicator 
-                            animating={true}
-                        />
-                    </View>
+                    <ActivityIndicator 
+                        animating={true}
+                    />
                 </View>
             );
         }else {
             return (
-                <ScrollView>
-                    <Tile styleName={'text-centric inflexible'}>
-                        <Title>
-                            LoginApp
-                        </Title>
-                    </Tile>
+                <Screen>
                     <ListView 
                         data={this.state.list}
                         renderRow={this.renderItem} 
                     />
-                </ScrollView>
+                </Screen>
             );
         }
     }

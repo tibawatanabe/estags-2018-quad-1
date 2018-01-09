@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TabNavigator } from 'react-navigation';
-import { ScrollView, Divider, Caption, View, Tile, Title, Text, Button } from '@shoutem/ui';
+import { ScrollView, Divider, Caption, Icon, View, Tile, Title, Text, Button } from '@shoutem/ui';
 
 import List from '../artifacts/List';
 
@@ -9,7 +9,7 @@ interface State {}
 
 class LoggedUser extends React.Component<Props, State> {
     static navigationOptions = {
-        tabBarLabel: 'My account'
+        tabBarLabel: <Icon name="user-profile"/>
     }
 
     constructor(props) {
@@ -18,19 +18,20 @@ class LoggedUser extends React.Component<Props, State> {
 
     render() {
         return (
-            <ScrollView style={{flex: 1}}>
+            <ScrollView 
+                style={{
+                    flex: 1,
+                    backgroundColor: 'white'
+                }}
+            >
                 <Tile styleName={'text-centric inflexible'}>
                         <Title>
-                            LoginApp
+                            Welcome, {this.props.screenProps.user.name}
                         </Title>
                 </Tile>
                 <Divider styleName={'section-header'}>
                     <Caption>E-mail</Caption>
-                </Divider>
-                <View style={{alignItems: 'center'}}>
-                    <Text>{this.props.navigation.state.params.email}</Text>
-                </View>
-                <Divider styleName={'section-header'}>
+                    <Text>{this.props.screenProps.user.email}</Text>
                 </Divider>
                 <View>
                     <Button
@@ -44,7 +45,7 @@ class LoggedUser extends React.Component<Props, State> {
     }
 }
 
-export default UserInfo = TabNavigator({
+const UserInfoNav = TabNavigator({
     List: {
         screen: List
     },
@@ -52,5 +53,24 @@ export default UserInfo = TabNavigator({
         screen: LoggedUser
     },
 }, {
-    tabBarPosition: 'bottom'
+    tabBarOptions: {
+        activeTintColor: 'black',
+        inactiveTintColor: 'white',
+        style: {
+            backgroundColor: 'snow'
+        },
+        indicatorStyle: {
+            backgroundColor: 'black'
+        }
+    }
 });
+
+export default class UserInfo extends React.Component<Props, State> {
+    render() {
+        return (
+            <UserInfoNav 
+                screenProps={this.props.navigation.state.params.data}
+            />
+        );
+    }
+}

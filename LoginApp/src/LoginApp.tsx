@@ -2,7 +2,6 @@ import * as React from 'react';
 import { AppRegistry } from 'react-native';
 
 import Login from '../artifacts/Login';
-import UserInfo from '../artifacts/UserInfo';
 
 interface Props {}
 interface State {}
