@@ -4,10 +4,16 @@ import { ScrollView, Divider, Caption, Icon, View, Tile, Title, Text, Button } f
 
 import List from '../artifacts/List';
 
-interface Props {}
-interface State {}
+export interface InfoProps {
+    navigation: any
+}
+export interface InfoState {}
+export interface UserProps {
+    screenProps: any
+}
+export interface UserState {}
 
-class LoggedUser extends React.Component<Props, State> {
+class LoggedUser extends React.Component<UserProps, UserState> {
     static navigationOptions = {
         tabBarLabel: <Icon name="user-profile"/>
     }
@@ -26,20 +32,20 @@ class LoggedUser extends React.Component<Props, State> {
             >
                 <Tile styleName={'text-centric inflexible'}>
                         <Title>
-                            Welcome, {this.props.screenProps.user.name}
+                            Welcome, {this.props.screenProps.state.params.data.user.name}
                         </Title>
                 </Tile>
                 <Divider styleName={'section-header'}>
                     <Caption>E-mail</Caption>
-                    <Text>{this.props.screenProps.user.email}</Text>
+                    <Text>{this.props.screenProps.state.params.data.user.email}</Text>
                 </Divider>
                 <Divider styleName={'section-header'}>
                     <Caption>Role</Caption>
-                    <Text>{this.props.screenProps.user.role}</Text>
+                    <Text>{this.props.screenProps.state.params.data.user.role}</Text>
                 </Divider>
                 <View>
                     <Button
-                        onPress={() => this.props.navigation.navigate('Login')}
+                        onPress={() => this.props.screenProps.navigate('Login')}
                     >
                         <Text>Log out</Text>
                     </Button>
@@ -69,11 +75,11 @@ const UserInfoNav = TabNavigator({
     }
 });
 
-export default class UserInfo extends React.Component<Props, State> {
+export default class UserInfo extends React.Component<InfoProps, InfoState> {
     render() {
         return (
             <UserInfoNav 
-                screenProps={this.props.navigation.state.params.data}
+                screenProps={this.props.navigation}
             />
         );
     }

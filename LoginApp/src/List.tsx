@@ -1,18 +1,44 @@
 import * as React from 'react';
 import { ActivityIndicator } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { Screen, TouchableOpacity, ListView, Icon, Row, Text, Divider, View } from '@shoutem/ui';
+import { ScrollView, Button, TouchableOpacity, ListView, Icon, Row, Text, Divider, View } from '@shoutem/ui';
 import axios from 'axios';
 
 import UserDetail from '../artifacts/UserDetail';
 
-interface Props {}
-interface State {
+export interface UListProps {
+    screenProps: any,
+    navigation: any
+}
+export interface UListState {
     loading: boolean,
-    list: any
+    list: any,
+    error: boolean
+}
+export interface ListProps {
+    screenProps: any,
+}
+export interface Props {}
+export interface State {}
+
+class PageButton extends React.Component<Props, State> {
+    render() {
+        return (
+            <View styleName="horizontal flexible">
+                <Button styleName="full-width muted">
+                    <Icon name="left-arrow"/>
+                    <Text>Previous</Text>
+                </Button>
+                <Button styleName="full-width muted">
+                    <Text>Next</Text>
+                    <Icon name="right-arrow"/>                    
+                </Button>
+            </View>
+        );
+    }
 }
 
-class UserList extends React.Component<Props, State> {
+class UserList extends React.Component<UListProps, UListState> {
     static navigationOptions = {
         tabBarLabel: <Icon name="sidebar"/>
     }
@@ -21,37 +47,33 @@ class UserList extends React.Component<Props, State> {
         super(props);
         this.state = {
             loading: true,
-            list: []
+            list: [],
+            error: false
         }
     }
-    componentWillMount = async () => {
-        let success = false
+    async componentWillMount() {
         let data = [];
         let pagination={
-            page: 0,
+            page: 1,
             window: 10
         };
-        axios.get('http://tq-template-node.herokuapp.com/users',
-                    {   headers: {
-                            Authorization: this.props.screenProps.token
-                        },
-                        params: {
-                            pagination: pagination
-                        }
-                    })
-                    .then(function (response) {
-                        data = response.data.data;
-                        pagination= response.data.pagination;
-                        success = true;
-                    })
-                    .catch(function (error) {
-                        this.setState({loading: false, error: true})
-                    })
-                    .then(() => {
-                        if (success) {
-                            this.setState({loading: false, list: data})
-                        }
-                    });
+        try {
+            let response = await axios.get('http://tq-template-node.herokuapp.com/users',
+                            {   
+                                headers: {
+                                    Authorization: this.props.screenProps.state.params.data.token
+                                },
+                                params: {
+                                    pagination: pagination
+                                }
+                            })
+            data = response.data.data;
+            pagination= response.data.pagination;
+            this.setState({loading: false, list: data})
+        }
+        catch (error) {
+            this.setState({loading: false, error: true})
+        }
     }
 
     renderItem = ({name, email, role}) => {
@@ -90,18 +112,19 @@ class UserList extends React.Component<Props, State> {
             );
         }else {
             return (
-                <Screen>
+                <ScrollView>
                     <ListView 
                         data={this.state.list}
                         renderRow={this.renderItem} 
                     />
-                </Screen>
+                    <PageButton />
+                </ScrollView>
             );
         }
     }
 }
 
-export default List = StackNavigator({
+const ListNav = StackNavigator({
     UserList: {
         screen: UserList,
         navigationOptions: {
@@ -112,3 +135,13 @@ export default List = StackNavigator({
         screen: UserDetail
     }
 });
+
+export default class List extends React.Component<ListProps, State> {
+    render() {
+        return (
+            <ListNav 
+                screenProps={this.props.screenProps}
+            />
+        );
+    }
+}

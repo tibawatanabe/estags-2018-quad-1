@@ -6,15 +6,19 @@ import axios from 'axios';
 
 import UserInfo from '../artifacts/UserInfo';
 
-interface Props {}
-interface State {
+export interface LoginProps {
+    navigation: any
+}
+export interface LoginState {
     email: string,
     password: string,
     rememberMe: boolean
     data: any
 }
+export interface Props {}
+export interface State {}
 
-class LoginScreen extends React.Component<Props, State> {
+class LoginScreen extends React.Component<LoginProps, LoginState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -97,7 +101,7 @@ class LoginScreen extends React.Component<Props, State> {
     }
 }
 
-export default Login = StackNavigator({
+const LoginNav = StackNavigator({
     Login: {
         screen: LoginScreen,
         navigationOptions: {
@@ -111,3 +115,11 @@ export default Login = StackNavigator({
         }
     }
 });
+
+export default class Login extends React.Component<Props, State> {
+    render() {
+        return (
+            <LoginNav/>
+        );
+    }
+}
