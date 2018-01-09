@@ -54,9 +54,16 @@ class UserList extends React.Component<Props, State> {
                     });
     }
 
-    renderItem = ({name}) => {
+    renderItem = ({name, email, role}) => {
         return (
             <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Detail',
+                    {
+                        name: name,
+                        email: email,
+                        role: role
+                    }   
+                )}
             >
                 <Row styleName="small">
                     <Icon name="user-profile" />

@@ -33,6 +33,10 @@ class LoggedUser extends React.Component<Props, State> {
                     <Caption>E-mail</Caption>
                     <Text>{this.props.screenProps.user.email}</Text>
                 </Divider>
+                <Divider styleName={'section-header'}>
+                    <Caption>Role</Caption>
+                    <Text>{this.props.screenProps.user.role}</Text>
+                </Divider>
                 <View>
                     <Button
                         onPress={() => this.props.navigation.navigate('Login')}

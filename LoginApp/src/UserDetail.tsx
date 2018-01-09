@@ -1,22 +1,35 @@
 import * as React from 'react';
-import { ScrollView, View, Text } from '@shoutem/ui';
+import { ScrollView, Tile, Icon, Divider, Caption, Text } from '@shoutem/ui';
 
 interface Props {}
 interface State {}
 
 export default class UserDetail extends React.Component<Props, State> {
-    constructor(props) {
-        super(props);
-        this.state = {
-             
-        }
-    }
+    static navigationOptions = ({ navigation }) => ({
+        tabBarLabel: <Icon name="sidebar"/>,
+        title: `${navigation.state.params.name}`
+    });
 
     render() {
         return (
-            <View>
-                <Text>Detail</Text>
-            </View>
+            <ScrollView 
+                style={{
+                    flex: 1,
+                    backgroundColor: 'white'
+                }}
+            >
+                <Tile styleName={'text-centric inflexible'}>
+                        <Icon name="user-profile"/>
+                </Tile>
+                <Divider styleName={'section-header'}>
+                    <Caption>E-mail</Caption>
+                    <Text>{this.props.navigation.state.params.email}</Text>
+                </Divider>
+                <Divider styleName={'section-header'}>
+                    <Caption>Role</Caption>
+                    <Text>{this.props.navigation.state.params.role}</Text>
+                </Divider>
+            </ScrollView>
         );
     }
 }
