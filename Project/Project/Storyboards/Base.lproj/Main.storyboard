@@ -143,6 +143,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="userList" destination="hBi-Zh-e7o" id="iil-5R-uu4"/>
                         <segue destination="Zop-lE-IlH" kind="show" identifier="fromListToDetail" id="pbm-cw-bCf"/>
                     </connections>
                 </tableViewController>

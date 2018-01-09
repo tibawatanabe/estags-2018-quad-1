@@ -8,13 +8,14 @@
 
 import UIKit
 import Foundation
+import Alamofire
 
 class LoginScreenViewController: UIViewController{
     //MARK: Properties
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var rememberMeSwitch: UISwitch!
-    
+    var token: String?
     
     //MARK: Actions
     override func viewDidLoad() {
@@ -35,74 +36,44 @@ class LoginScreenViewController: UIViewController{
         }
         let rememberMe = rememberMeSwitch.isOn
         
-        executeLogin(username, password, rememberMe)
+        doLogin(username, password, rememberMe)
     }
     
-    
-    
-    //MARK: Login functions
-    func executeLogin(_ user:String,_ password:String, _ rememberMe: Bool){
-        let url = URL(string: "http://tq-template-node.herokuapp.com/authenticate")
-        let session = URLSession.shared
-        
-        let request = NSMutableURLRequest(url: url!)
-        
-        let loginParameters: [String: Any] = ["email": user, "password": password, "rememberMe": rememberMe]
-        let jsonParameters: Data
-        do {
-            jsonParameters = try JSONSerialization.data(withJSONObject: loginParameters, options: [])
-            
-            request.httpMethod = "POST"
-            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-            request.httpBody = jsonParameters
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "fromLoginToUserList") {
+            let nextController = segue.destination as? UserListViewController
+            guard token != nil else {
+                return
+            }
+            nextController?.authorizationToken = token!
         }
-        catch{
-            print("Could not create json")
-            print(Thread.callStackSymbols)
-            return
+    }
+    
+     //MARK: Login functions
+    func doLogin(_ user:String,_ password:String, _ rememberMe: Bool){
+        guard let urlComponents = URLComponents(string: User.getLoginEndpoint()) else {
+            fatalError("Tried to load an invalid url")
         }
         
-        let task = session.dataTask(with: request as URLRequest, completionHandler: {
-            (data, response, error) in
-            guard error == nil else {
-                print("error calling POST method")
-                print(error!)
-                return
-            }
-            
-            guard let responseData:Data = data
-            else {
-                print("Could not get data")
-                return
-            }
-            
-            let jsonResponse: Any?
-            do
-            {
-                jsonResponse = try JSONSerialization.jsonObject(with: responseData, options: [])
-            }
-            catch{
-                print("Could not create json response")
-                print(Thread.callStackSymbols)
-                return
-            }
-            
-            guard let serverResponse = jsonResponse as? NSDictionary else{
-                print("Could not get server reponse")
-                print(Thread.callStackSymbols)
-                return
-            }
-            
-            if (serverResponse["data"] as? NSDictionary) != nil{
-                DispatchQueue.main.async(execute: self.loginSucceeded)
-            }
-            else{
-                DispatchQueue.main.async(execute: self.loginFailed)
-            }
-        })
+        let loginParameters: [String: Any]? = ["email": user, "password": password, "rememberMe": rememberMe]
         
-        task.resume()
-
+        Alamofire.request(urlComponents, method: .post, parameters: loginParameters, encoding: JSONEncoding.default).responseJSON {
+            response in
+            if response.result.error != nil {
+                fatalError("Error on json response")
+            }
+            
+            guard let json = response.result.value as? [String: Any] else {
+                fatalError("Didn't get json dictionary")
+            }
+            
+            guard let data = json["data"] as? [String: Any] else {
+                self.loginFailed()
+                return
+            }
+            self.token = (data["token"] as! String)
+            self.loginSucceeded()
+        }
     }
     
     func loginSucceeded(){
