@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     private static final String TAG = ItemAdapter.class.getSimpleName();
-    private String[] mDataset;
+    private List<ListData> mDataset;
 
     final private ListItemlickListener mOnClickListener;
 
@@ -19,7 +21,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         void onListItemClick(int clickedItemIndex);
     }
 
-    public ItemAdapter(int numberOfItems, ListItemlickListener listener, String[] myDataSet) {
+    public ItemAdapter(int numberOfItems, ListItemlickListener listener, List<ListData> myDataSet) {
         mNumberItems = numberOfItems;
         mOnClickListener = listener;
         mDataset = myDataSet;
@@ -40,12 +42,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        holder.bind(mDataset[position]);
+        holder.bind(mDataset.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        if (mDataset != null) {
+            return mDataset.size();
+        }
+        else {
+            return 0;
+        }
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -58,8 +65,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             itemView.setOnClickListener(this);
         }
 
-        void bind(String name) {
-            listItemView.setText(String.valueOf(name));
+        void bind(ListData user) {
+            String formatedName = "Email: ";
+            formatedName += user.getEmail();
+            listItemView.setText(String.valueOf(formatedName));
         }
 
         @Override
