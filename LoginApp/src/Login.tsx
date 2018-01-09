@@ -29,32 +29,26 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
         }
     }
 
-    onButtonPress() {
-        let success = false;
-        axios.post('http://tq-template-node.herokuapp.com/authenticate',
-                    {
-                        email: this.state.email,
-                        password: this.state.password,
-                        rememberMe: this.state.rememberMe
-                    },
-                    { headers: 
-                        {'Content-Type': 'application/json' }
-                    })
-                    .then( (response) => {
-                        this.setState({data: response.data});
-                        success = true;
-                    })
-                    .catch( (error) => {
-                        Alert.alert('Invalid Email or Password!');
-                    })
-                    .then(() => {
-                        if (success) {
-                            this.props.navigation.navigate('Logged', 
+    async onButtonPress() {
+        try {
+            let response = await axios.post('http://tq-template-node.herokuapp.com/authenticate',
+                            {
+                                email: this.state.email,
+                                password: this.state.password,
+                                rememberMe: this.state.rememberMe
+                            },
+                            { headers: 
+                                {'Content-Type': 'application/json' }
+                            });
+            this.setState({data: response.data});
+            this.props.navigation.navigate('Logged', 
                                 { 
                                     data: this.state.data.data
                                 });
-                        }
-                    });
+        }
+        catch (error) {
+            Alert.alert('Invalid Email or Password!');
+        }
     }
 
     render() {

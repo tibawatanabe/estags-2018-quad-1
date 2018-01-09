@@ -39,10 +39,6 @@ class PageButton extends React.Component<Props, State> {
 }
 
 class UserList extends React.Component<UListProps, UListState> {
-    static navigationOptions = {
-        tabBarLabel: <Icon name="sidebar"/>
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -110,7 +106,17 @@ class UserList extends React.Component<UListProps, UListState> {
                     />
                 </View>
             );
-        }else {
+        } else if (this.state.error) {
+            return (
+                <View
+                    style={{alignItems: 'center',
+                            flex: 1,
+                            justifyContent: 'space-around'}}
+                >
+                    <Text>Failed to load content!</Text>
+                </View>
+            );
+        } else {
             return (
                 <ScrollView>
                     <ListView 
@@ -137,6 +143,10 @@ const ListNav = StackNavigator({
 });
 
 export default class List extends React.Component<ListProps, State> {
+    static navigationOptions = {
+        tabBarLabel: <Icon name="sidebar"/>
+    }
+    
     render() {
         return (
             <ListNav 
