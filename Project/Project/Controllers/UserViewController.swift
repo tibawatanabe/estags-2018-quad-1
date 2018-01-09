@@ -7,24 +7,45 @@
 //
 
 import UIKit
+import Alamofire
 
 class UserViewController: UIViewController {
     //MARK: Properties
-    var user: User?
+    var userId: Int?
+    var authorizationToken: String?
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var roleLabel: UILabel!
     
     //MARK: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        guard user != nil else {
-            return
-        }
-        
-        nameLabel.text = user?.name
-        roleLabel.text = user?.role
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.getUserDetails()
+        super.viewWillAppear(animated)
+    }
+    
+    //MARK: Private methods
+    fileprivate func getUserDetails(){
+        
+        guard userId != nil else {
+            fatalError("Empty id")
+        }
+        
+        guard let urlComponents = URLComponents(string: User.getUsersEndpoint()) else {
+            fatalError("Tried to load an invalid url")
+        }
+        
+        Alamofire.request(urlComponents, method: .get, parameters: ["id": String(self.userId!)], encoding: URLEncoding.default, headers: ["Authorization": self.authorizationToken!]).responseJSON {
+            response in
+            if response.result.error != nil {
+                fatalError("Error on json response")
+            }
+            
+            let user = User.userFromResponse(response)
+            
+        }
+    }
     
 }

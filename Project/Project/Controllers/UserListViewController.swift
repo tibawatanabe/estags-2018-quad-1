@@ -25,7 +25,7 @@ class UserListViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.getUsersFrom(User.getUserListEndpoint(), on: currentPage, showing: 10)
+        self.getUsersFrom(User.getUsersEndpoint(), on: currentPage, showing: 10)
         super.viewWillAppear(animated)
     }
     //MARK: UITableViewController
@@ -45,7 +45,7 @@ class UserListViewController: UITableViewController {
         }
         
         cell.nameLabel.text = users[indexPath.row].name
-        cell.roleLabel.text = users[indexPath.row].role
+        cell.roleLabel.text = String(users[indexPath.row].id)
         
         return cell
     }
@@ -60,7 +60,7 @@ class UserListViewController: UITableViewController {
             if self.endOfList == nil {
                 return
             }
-            getUsersFrom(User.getUserListEndpoint(), on: self.currentPage, showing: 10)
+            getUsersFrom(User.getUsersEndpoint(), on: self.currentPage, showing: 10)
         }
     }
     
@@ -70,7 +70,8 @@ class UserListViewController: UITableViewController {
             guard currentUser != nil else {
                 return
             }
-            nextController?.user = currentUser!
+            nextController?.userId = currentUser!.id
+            nextController?.authorizationToken = self.authorizationToken!
         }
     }
     
@@ -81,7 +82,7 @@ class UserListViewController: UITableViewController {
             fatalError("Tried to load an invalid url")
         }
         
-        Alamofire.request(urlComponents, method: .get, parameters: ["pagination": ["page": page, "window": window]], encoding: URLEncoding.default, headers: ["Authorization": self.authorizationToken!]).responseJSON{
+        Alamofire.request(urlComponents, method: .get, parameters: ["pagination": ["page": page, "window": window]], encoding: URLEncoding.default, headers: ["Authorization": self.authorizationToken!]).responseJSON {
             response in
             if response.result.error != nil{
                 fatalError("Error on json response")
