@@ -163,7 +163,8 @@ class UserList extends React.Component<UListProps, UListState> {
                 <View
                     style={{alignItems: 'center',
                             flex: 1,
-                            justifyContent: 'space-around'}}
+                            justifyContent: 'space-around',
+                            backgroundColor: 'white'}}
                 >
                     <ActivityIndicator 
                         animating={true}
@@ -175,14 +176,19 @@ class UserList extends React.Component<UListProps, UListState> {
                 <View
                     style={{alignItems: 'center',
                             flex: 1,
-                            justifyContent: 'space-around'}}
+                            justifyContent: 'space-around',
+                            backgroundColor: 'white'}}
                 >
                     <Text>Failed to load content!</Text>
                 </View>
             );
         } else {
             return (
-                <ScrollView>
+                <ScrollView
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'white'}}
+                >
                     <ListView 
                         data={this.state.list}
                         renderRow={this.renderItem} 

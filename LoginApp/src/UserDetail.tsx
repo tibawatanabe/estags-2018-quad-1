@@ -75,6 +75,23 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
         }
     }
 
+    async onDeletePress() {
+        let param = this.props.navigation.state.params.id;
+        try {
+            await axios.delete('http://tq-template-node.herokuapp.com/user/'+param,
+                {   
+                    headers: {
+                        Authorization: this.props.navigation.state.params.token
+                    },
+                }
+            )
+            this.props.navigation.navigate('UserList')
+        }
+        catch (error) {
+            this.setState({loading: true, error: true, editing: false})
+        }
+    }
+
     onEditPress() {
         this.setState({editing: true})
     }
@@ -106,7 +123,8 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                 <View
                     style={{alignItems: 'center',
                             flex: 1,
-                            justifyContent: 'space-around'}}
+                            justifyContent: 'space-around',
+                            backgroundColor: 'white'}}
                 >
                     <ActivityIndicator 
                         animating={true}
@@ -118,7 +136,8 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                 <View
                     style={{alignItems: 'center',
                             flex: 1,
-                            justifyContent: 'space-around'}}
+                            justifyContent: 'space-around',
+                            backgroundColor: 'white'}}
                 >
                     <Text>Failed to load content!</Text>
                 </View>
@@ -173,6 +192,16 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                         >
                             <Icon name="close"/>
                             <Text>Cancel</Text>
+                        </Button>
+                    </View>
+                    <Divider styleName="line"/>
+                    <View styleName="horizontal flexible">
+                        <Button 
+                            styleName="full-width"
+                            onPress={() => this.onDeletePress()}
+                        >
+                            <Icon name="clear-text" style={{color: 'red'}}/>
+                            <Text style={{color: 'red'}}>Delete user</Text>
                         </Button>
                     </View>
                     <Divider styleName="line"/>
