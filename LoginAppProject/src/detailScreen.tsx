@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { StackNavigator } from 'react-navigation'
 // tslint:disable-next-line:max-line-length
 import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, FlatList, TouchableHighlight } from 'react-native'
+import axios from 'axios'
 
 interface DetailScreenProps {
   navigation: any
@@ -28,16 +29,16 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
   componentDidMount() {
     this.setState({ isLoading: true })
     const {params} = this.props.navigation.state
-    return fetch(`https://tq-template-node.herokuapp.com/user/${params.id}`, {
-      method: 'GET',
-      headers: {Authorization: `${params.token}`}
-    })
-    .then((response) => response.json())
+    axios.get(`https://tq-template-node.herokuapp.com/user/${params.id}`,
+      {
+        headers: {Authorization: `${params.token}`}
+      }
+    )
     .then((responseJson) => {
       this.setState({
         isLoading: false,
-        name: responseJson.data.name,
-        email: responseJson.data.email
+        name: responseJson.data.data.name,
+        email: responseJson.data.data.email
       })
     })
     .catch((error) => {

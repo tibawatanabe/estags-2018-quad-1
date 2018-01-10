@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { StackNavigator } from 'react-navigation'
+import axios from 'axios'
 // tslint:disable-next-line:max-line-length
-import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, FlatList, TouchableHighlight } from 'react-native'
+import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, TouchableWithoutFeedback } from 'react-native'
 
 // Screens
 
@@ -28,38 +29,34 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
     }
   }
 
-  _onPressButton() {
+  async onPressButton() {
     this.setState({isLoading: true})
-    return fetch('https://tq-template-node.herokuapp.com/authenticate', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
+    await axios.post('https://tq-template-node.herokuapp.com/authenticate',
+      {
         email: this.state.email,
         password: this.state.password,
         rememberMe: this.state.rememberMe
-      })
-      }
-    ).then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.data !== null) {
-          this.setState({
-            isLoading: false
-            // data: responseJson.data // data is being sent to the next screen with navigate
-            // name: responseJson.data.user.name
-          })
-          const { navigate } = this.props.navigation
-          navigate('Profile', {data: responseJson.data})
-        } else {
-          Alert.alert('Wrong Email or Password')
-          this.setState({isLoading: false})
+      },
+      {
+        headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
         }
+      }
+    )
+    .then((responseJson) => {
+      this.setState({
+        isLoading: false
+        // data: responseJson.data // data is being sent to the next screen with navigate
+        // name: responseJson.data.user.name
       })
-      .catch((error) => {
-        console.error(error)
-      })
+      const { navigate } = this.props.navigation
+      navigate('Profile', {data: responseJson.data.data})
+    })
+    .catch((error) => {
+      Alert.alert('Wrong Email or Password')
+      this.setState({isLoading: false})
+    })
   }
 
   render() {
@@ -72,9 +69,9 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
     } else {
       return (
         <View style={styles.container}>
-            <Text style = {{fontSize: 30, alignContent: 'flex-start'}}>
-              Welcome to BestApp
-            </Text>
+          <Text style = {{fontSize: 30, alignContent: 'flex-start'}}>
+            Welcome to BestApp
+          </Text>
           <TextInput
             style={styles.inputBox}
             placeholder='Email'
@@ -85,7 +82,7 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
             secureTextEntry = {true}
             onChangeText={(password) => this.setState({password})}
           />
-          <TouchableHighlight
+          <TouchableWithoutFeedback
             onPress={() => {
               if (this.state.rememberMe) {
                 this.setState({rememberMeBox: '  ', rememberMe: false})
@@ -93,11 +90,13 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
                 this.setState({rememberMeBox: 'X', rememberMe: true})
               }
             }}
-            underlayColor = 'white'>
-            <Text style={{padding: 20, alignContent: 'center'}}> Remember me: [{this.state.rememberMeBox}] </Text>
-          </TouchableHighlight>
+          >
+            <View>
+              <Text style={{padding: 20, alignContent: 'center'}}> Remember me: [{this.state.rememberMeBox}] </Text>
+            </View>
+          </TouchableWithoutFeedback>
           <Button
-            onPress = {() => this._onPressButton()}
+            onPress = {this.onPressButton.bind(this)}
             title = 'Login'
             // onPress = {() => navigate('Profile')}
           />

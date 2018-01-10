@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { StackNavigator } from 'react-navigation'
 // tslint:disable-next-line:max-line-length
-import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, FlatList, TouchableHighlight } from 'react-native'
-
+import { Text, View, StyleSheet, ActivityIndicator, FlatList, TouchableHighlight } from 'react-native'
+import axios from 'axios'
 interface ProfileScreenProps {
   navigation: any
 }
@@ -31,22 +30,24 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
     console.warn(this.state.page)
     if (this.state.page < this.state.totalPages) {
       this.setState({page: this.state.page + 1})
-      this.loadMorePages()
+      this.loadPage(this.state.page)
     }
   }
 
-  loadMorePages() {
+  loadPage(page: number) {
     const {params} = this.props.navigation.state
-    return fetch(`https://tq-template-node.herokuapp.com/users?pagination={"page": ${this.state.page} , "window": 10}`, {
-      method: 'GET',
-      headers: {Authorization: `${params.data.token}`}
-    })
-    .then((response) => response.json())
+    axios.get(`https://tq-template-node.herokuapp.com/users?pagination={"page": ${page} , "window": 10}`,
+        {
+            headers: {
+                Authorization: `${params.data.token}`
+            }
+        }
+    )
     .then((responseJson) => {
       this.setState({
         isLoading: false,
-        data: this.state.data.concat(responseJson.data),
-        totalPages: responseJson.pagination.totalPages
+        data: this.state.data.concat(responseJson.data.data),
+        totalPages: responseJson.data.pagination.totalPages
       })
     })
     .catch((error) => {
@@ -54,23 +55,9 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
     })
   }
 
-  componentDidMount() {
-    const {params} = this.props.navigation.state
-    return fetch(`https://tq-template-node.herokuapp.com/users?pagination={"page": 0 , "window": 10}`, {
-      method: 'GET',
-      headers: {Authorization: `${params.data.token}`}
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({
-        isLoading: false,
-        data: this.state.data.concat(responseJson.data),
-        totalPages: responseJson.pagination.totalPages
-      })
-    })
-    .catch((error) => {
-      console.error(error)
-    })  }
+    componentDidMount() {
+        this.loadPage(0)
+    }
 
   render() {
     const {navigate} = this.props.navigation
