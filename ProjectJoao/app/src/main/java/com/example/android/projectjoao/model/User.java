@@ -1,4 +1,4 @@
-package com.example.android.projectjoao;
+package com.example.android.projectjoao.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
