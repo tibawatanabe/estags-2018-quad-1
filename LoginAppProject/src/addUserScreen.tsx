@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { StackNavigator } from 'react-navigation'
 import axios from 'axios'
 // tslint:disable-next-line:max-line-length
-import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, TouchableWithoutFeedback } from 'react-native'
+import { Text, TextInput, View, StyleSheet, Button, Alert } from 'react-native'
 
 // Screens
 
@@ -48,12 +47,13 @@ export default class AddUserScreen extends Component<AddUserScreenProps, AddUser
         }
       }
     )
-    .then((responseJson) => {
+    .then(() => {
       params.refresh()
       goBack()
     })
     .catch((error) => {
-      Alert.alert('New user couldn\`t be created')
+      console.error(error)
+      Alert.alert('New user couldn\'t be created')
     })
   }
 

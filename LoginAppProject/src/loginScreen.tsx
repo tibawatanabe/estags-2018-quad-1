@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { StackNavigator } from 'react-navigation'
 import axios from 'axios'
 // tslint:disable-next-line:max-line-length
 import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, TouchableWithoutFeedback } from 'react-native'
@@ -55,6 +54,7 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
     })
     .catch((error) => {
       Alert.alert('Wrong Email or Password')
+      console.error(error)
       this.setState({isLoading: false})
     })
   }
@@ -69,9 +69,11 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
     } else {
       return (
         <View style={styles.container}>
-          <Text style = {{fontSize: 30, alignContent: 'flex-start'}}>
-            Welcome to BestApp
-          </Text>
+          <View style= {{flexDirection: 'column', alignItems: 'flex-end'}}>
+            <Text style = {{fontSize: 30}}>Welcome</Text>
+            <Text style = {{fontSize: 30}}>to</Text>
+            <Text style = {{fontSize: 30}}>BestApp</Text>
+          </View>
           <TextInput
             style={styles.inputBox}
             placeholder='Email'

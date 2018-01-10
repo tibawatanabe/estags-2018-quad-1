@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { StackNavigator } from 'react-navigation'
 import axios from 'axios'
 // tslint:disable-next-line:max-line-length
-import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, TouchableWithoutFeedback } from 'react-native'
+import { Text, TextInput, View, StyleSheet, Button, Alert } from 'react-native'
 
 // Screens
 
@@ -50,13 +49,14 @@ export default class EditUserScreen extends Component<EditUserScreenProps, EditU
         }
       }
     )
-    .then((responseJson) => {
+    .then(() => {
       params.refreshDetail()
       params.refreshList()
       goBack()
     })
     .catch((error) => {
       Alert.alert('User couldn\'t be edited')
+      console.error(error)
     })
   }
 

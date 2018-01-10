@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { StackNavigator } from 'react-navigation'
 // tslint:disable-next-line:max-line-length
-import { Text, View, StyleSheet, TouchableHighlight, Alert } from 'react-native'
+import { Text, View, TouchableHighlight, Alert } from 'react-native'
 import axios from 'axios'
 
 interface DetailScreenProps {
@@ -104,27 +103,3 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
     )
   }
 }
-
-// Styles
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  inputBox: {
-    height: 40,
-    width: 200
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44
-  },
-  activity: {
-    flex: 1,
-    paddingTop: 20
-  }
-})
