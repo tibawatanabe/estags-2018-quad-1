@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.projectjoao.model.ListData;
@@ -149,5 +151,21 @@ public class ListingActivity extends AppCompatActivity implements ItemAdapter.Li
         Intent i = new Intent(ListingActivity.this, ShowActivity.class);
         i.putExtra("id", String.valueOf(users.get(clickedItemIndex).getId()));
         startActivity(i);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_create_user, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int selected = item.getItemId();
+        if(selected == R.id.create_user) {
+            Intent i = new Intent(ListingActivity.this, CreateActivity.class);
+            startActivity(i);
+        }
+        return true;
     }
 }
