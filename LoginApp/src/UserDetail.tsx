@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { ScrollView, Tile, Icon, Divider, Caption, Text } from '@shoutem/ui';
 
-interface Props {}
-interface State {}
+export interface DetailProps {
+    navigation: any
+}
+export interface DetailState {}
 
-export default class UserDetail extends React.Component<Props, State> {
+export default class UserDetail extends React.Component<DetailProps, DetailState> {
     static navigationOptions = ({ navigation }) => ({
         tabBarLabel: <Icon name="sidebar"/>,
         title: `${navigation.state.params.name}`

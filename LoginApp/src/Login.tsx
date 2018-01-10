@@ -51,6 +51,14 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
         }
     }
 
+    setEmail(email) {
+        this.setState({email});
+    }
+
+    setPassword(password) {
+        this.setState({password});
+    }
+
     render() {
         return (
                 <View 
@@ -73,7 +81,7 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
                     <TextInput
                         returnKeyType='next'
                         placeholder='Type here'
-                        onChangeText={(email) => this.setState({email})}
+                        onChangeText={(email) => this.setEmail(email)}
                     />
                     <Divider styleName={'section-header'}>
                         <Caption>Password</Caption>
@@ -81,7 +89,7 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
                     <TextInput
                         placeholder='Type here'
                         secureTextEntry
-                        onChangeText={(password) => this.setState({password})}
+                        onChangeText={(password) => this.setPassword(password)}
                     />
                     <Divider styleName="line"/>
                     <Button

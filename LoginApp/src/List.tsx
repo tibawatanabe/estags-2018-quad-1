@@ -13,28 +13,76 @@ export interface UListProps {
 export interface UListState {
     loading: boolean,
     list: any,
-    error: boolean
+    error: boolean,
+    pagination: any,
+    page: number
 }
 export interface ListProps {
     screenProps: any,
 }
-export interface Props {}
+export interface PageProps {
+    pagination: any,
+    previousPage: () => void,
+    nextPage: () => void
+}
 export interface State {}
 
-class PageButton extends React.Component<Props, State> {
+class PageButton extends React.Component<PageProps, State> {
     render() {
-        return (
-            <View styleName="horizontal flexible">
-                <Button styleName="full-width muted">
-                    <Icon name="left-arrow"/>
-                    <Text>Previous</Text>
-                </Button>
-                <Button styleName="full-width muted">
-                    <Text>Next</Text>
-                    <Icon name="right-arrow"/>                    
-                </Button>
-            </View>
+        const previousActive = (
+            <Button 
+                styleName="full-width"
+                onPress={() => this.props.previousPage()}
+            >
+                <Icon name="left-arrow"/>
+                <Text>Previous</Text>
+            </Button>
         );
+        
+        const previousInactive = (
+            <Button styleName="full-width muted">
+                <Icon name="left-arrow"/>
+                <Text>Previous</Text>
+            </Button>
+        );
+
+        const nextActive = (
+            <Button 
+                styleName="full-width"
+                onPress={() => this.props.nextPage()}
+            >
+                <Text>Next</Text>
+                <Icon name="right-arrow"/>                    
+            </Button>
+        );
+        
+        const nextInactive = (
+            <Button styleName="full-width muted">
+                <Text>Next</Text>
+                <Icon name="right-arrow"/>                    
+            </Button>
+        );
+
+        let hasNext = true;
+        if (this.props.pagination.page === this.props.pagination.totalPages - 1) {
+            hasNext = false;
+        }
+
+        if (this.props.pagination.page === 1) {
+            return (
+                <View styleName="horizontal flexible">
+                    {previousInactive}
+                    {hasNext ? nextActive : nextInactive}
+                </View>
+            );
+        } else {
+            return (
+                <View styleName="horizontal flexible">
+                    {previousActive}
+                    {hasNext ? nextActive : nextInactive}
+                </View>
+            );
+        }
     }
 }
 
@@ -44,13 +92,14 @@ class UserList extends React.Component<UListProps, UListState> {
         this.state = {
             loading: true,
             list: [],
-            error: false
+            error: false,
+            pagination: {},
+            page: 1
         }
     }
-    async componentWillMount() {
-        let data = [];
-        let pagination={
-            page: 1,
+    async getList() {
+        let param={
+            page: this.state.page,
             window: 10
         };
         try {
@@ -60,12 +109,12 @@ class UserList extends React.Component<UListProps, UListState> {
                                     Authorization: this.props.screenProps.state.params.data.token
                                 },
                                 params: {
-                                    pagination: pagination
+                                    pagination: param
                                 }
                             })
-            data = response.data.data;
-            pagination= response.data.pagination;
-            this.setState({loading: false, list: data})
+            let data = response.data.data;
+            let pagination= response.data.pagination;
+            this.setState({loading: false, list: data, pagination: pagination, page: pagination.page})
         }
         catch (error) {
             this.setState({loading: false, error: true})
@@ -93,8 +142,20 @@ class UserList extends React.Component<UListProps, UListState> {
         );
     }
 
+    previousPage() {
+        const page = this.state.pagination.page - 1;
+        this.setState({page: page, loading: true})
+    }
+
+    nextPage() {
+        const page = this.state.pagination.page + 1;
+        this.setState({page: page, loading: true})
+    }
+
     render() {
+        console.log(this.state)
         if (this.state.loading) {
+            this.getList();
             return (
                 <View
                     style={{alignItems: 'center',
@@ -123,7 +184,11 @@ class UserList extends React.Component<UListProps, UListState> {
                         data={this.state.list}
                         renderRow={this.renderItem} 
                     />
-                    <PageButton />
+                    <PageButton 
+                        pagination={this.state.pagination}
+                        previousPage={() => this.previousPage()}
+                        nextPage={() => this.nextPage()}
+                    />
                 </ScrollView>
             );
         }
