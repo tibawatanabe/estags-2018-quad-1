@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".ListingActivity"
-            android:label="Lista de Usuários"
+            android:label="Lista de usuários"
             android:parentActivityName=".MainActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
@@ -28,14 +28,27 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ShowActivity"
-            android:label="Detalhe do Usuário"
+        <activity
+            android:name=".ShowActivity"
+            android:label="Detalhe do usuário"
             android:parentActivityName=".ListingActivity">
+
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListingActivity" />
-            ></activity>
+            >
+        </activity>
+        <activity
+            android:name=".CreateActivity"
+            android:label="Criar usuário"
+            android:parentActivityName=".ListingActivity">
+
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ListingActivity" />
+        </activity>
     </application>
 
 </manifest>
