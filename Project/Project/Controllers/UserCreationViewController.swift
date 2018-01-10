@@ -59,7 +59,7 @@ class UserCreationViewController: UIViewController {
     }
     
     func createUser(_ name: String, _ password: String, _ email: String, _ role: String){
-        guard let urlComponents = URLComponents(string: User.getUserEndpoint()) else {
+        guard let urlComponents = URLComponents(string: TemplateAPIHandler.userEndpoint) else {
             fatalError("Tried to load an invalid url")
         }
         

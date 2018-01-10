@@ -27,7 +27,7 @@ class UserListViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.getUsersFrom(User.getUserListEndpoint(), on: currentPage, showing: 10)
+        self.getUsersFrom(TemplateAPIHandler.userListEndpoint, on: currentPage, showing: 10)
         super.viewWillAppear(animated)
     }
     //MARK: UITableViewController
@@ -68,7 +68,7 @@ class UserListViewController: UITableViewController {
             if self.endOfList == nil {
                 return
             }
-            getUsersFrom(User.getUserListEndpoint(), on: self.currentPage, showing: 10)
+            getUsersFrom(TemplateAPIHandler.userListEndpoint, on: self.currentPage, showing: 10)
         }
     }
     

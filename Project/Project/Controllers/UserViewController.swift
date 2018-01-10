@@ -39,7 +39,7 @@ class UserViewController: UIViewController {
             fatalError("Empty id")
         }
         
-        let url = User.getUserEndpoint() + String(self.userId!)
+        let url = TemplateAPIHandler.userEndpoint + String(self.userId!)
         
         guard let urlComponents = URLComponents(string: url) else {
             fatalError("Tried to load an invalid url")

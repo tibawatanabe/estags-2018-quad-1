@@ -51,7 +51,7 @@ class LoginScreenViewController: UIViewController {
     
      //MARK: Login functions
     func doLogin(_ user:String,_ password:String, _ rememberMe: Bool) {
-        guard let urlComponents = URLComponents(string: User.getLoginEndpoint()) else {
+        guard let urlComponents = URLComponents(string: TemplateAPIHandler.loginEndpoint) else {
             fatalError("Tried to load an invalid url")
         }
         

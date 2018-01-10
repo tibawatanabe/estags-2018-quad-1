@@ -35,17 +35,17 @@ class User{
     }
     
     //MARK: Endpoints
-    class func getUserListEndpoint() -> String {
-        return "https://tq-template-node.herokuapp.com/users?"
-    }
-    
-    class func getUserEndpoint() -> String {
-        return "https://tq-template-node.herokuapp.com/user/"
-    }
-    
-    class func getLoginEndpoint() -> String {
-        return "https://tq-template-node.herokuapp.com/authenticate"
-    }
+//    class func getUserListEndpoint() -> String {
+//        return "https://tq-template-node.herokuapp.com/users?"
+//    }
+//
+//    class func getUserEndpoint() -> String {
+//        return "https://tq-template-node.herokuapp.com/user/"
+//    }
+//
+//    class func getLoginEndpoint() -> String {
+//        return "https://tq-template-node.herokuapp.com/authenticate"
+//    }
     
     //MARK: Handle json response
     class func usersArrayFromResponse(_ response: DataResponse<Any>) -> [User] {
