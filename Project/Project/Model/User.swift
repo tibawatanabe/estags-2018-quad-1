@@ -34,14 +34,20 @@ class User{
         self.role = role
     }
     
-    class func getUsersEndpoint() -> String{
+    //MARK: Endpoints
+    class func getUserListEndpoint() -> String {
         return "https://tq-template-node.herokuapp.com/users?"
+    }
+    
+    class func getUserEndpoint() -> String {
+        return "https://tq-template-node.herokuapp.com/user/"
     }
     
     class func getLoginEndpoint() -> String {
         return "https://tq-template-node.herokuapp.com/authenticate"
     }
     
+    //MARK: Handle json response
     class func usersArrayFromResponse(_ response: DataResponse<Any>) -> [User] {
         var usersArray = [User]()
         guard let json = response.result.value as? [String: Any] else {
@@ -53,9 +59,9 @@ class User{
         }
         
         for value in results {
-            let id = value["id"] as! Int
-            let name = value["name"] as! String
-            let role = value["role"] as! String
+            let id = value[UserFields.id.rawValue] as! Int
+            let name = value[UserFields.name.rawValue] as! String
+            let role = value[UserFields.role.rawValue] as! String
             
             guard let user = User.init(name, id, role) else {
                 fatalError("Could not instantiate user")
@@ -72,19 +78,20 @@ class User{
             fatalError("Didn't get json dictionary")
         }
         
-        guard let data = json["data"] as? [[String: Any]] else {
+        guard let data = json["data"] as? [String: Any] else {
             fatalError("Error on json response: could not get data")
         }
         
-        guard let userInfo = data.first as? [String:Any] else {
-            fatalError("Empty data")
-        }
+        let name = ResponseHandler.getTextParameter(from: data[UserFields.name.rawValue], optional: false)
+        let role = ResponseHandler.getTextParameter(from: data[UserFields.role.rawValue], optional: false)
+        let id = ResponseHandler.getIntParameter(from: data[UserFields.id.rawValue], optional: false)
+
+        let user = User.init(name!, id!, role!)
         
-        let name = ResponseHandler.getTextParameter(from: userInfo[UserFields.name.rawValue]!)
-        let role = ResponseHandler.getTextParameter(from: userInfo[UserFields.role.rawValue]!)
-        let id = ResponseHandler.getIntParameter(from: userInfo[UserFields.id.rawValue]!)
-        
-        let user = User.init(name, id, role)
+        user?.email = ResponseHandler.getTextParameter(from: data[UserFields.email.rawValue], optional: false)
+        user?.createdAt = ResponseHandler.getTextParameter(from: data[UserFields.createdAt.rawValue], optional: true)
+        user?.updatedAt = ResponseHandler.getTextParameter(from: data[UserFields.updatedAt.rawValue], optional: true)
+        user?.active = ResponseHandler.getBoolParameter(from: data[UserFields.active.rawValue], optional: true)
         
         return user!
     }

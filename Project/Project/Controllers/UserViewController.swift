@@ -13,8 +13,14 @@ class UserViewController: UIViewController {
     //MARK: Properties
     var userId: Int?
     var authorizationToken: String?
+    
+    //MARK: Storyboard labels
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var roleLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var activeLabel: UILabel!
+    @IBOutlet weak var createdAt: UILabel!
+    @IBOutlet weak var updatedAt: UILabel!
     
     //MARK: UIViewController
     override func viewDidLoad() {
@@ -33,11 +39,13 @@ class UserViewController: UIViewController {
             fatalError("Empty id")
         }
         
-        guard let urlComponents = URLComponents(string: User.getUsersEndpoint()) else {
+        let url = User.getUserEndpoint() + String(self.userId!)
+        
+        guard let urlComponents = URLComponents(string: url) else {
             fatalError("Tried to load an invalid url")
         }
         
-        Alamofire.request(urlComponents, method: .get, parameters: ["id": String(self.userId!)], encoding: URLEncoding.default, headers: ["Authorization": self.authorizationToken!]).responseJSON {
+        Alamofire.request(urlComponents, headers: ["Authorization": self.authorizationToken!]).responseJSON {
             response in
             if response.result.error != nil {
                 fatalError("Error on json response")
@@ -45,6 +53,12 @@ class UserViewController: UIViewController {
             
             let user = User.userFromResponse(response)
             
+            self.nameLabel.text = "Name: " + user.name
+            self.roleLabel.text = "Role: " + user.role
+            self.emailLabel.text = "Email: " + user.email!
+            self.activeLabel.text = "Active: " + (user.active != nil ? String(describing: user.active!) : " - ")
+            self.createdAt.text = "Created: " + (user.createdAt ?? " - ")
+            self.updatedAt.text = "Last update: " + (user.updatedAt ?? " - ")
         }
     }
     

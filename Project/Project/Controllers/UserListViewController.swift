@@ -25,7 +25,7 @@ class UserListViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.getUsersFrom(User.getUsersEndpoint(), on: currentPage, showing: 10)
+        self.getUsersFrom(User.getUserListEndpoint(), on: currentPage, showing: 10)
         super.viewWillAppear(animated)
     }
     //MARK: UITableViewController
@@ -45,7 +45,7 @@ class UserListViewController: UITableViewController {
         }
         
         cell.nameLabel.text = users[indexPath.row].name
-        cell.roleLabel.text = String(users[indexPath.row].id)
+        cell.roleLabel.text = users[indexPath.row].role
         
         return cell
     }
@@ -60,7 +60,7 @@ class UserListViewController: UITableViewController {
             if self.endOfList == nil {
                 return
             }
-            getUsersFrom(User.getUsersEndpoint(), on: self.currentPage, showing: 10)
+            getUsersFrom(User.getUserListEndpoint(), on: self.currentPage, showing: 10)
         }
     }
     
