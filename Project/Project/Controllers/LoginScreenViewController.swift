@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import Alamofire
 
-class LoginScreenViewController: UIViewController{
+class LoginScreenViewController: UIViewController {
     //MARK: Properties
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -50,7 +50,7 @@ class LoginScreenViewController: UIViewController{
     }
     
      //MARK: Login functions
-    func doLogin(_ user:String,_ password:String, _ rememberMe: Bool){
+    func doLogin(_ user:String,_ password:String, _ rememberMe: Bool) {
         guard let urlComponents = URLComponents(string: User.getLoginEndpoint()) else {
             fatalError("Tried to load an invalid url")
         }
@@ -76,18 +76,18 @@ class LoginScreenViewController: UIViewController{
         }
     }
     
-    func loginSucceeded(){
+    func loginSucceeded() {
         dismiss(animated: true, completion: nil)
         performSegue(withIdentifier: "fromLoginToUserList", sender: self)
     }
     
-    func loginFailed(){
+    func loginFailed() {
         let alert = UIAlertController(title: "Error", message: "Could not login", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
-    func clearTextFields(){
+    func clearTextFields() {
         userNameTextField.text = ""
         passwordTextField.text = ""
     }

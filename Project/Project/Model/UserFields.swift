@@ -12,6 +12,8 @@ enum UserFields: String {
     case id = "id"
     case active = "active"
     case email = "email"
+    case password = "password"
+    case token = "token"
     case createdAt = "createdAt"
     case updatedAt = "updatedAt"
     case name = "name"

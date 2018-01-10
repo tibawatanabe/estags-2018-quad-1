@@ -20,7 +20,7 @@ class User{
     var updatedAt: String?
     
     //MARK: Initialization
-    init?(_ name: String, _ id: Int, _ role: String){
+    init?(_ name: String, _ id: Int, _ role: String) {
         if name.isEmpty {
             return nil
         }

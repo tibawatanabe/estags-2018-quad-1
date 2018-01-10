@@ -17,6 +17,8 @@ class UserListViewController: UITableViewController {
     var currentUser: User?
     var endOfList: Bool?
     var currentPage: Int = 0
+    
+    //MARK: Storyboard items
     @IBOutlet var userList: UITableView!
     
     //MARK: UIViewController
@@ -50,6 +52,12 @@ class UserListViewController: UITableViewController {
         return cell
     }
     
+    //MARK: Actions
+    @IBAction func didPressAddButton(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "fromListToCreation", sender: self)
+    }
+    
+    //MARK: Table Actions
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         currentUser = users[indexPath.row]
         performSegue(withIdentifier: "fromListToDetail", sender: self)
@@ -65,18 +73,30 @@ class UserListViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "fromListToDetail") {
+        if segue.identifier == nil {
+            return
+        }
+        switch segue.identifier! {
+        case "fromListToDetail":
             let nextController = segue.destination as? UserViewController
             guard currentUser != nil else {
                 return
             }
             nextController?.userId = currentUser!.id
             nextController?.authorizationToken = self.authorizationToken!
+        case "fromListToCreation":
+            let nextController = segue.destination as? UserCreationViewController
+            guard self.authorizationToken != nil else {
+                return
+            }
+            nextController?.authorizationToken = self.authorizationToken!
+        default:
+            super.prepare(for: segue, sender: sender)
         }
     }
     
     //MARK: Private Methods
-    fileprivate func getUsersFrom(_ path: String, on page: Int, showing window: Int){
+    fileprivate func getUsersFrom(_ path: String, on page: Int, showing window: Int) {
         
         guard let urlComponents = URLComponents(string: path) else {
             fatalError("Tried to load an invalid url")
@@ -84,7 +104,7 @@ class UserListViewController: UITableViewController {
         
         Alamofire.request(urlComponents, method: .get, parameters: ["pagination": ["page": page, "window": window]], encoding: URLEncoding.default, headers: ["Authorization": self.authorizationToken!]).responseJSON {
             response in
-            if response.result.error != nil{
+            if response.result.error != nil {
                 fatalError("Error on json response")
             }
             self.users += User.usersArrayFromResponse(response)
@@ -94,7 +114,7 @@ class UserListViewController: UITableViewController {
         }
     }
     
-    fileprivate func checkIfListHasEnded(_ response: DataResponse<Any>) -> Bool{
+    fileprivate func checkIfListHasEnded(_ response: DataResponse<Any>) -> Bool {
         guard let json = response.result.value as? [String: Any] else {
             fatalError("Didn't get json dictionary")
         }
@@ -114,6 +134,7 @@ class UserListViewController: UITableViewController {
         if Int(page)! < totalPages - 1 {
             return false
         }
+        
         return true
     }
     

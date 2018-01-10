@@ -33,7 +33,7 @@ class UserViewController: UIViewController {
     }
     
     //MARK: Private methods
-    fileprivate func getUserDetails(){
+    fileprivate func getUserDetails() {
         
         guard userId != nil else {
             fatalError("Empty id")
