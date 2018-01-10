@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StackNavigator } from 'react-navigation'
 // tslint:disable-next-line:max-line-length
-import { Text, View, StyleSheet, TouchableHighlight } from 'react-native'
+import { Text, View, StyleSheet, TouchableHighlight, Alert } from 'react-native'
 import axios from 'axios'
 
 interface DetailScreenProps {
@@ -50,8 +50,24 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
     this.componentDidMount()
   }
 
+  async deleteUser() {
+    const { params } = this.props.navigation.state
+    await axios.delete(`https://tq-template-node.herokuapp.com/user/${params.id}`,
+      {
+        headers: { Authorization: `${params.token}`}
+      }
+    )
+    .then(() => {
+      Alert.alert(`User: ${this.state.name} deleted`)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+  }
+
   render() {
     const {params} = this.props.navigation.state
+    const {goBack} = this.props.navigation
     const {navigate} = this.props.navigation
     return(
       <View>
@@ -72,6 +88,17 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
           })}
         >
           <Text> Edit </Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style = {{backgroundColor: 'red'}}
+          underlayColor = 'crimson'
+          onPress = {() => {
+            this.deleteUser()
+            params.refresh()
+            goBack()
+          }}
+        >
+          <Text> Delete! </Text>
         </TouchableHighlight>
       </View>
     )

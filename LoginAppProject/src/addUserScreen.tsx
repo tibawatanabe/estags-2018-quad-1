@@ -53,7 +53,7 @@ export default class AddUserScreen extends Component<AddUserScreenProps, AddUser
       goBack()
     })
     .catch((error) => {
-      Alert.alert('New user couldnt be created')
+      Alert.alert('New user couldn\`t be created')
     })
   }
 
