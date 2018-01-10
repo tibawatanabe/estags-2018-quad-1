@@ -1,19 +1,86 @@
 import * as React from 'react';
-import { ScrollView, Text, Button } from '@shoutem/ui';
+import { TabNavigator } from 'react-navigation';
+import { ScrollView, Divider, Caption, Icon, View, Tile, Title, Text, Button } from '@shoutem/ui';
 
-interface Props {}
-interface State {}
+import List from '../artifacts/List';
 
-export default class UserInfo extends React.Component<Props, State> {
+export interface InfoProps {
+    navigation: any
+}
+export interface InfoState {}
+export interface UserProps {
+    screenProps: any
+}
+export interface UserState {}
+
+class LoggedUser extends React.Component<UserProps, UserState> {
+    static navigationOptions = {
+        tabBarLabel: <Icon name="user-profile"/>
+    }
+
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
-            <ScrollView>
-                <Button
-                    onPress={this.props.onLogoutPress}
-                >
-                    <Text>Log out</Text>
-                </Button>
+            <ScrollView 
+                style={{
+                    flex: 1,
+                    backgroundColor: 'white'
+                }}
+            >
+                <Tile styleName={'text-centric inflexible'}>
+                        <Title>
+                            Welcome, {this.props.screenProps.state.params.data.user.name}
+                        </Title>
+                </Tile>
+                <Divider styleName={'section-header'}>
+                    <Caption>E-mail</Caption>
+                    <Text>{this.props.screenProps.state.params.data.user.email}</Text>
+                </Divider>
+                <Divider styleName={'section-header'}>
+                    <Caption>Role</Caption>
+                    <Text>{this.props.screenProps.state.params.data.user.role}</Text>
+                </Divider>
+                <View>
+                    <Button
+                        onPress={() => this.props.screenProps.navigate('Login')}
+                    >
+                        <Text>Log out</Text>
+                    </Button>
+                </View>
             </ScrollView>
+        );
+    }
+}
+
+const UserInfoNav = TabNavigator({
+    List: {
+        screen: List
+    },
+    Me: {
+        screen: LoggedUser
+    },
+}, {
+    tabBarOptions: {
+        activeTintColor: 'black',
+        inactiveTintColor: 'white',
+        style: {
+            backgroundColor: 'snow'
+        },
+        indicatorStyle: {
+            backgroundColor: 'black'
+        }
+    }
+});
+
+export default class UserInfo extends React.Component<InfoProps, InfoState> {
+    render() {
+        return (
+            <UserInfoNav 
+                screenProps={this.props.navigation}
+            />
         );
     }
 }
