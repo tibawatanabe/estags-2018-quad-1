@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { StackNavigator } from 'react-navigation'
 // tslint:disable-next-line:max-line-length
-import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, FlatList, TouchableHighlight } from 'react-native'
+import {StyleSheet} from 'react-native'
 import LoginScreen from './loginScreen'
 import ProfileScreen from './profileScreen'
 import DetailScreen from './detailScreen'
+import AddUserScreen from './addUserScreen'
+import EditUserScreen from './editUserScreen'
 
 export default class App extends React.Component {
   render() {
@@ -17,7 +19,9 @@ export default class App extends React.Component {
 const LoginApp = StackNavigator({
   Home: { screen: LoginScreen },
   Profile: { screen: ProfileScreen },
-  Detail: { screen: DetailScreen }
+  Detail: { screen: DetailScreen },
+  AddUser: { screen: AddUserScreen},
+  EditUser: { screen: EditUserScreen}
 })
 
 // Styles
