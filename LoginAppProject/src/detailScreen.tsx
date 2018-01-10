@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StackNavigator } from 'react-navigation'
 // tslint:disable-next-line:max-line-length
-import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, FlatList, TouchableHighlight } from 'react-native'
+import { Text, View, StyleSheet, TouchableHighlight } from 'react-native'
 import axios from 'axios'
 
 interface DetailScreenProps {
@@ -46,13 +46,33 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
     })
   }
 
+  refresh = () => {
+    this.componentDidMount()
+  }
+
   render() {
     const {params} = this.props.navigation.state
+    const {navigate} = this.props.navigation
     return(
       <View>
         <Text> Name: {this.state.name} </Text>
         <Text> Email: {this.state.email} </Text>
         <Text> Id: {params.id} </Text>
+        <TouchableHighlight
+          style = {{backgroundColor: 'skyblue'}}
+          underlayColor = 'powderblue'
+          onPress = {() => navigate('EditUser',
+          {
+            refreshDetail: this.refresh,
+            refreshList: params.refresh,
+            token: params.token,
+            id: params.id,
+            name: this.state.name,
+            email: this.state.email
+          })}
+        >
+          <Text> Edit </Text>
+        </TouchableHighlight>
       </View>
     )
   }
