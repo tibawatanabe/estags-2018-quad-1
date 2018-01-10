@@ -9,16 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.IOException;
+import com.example.android.projectjoao.model.LoginResponse;
+import com.example.android.projectjoao.model.User;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     EditText mUserName;
@@ -27,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button mConfirmationButton;
 
-    LoginAPI loginApi;
+    TaqtileApiHandler apiHandler;
 
     SharedPreferences pref; // 0 - for private mode
     SharedPreferences.Editor editor;
@@ -49,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         mConfirmationButton = (Button) findViewById(R.id.confirmation_button);
 
-        userAuthentication();
+        apiHandler = NetworkConnection.getConnection();
 
         mConfirmationButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -60,31 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 user.setEmail(username);
                 user.setPassword(password);
                 user.setRememberMe(false);
-                loginApi.authenticateUser(user).enqueue(userAuthenticationCallback);
+                apiHandler.authenticateUser(user).enqueue(userAuthenticationCallback);
             }
         });
-    }
-
-    private void userAuthentication(){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-            @Override
-            public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request originalRequest = chain.request();
-
-                Request.Builder builder = originalRequest.newBuilder();
-
-                Request newRequest = builder.build();
-                return chain.proceed(newRequest);
-            }
-        }).build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(LoginAPI.BASE_URL)
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        loginApi = retrofit.create(LoginAPI.class);
     }
 
     Callback<LoginResponse> userAuthenticationCallback = new Callback<LoginResponse>() {
