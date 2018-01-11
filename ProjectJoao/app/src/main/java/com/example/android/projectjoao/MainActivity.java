@@ -52,11 +52,18 @@ public class MainActivity extends AppCompatActivity {
                 String username = mUserName.getText().toString();
                 String password = mPassword.getText().toString();
 
-                User user = new User();
-                user.setEmail(username);
-                user.setPassword(password);
-                user.setRememberMe(false);
-                apiHandler.authenticateUser(user).enqueue(userAuthenticationCallback);
+                if(username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Preencha todos os dados", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    User user = new User();
+                    user.setEmail(username);
+                    user.setPassword(password);
+                    user.setRememberMe(false);
+
+                    apiHandler.authenticateUser(user).enqueue(userAuthenticationCallback);
+                }
+
             }
         });
     }
