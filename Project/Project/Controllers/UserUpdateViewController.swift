@@ -38,6 +38,7 @@ class UserUpdateViewController: UIViewController {
         }
         
         self.updateUser(name, password, email, role)
+        navigationController?.popViewController(animated: true)
     }
     
     //MARK: Private methods

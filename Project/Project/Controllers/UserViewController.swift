@@ -22,6 +22,7 @@ class UserViewController: UIViewController {
     @IBOutlet weak var createdAt: UILabel!
     @IBOutlet weak var updatedAt: UILabel!
     @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var deleteButton: UIBarButtonItem!
     
     
     //MARK: UIViewController
@@ -31,6 +32,7 @@ class UserViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.editButton.isEnabled = false
+        self.deleteButton.isEnabled = false
         self.getUserDetails()
         super.viewWillAppear(animated)
     }
@@ -39,6 +41,21 @@ class UserViewController: UIViewController {
     @IBAction func didPressEditButton(_ sender: UIBarButtonItem) {
         UserItems.storeObject(self.authorizationToken!, forKey: "authorizationToken")
         performSegue(withIdentifier: "fromDetailToUpdate", sender: self)
+    }
+    
+    @IBAction func didPressDeleteButton(_ sender: UIBarButtonItem) {
+        let dialogMessage = UIAlertController(title: "Confirm", message: "Are you sure you want to delete this user?", preferredStyle: .alert)
+        
+        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            self.deleteUser()
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        dialogMessage.addAction(cancel)
+        dialogMessage.addAction(ok)
+        
+        self.present(dialogMessage, animated: true, completion: nil)
     }
     
     //MARK: Private methods
@@ -76,6 +93,52 @@ class UserViewController: UIViewController {
             UserItems.storeObject(userInfo, forKey: "updatingUser")
             UserItems.storeObject(String(self.userId!), forKey: "updatingUserId")
             self.editButton.isEnabled = true
+            self.deleteButton.isEnabled = true
+
+        }
+    }
+    
+    fileprivate func deleteUser() {
+        guard let userId = UserItems.getObject(forKey: "updatingUserId") as? String else {
+            AlertHandler.show("Error", "Unable to recover user id", sender: self)
+            return
+        }
+        
+        let url = TemplateAPIHandler.userEndpoint + userId
+        
+        guard let urlComponents = URLComponents(string: url) else {
+            AlertHandler.show("Error", "Invalid url", sender: self)
+            return
+        }
+        
+        guard let token = UserItems.getObject(forKey: "authorizationToken") as? String else {
+            AlertHandler.show("Error", "Unable to recover authorization token", sender: self)
+            return
+        }
+        
+        let headerParameters = ["Authorization": token]
+        
+        Alamofire.request(urlComponents, method: .delete, headers: headerParameters)
+            .responseJSON{ response in
+            if response.result.error != nil {
+                AlertHandler.show("Error", "Error on json response", sender: self)
+                return
+            }
+            
+            guard let json = response.result.value as? [String: Any] else {
+                AlertHandler.show("Error", "Didn't get json dictionary", sender: self)
+                return
+            }
+            
+            guard let _ = json["data"] as? [String: Any] else {
+                let errors = json["errors"] as? [[String: String]]
+                if errors != nil {
+                    print((errors?.first!["name"])! + (errors?.first!["message"])!)
+                }
+                AlertHandler.show("Error", "User could not be removed", sender: self)
+                return
+            }
+            AlertHandler.show("Success!", "User has been removed", sender: self)
         }
     }
 }

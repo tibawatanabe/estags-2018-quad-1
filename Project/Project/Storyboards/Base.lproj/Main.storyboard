@@ -6,6 +6,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -305,15 +306,23 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Details" id="TAT-TT-uGm">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="edit" id="x87-6c-cbr">
-                            <connections>
-                                <action selector="didPressEditButton:" destination="Zop-lE-IlH" id="cJd-Qv-pQz"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem style="plain" systemItem="trash" id="aqa-22-9xY">
+                                <connections>
+                                    <action selector="didPressDeleteButton:" destination="Zop-lE-IlH" id="pmP-hB-Oln"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem style="plain" systemItem="edit" id="x87-6c-cbr">
+                                <connections>
+                                    <action selector="didPressEditButton:" destination="Zop-lE-IlH" id="cJd-Qv-pQz"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="activeLabel" destination="E3h-Le-jAB" id="49q-Xg-8xz"/>
                         <outlet property="createdAt" destination="vl3-5i-ehP" id="LoT-cQ-0bp"/>
+                        <outlet property="deleteButton" destination="aqa-22-9xY" id="ZRp-Mw-rJk"/>
                         <outlet property="editButton" destination="x87-6c-cbr" id="njn-Ir-bkK"/>
                         <outlet property="emailLabel" destination="C6p-Z1-HcZ" id="iYz-51-Wqh"/>
                         <outlet property="nameLabel" destination="gcX-xF-MzG" id="0ak-IV-ngs"/>

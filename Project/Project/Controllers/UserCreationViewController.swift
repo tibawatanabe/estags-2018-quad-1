@@ -39,7 +39,6 @@ class UserCreationViewController: UIViewController {
         }
         
         self.createUser(name, password, email, role)
-        
     }
     
     //MARK: Private methods
