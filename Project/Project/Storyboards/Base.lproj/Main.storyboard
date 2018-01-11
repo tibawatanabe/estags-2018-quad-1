@@ -101,6 +101,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" id="O4j-5P-xcd">
+                            <rect key="frame" x="0.0" y="108" width="375" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UserTableViewCell" id="Mai-md-T4q" customClass="UserTableViewCell" customModule="Project" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="80"/>
@@ -132,6 +136,7 @@
                                         <constraint firstItem="vQu-Ba-TIg" firstAttribute="leading" secondItem="jHC-jd-dEl" secondAttribute="leadingMargin" id="FBN-RG-WcS"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <gestureRecognizers/>
                                 <connections>
                                     <outlet property="nameLabel" destination="79b-dq-R7J" id="E8R-9d-4J5"/>
                                     <outlet property="roleLabel" destination="FTe-iH-O96" id="vEZ-KZ-ED9"/>
@@ -143,13 +148,22 @@
                             <outlet property="delegate" destination="1Cy-1R-eZJ" id="7um-ZW-zUb"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Users" id="6Jj-BZ-gcZ">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Ce3-4F-WIm">
-                            <connections>
-                                <action selector="didPressAddButton:" destination="1Cy-1R-eZJ" id="g2y-QV-CgT"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="Ce3-4F-WIm">
+                                <connections>
+                                    <action selector="didPressAddButton:" destination="1Cy-1R-eZJ" id="g2y-QV-CgT"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="refresh" id="DMx-9m-x4K">
+                                <connections>
+                                    <action selector="didTapRefreshButton:" destination="1Cy-1R-eZJ" id="rYH-XR-iA2"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="userList" destination="hBi-Zh-e7o" id="iil-5R-uu4"/>
                         <segue destination="Zop-lE-IlH" kind="show" identifier="fromListToDetail" id="pbm-cw-bCf"/>
