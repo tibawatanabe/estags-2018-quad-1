@@ -21,6 +21,8 @@ class UserViewController: UIViewController {
     @IBOutlet weak var activeLabel: UILabel!
     @IBOutlet weak var createdAt: UILabel!
     @IBOutlet weak var updatedAt: UILabel!
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    
     
     //MARK: UIViewController
     override func viewDidLoad() {
@@ -28,27 +30,37 @@ class UserViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.editButton.isEnabled = false
         self.getUserDetails()
         super.viewWillAppear(animated)
+    }
+    
+    //MARK: Actions
+    @IBAction func didPressEditButton(_ sender: UIBarButtonItem) {
+        UserItems.storeObject(self.authorizationToken!, forKey: "authorizationToken")
+        performSegue(withIdentifier: "fromDetailToUpdate", sender: self)
     }
     
     //MARK: Private methods
     fileprivate func getUserDetails() {
         
         guard userId != nil else {
-            fatalError("Empty id")
+            AlertHandler.show("Error", "Could not get user details", sender: self)
+            return
         }
         
         let url = TemplateAPIHandler.userEndpoint + String(self.userId!)
         
         guard let urlComponents = URLComponents(string: url) else {
-            fatalError("Tried to load an invalid url")
+            AlertHandler.show("Error", "Unable to reach endpoint", sender: self)
+            return
         }
         
         Alamofire.request(urlComponents, headers: ["Authorization": self.authorizationToken!]).responseJSON {
             response in
             if response.result.error != nil {
-                fatalError("Error on json response")
+                AlertHandler.show("Error", "No response", sender: self)
+                return
             }
             
             let user = User.userFromResponse(response)
@@ -59,7 +71,12 @@ class UserViewController: UIViewController {
             self.activeLabel.text = "Active: " + (user.active != nil ? String(describing: user.active!) : " - ")
             self.createdAt.text = "Created: " + (user.createdAt ?? " - ")
             self.updatedAt.text = "Last update: " + (user.updatedAt ?? " - ")
+            
+            let userInfo = [UserFields.name.rawValue: user.name, UserFields.email.rawValue: user.email, UserFields.role.rawValue: user.role]
+            UserItems.storeObject(userInfo, forKey: "updatingUser")
+            UserItems.storeObject(String(self.userId!), forKey: "updatingUserId")
+            self.editButton.isEnabled = true
         }
     }
-    
 }
+

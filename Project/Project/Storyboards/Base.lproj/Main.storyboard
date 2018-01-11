@@ -304,19 +304,110 @@
                             <constraint firstItem="KcT-mP-U2d" firstAttribute="top" secondItem="3jE-ud-C0l" secondAttribute="bottom" constant="20" id="sin-fT-IMU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Details" id="TAT-TT-uGm"/>
+                    <navigationItem key="navigationItem" title="Details" id="TAT-TT-uGm">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="edit" id="x87-6c-cbr">
+                            <connections>
+                                <action selector="didPressEditButton:" destination="Zop-lE-IlH" id="cJd-Qv-pQz"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="activeLabel" destination="E3h-Le-jAB" id="49q-Xg-8xz"/>
                         <outlet property="createdAt" destination="vl3-5i-ehP" id="LoT-cQ-0bp"/>
+                        <outlet property="editButton" destination="x87-6c-cbr" id="njn-Ir-bkK"/>
                         <outlet property="emailLabel" destination="C6p-Z1-HcZ" id="iYz-51-Wqh"/>
                         <outlet property="nameLabel" destination="gcX-xF-MzG" id="0ak-IV-ngs"/>
                         <outlet property="roleLabel" destination="nMa-Yx-OKv" id="hiw-c0-mfu"/>
                         <outlet property="updatedAt" destination="w4g-kF-Vj4" id="dXx-Re-ohH"/>
+                        <segue destination="3wY-mx-eur" kind="show" identifier="fromDetailToUpdate" id="SAW-Mw-Pmb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HrT-O4-OIF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2898" y="435"/>
+        </scene>
+        <!--Edit-->
+        <scene sceneID="K9g-3W-OIf">
+            <objects>
+                <viewController id="3wY-mx-eur" customClass="UserUpdateViewController" customModule="Project" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7GG-gq-S14"/>
+                        <viewControllerLayoutGuide type="bottom" id="CPP-Z8-iu5"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="muX-ux-jSn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="W71-d1-emr">
+                                <rect key="frame" x="66" y="144" width="243" height="235"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0ME-Ok-Epe">
+                                        <rect key="frame" x="0.0" y="0.0" width="243" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="ena-0L-m31"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="username"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zqp-sM-3IB">
+                                        <rect key="frame" x="0.0" y="65" width="243" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="2qB-dd-W7Z"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES" textContentType="password"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="r2L-Fc-1eX">
+                                        <rect key="frame" x="0.0" y="130" width="243" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="bBe-Eu-k0u"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="email"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Role" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="caQ-Zp-E8W">
+                                        <rect key="frame" x="0.0" y="195" width="243" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="Ckq-Db-hl4"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="organization-title"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zgn-Ro-f2W">
+                                <rect key="frame" x="162" y="429" width="51" height="30"/>
+                                <state key="normal" title="Update"/>
+                                <connections>
+                                    <action selector="didPressUpdateButton:" destination="3wY-mx-eur" eventType="touchUpInside" id="Tha-xl-SS4"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Zgn-Ro-f2W" firstAttribute="centerX" secondItem="muX-ux-jSn" secondAttribute="centerX" id="0te-aj-T8r"/>
+                            <constraint firstItem="W71-d1-emr" firstAttribute="centerX" secondItem="muX-ux-jSn" secondAttribute="centerX" id="F5t-sh-E1i"/>
+                            <constraint firstItem="Zgn-Ro-f2W" firstAttribute="top" secondItem="W71-d1-emr" secondAttribute="bottom" constant="50" id="IJg-zM-X9m"/>
+                            <constraint firstItem="W71-d1-emr" firstAttribute="leading" secondItem="muX-ux-jSn" secondAttribute="leadingMargin" constant="50" id="Kzd-IR-MH1"/>
+                            <constraint firstItem="W71-d1-emr" firstAttribute="top" secondItem="7GG-gq-S14" secondAttribute="bottom" constant="80" id="YAQ-Ob-5lf"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="W71-d1-emr" secondAttribute="trailing" constant="50" id="zQA-Sh-gPT"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Edit" id="zhF-Id-FO7"/>
+                    <connections>
+                        <outlet property="emailTextField" destination="r2L-Fc-1eX" id="3ho-70-gyy"/>
+                        <outlet property="nameTextField" destination="0ME-Ok-Epe" id="4Ao-gM-4r8"/>
+                        <outlet property="passwordTextField" destination="zqp-sM-3IB" id="3dx-br-bSM"/>
+                        <outlet property="roleTextField" destination="caQ-Zp-E8W" id="gRY-Gc-fjW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BCR-sY-3as" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3888.8000000000002" y="434.93253373313348"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="9KB-m0-Lkp">
