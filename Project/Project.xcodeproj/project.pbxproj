@@ -12,6 +12,8 @@
 		4D1FDF8020000D6A0087AE59 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FDF7F20000D6A0087AE59 /* UserTableViewCell.swift */; };
 		4D1FDF85200015040087AE59 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FDF84200015040087AE59 /* UserListViewController.swift */; };
 		4D1FDF8820001CCC0087AE59 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FDF8720001CCC0087AE59 /* User.swift */; };
+		4D2966922006450900F9C0BB /* UserCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2966912006450900F9C0BB /* UserCreationViewController.swift */; };
+		4D2966962006A9EC00F9C0BB /* TemplateAPIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2966952006A9EC00F9C0BB /* TemplateAPIHandler.swift */; };
 		4D36273D1FFE813100342117 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D36273C1FFE813100342117 /* AppDelegate.swift */; };
 		4D36273F1FFE813100342117 /* LoginScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D36273E1FFE813100342117 /* LoginScreenViewController.swift */; };
 		4D3627421FFE813100342117 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D3627401FFE813100342117 /* Main.storyboard */; };
@@ -27,6 +29,8 @@
 		4D1FDF7F20000D6A0087AE59 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		4D1FDF84200015040087AE59 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
 		4D1FDF8720001CCC0087AE59 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		4D2966912006450900F9C0BB /* UserCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCreationViewController.swift; sourceTree = "<group>"; };
+		4D2966952006A9EC00F9C0BB /* TemplateAPIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateAPIHandler.swift; sourceTree = "<group>"; };
 		4D3627391FFE813100342117 /* Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Project.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D36273C1FFE813100342117 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4D36273E1FFE813100342117 /* LoginScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +70,7 @@
 				4D1FDF84200015040087AE59 /* UserListViewController.swift */,
 				4D36273E1FFE813100342117 /* LoginScreenViewController.swift */,
 				4D433D7120039FF90055FF09 /* UserViewController.swift */,
+				4D2966912006450900F9C0BB /* UserCreationViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -92,9 +97,17 @@
 			children = (
 				4D1FDF8720001CCC0087AE59 /* User.swift */,
 				4D09F0472005450E000904FD /* UserFields.swift */,
-				4D09F0492005584F000904FD /* ResponseHandler.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		4D2966932006A08900F9C0BB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4D09F0492005584F000904FD /* ResponseHandler.swift */,
+				4D2966952006A9EC00F9C0BB /* TemplateAPIHandler.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		4D3627301FFE813100342117 = {
@@ -118,6 +131,7 @@
 		4D36273B1FFE813100342117 /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				4D2966932006A08900F9C0BB /* Services */,
 				4D1FDF8620001CA60087AE59 /* Model */,
 				4D1FDF7E20000D350087AE59 /* View */,
 				4D1FDF7B1FFFE8B20087AE59 /* Storyboards */,
@@ -270,6 +284,8 @@
 				4D36273F1FFE813100342117 /* LoginScreenViewController.swift in Sources */,
 				4D09F0482005450E000904FD /* UserFields.swift in Sources */,
 				4D433D7220039FF90055FF09 /* UserViewController.swift in Sources */,
+				4D2966962006A9EC00F9C0BB /* TemplateAPIHandler.swift in Sources */,
+				4D2966922006450900F9C0BB /* UserCreationViewController.swift in Sources */,
 				4D1FDF85200015040087AE59 /* UserListViewController.swift in Sources */,
 				4D1FDF8020000D6A0087AE59 /* UserTableViewCell.swift in Sources */,
 				4D09F04A2005584F000904FD /* ResponseHandler.swift in Sources */,

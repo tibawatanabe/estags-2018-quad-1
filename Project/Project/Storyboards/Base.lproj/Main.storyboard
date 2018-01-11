@@ -92,7 +92,7 @@
             </objects>
             <point key="canvasLocation" x="841" y="116"/>
         </scene>
-        <!--User List View Controller-->
+        <!--Users-->
         <scene sceneID="4s5-uA-O5w">
             <objects>
                 <tableViewController id="1Cy-1R-eZJ" customClass="UserListViewController" customModule="Project" customModuleProvider="target" sceneMemberID="viewController">
@@ -142,16 +142,109 @@
                             <outlet property="delegate" destination="1Cy-1R-eZJ" id="7um-ZW-zUb"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Users" id="6Jj-BZ-gcZ">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Ce3-4F-WIm">
+                            <connections>
+                                <action selector="didPressAddButton:" destination="1Cy-1R-eZJ" id="g2y-QV-CgT"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="userList" destination="hBi-Zh-e7o" id="iil-5R-uu4"/>
                         <segue destination="Zop-lE-IlH" kind="show" identifier="fromListToDetail" id="pbm-cw-bCf"/>
+                        <segue destination="Nq9-1o-wBY" kind="show" identifier="fromListToCreation" id="eLn-99-Oml"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="32J-r9-aUw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1783" y="116"/>
         </scene>
-        <!--User View Controller-->
+        <!--Registration-->
+        <scene sceneID="AWR-Of-x9f">
+            <objects>
+                <viewController id="Nq9-1o-wBY" customClass="UserCreationViewController" customModule="Project" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Wwe-qf-DwI"/>
+                        <viewControllerLayoutGuide type="bottom" id="OCp-Ob-KHe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UHY-GP-LEx">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="0P5-FO-eSg">
+                                <rect key="frame" x="66" y="144" width="243" height="235"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CNV-ub-Vxy">
+                                        <rect key="frame" x="0.0" y="0.0" width="243" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="01g-2J-Bik"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="username"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gov-Ab-kjC">
+                                        <rect key="frame" x="0.0" y="65" width="243" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="TX5-WS-Wkj"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES" textContentType="password"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rIS-tK-P8h">
+                                        <rect key="frame" x="0.0" y="130" width="243" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="AfY-Kv-5jD"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="email"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Role" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XYL-Xv-jYv">
+                                        <rect key="frame" x="0.0" y="195" width="243" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="Up3-Ff-YZX"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="organization-title"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GPt-05-FiL">
+                                <rect key="frame" x="158" y="429" width="58" height="36"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                <state key="normal" title="Create"/>
+                                <connections>
+                                    <action selector="didPressCreateButton:" destination="Nq9-1o-wBY" eventType="touchUpInside" id="dau-0k-g3y"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0P5-FO-eSg" firstAttribute="centerX" secondItem="UHY-GP-LEx" secondAttribute="centerX" id="5Wk-vw-V1M"/>
+                            <constraint firstItem="0P5-FO-eSg" firstAttribute="top" secondItem="Wwe-qf-DwI" secondAttribute="bottom" constant="80" id="6xL-sS-J3U"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0P5-FO-eSg" secondAttribute="trailing" constant="50" id="gcR-hE-ubT"/>
+                            <constraint firstItem="0P5-FO-eSg" firstAttribute="leading" secondItem="UHY-GP-LEx" secondAttribute="leadingMargin" constant="50" id="pB6-C1-aBN"/>
+                            <constraint firstItem="GPt-05-FiL" firstAttribute="top" secondItem="0P5-FO-eSg" secondAttribute="bottom" constant="50" id="tPS-t9-ZXu"/>
+                            <constraint firstItem="GPt-05-FiL" firstAttribute="centerX" secondItem="UHY-GP-LEx" secondAttribute="centerX" id="wAu-fS-vVQ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Registration" id="rBS-rA-uve"/>
+                    <connections>
+                        <outlet property="createButton" destination="GPt-05-FiL" id="Y50-6h-uJc"/>
+                        <outlet property="emailTextField" destination="rIS-tK-P8h" id="ZGh-T3-HPd"/>
+                        <outlet property="nameTextField" destination="CNV-ub-Vxy" id="rMn-RJ-Umu"/>
+                        <outlet property="passwordTextField" destination="gov-Ab-kjC" id="jSU-pG-0DL"/>
+                        <outlet property="roleTextField" destination="XYL-Xv-jYv" id="tEL-Oi-RD1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kdf-lR-P7B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2897" y="-267"/>
+        </scene>
+        <!--Details-->
         <scene sceneID="J8R-xe-Dz0">
             <objects>
                 <viewController id="Zop-lE-IlH" customClass="UserViewController" customModule="Project" customModuleProvider="target" sceneMemberID="viewController">
@@ -211,6 +304,7 @@
                             <constraint firstItem="KcT-mP-U2d" firstAttribute="top" secondItem="3jE-ud-C0l" secondAttribute="bottom" constant="20" id="sin-fT-IMU"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Details" id="TAT-TT-uGm"/>
                     <connections>
                         <outlet property="activeLabel" destination="E3h-Le-jAB" id="49q-Xg-8xz"/>
                         <outlet property="createdAt" destination="vl3-5i-ehP" id="LoT-cQ-0bp"/>
@@ -222,7 +316,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HrT-O4-OIF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2816.8000000000002" y="115.59220389805098"/>
+            <point key="canvasLocation" x="2898" y="435"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="9KB-m0-Lkp">
