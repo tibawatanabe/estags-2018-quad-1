@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ActivityIndicator } from 'react-native';
+import { Alert, ActivityIndicator } from 'react-native';
 import { ScrollView, Tile, Title, TextInput, Button, View, Icon, Divider, Caption, Text } from '@shoutem/ui';
 import axios from 'axios';
 
@@ -75,7 +75,7 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
         }
     }
 
-    async onDeletePress() {
+    async deleteUser() {
         let param = this.props.navigation.state.params.id;
         try {
             await axios.delete('http://tq-template-node.herokuapp.com/user/'+param,
@@ -91,6 +91,17 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
         catch (error) {
             this.setState({loading: true, error: true, editing: false})
         }
+    }
+
+    onDeletePress() {
+        Alert.alert(
+            'Delete user',
+            'Delete '+this.state.data.name+' from list?',
+            [
+                {text: 'Yes', onPress: () => this.deleteUser(), },
+                {text: 'No'}
+            ]
+        )
     }
 
     onEditPress() {

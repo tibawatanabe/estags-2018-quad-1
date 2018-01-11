@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Alert } from 'react-native';
 import { ScrollView, Tile, TextInput, Button, View, Icon, Divider, Caption, Text } from '@shoutem/ui';
 import axios from 'axios';
 
@@ -30,35 +31,31 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
     }
 
     async onDonePress() {
-        if( this.state.name === '' || this.state.email === '' || this.state.role === '' || this.state.password === '') {
-            this.setState({error: true})
-        } else {
-            let edited = {
-                email: this.state.email,
-                password: this.state.password,
-                name: this.state.name,
-                role: this.state.role
-            }
-            try {
-                await axios.post('http://tq-template-node.herokuapp.com/user',
-                    edited,
-                    {   
-                        headers: {
-                            Authorization: this.props.navigation.state.params.token,
-                            'Content-Type': 'application/json'
-                        }
+        let edited = {
+            email: this.state.email,
+            password: this.state.password,
+            name: this.state.name,
+            role: this.state.role
+        }
+        try {
+            await axios.post('http://tq-template-node.herokuapp.com/user',
+                edited,
+                {   
+                    headers: {
+                        Authorization: this.props.navigation.state.params.token,
+                        'Content-Type': 'application/json'
                     }
-                )
-                this.setState({name: '', email: '', password: '', role: ''})
-                this.props.navigation.goBack()
-                this.props.navigation.state.params.refresh(this.props.navigation.state.params.newPage)
-            }
-            catch (error) {
-                this.setState({error: true})
-            }
+                }
+            )
+            this.setState({name: '', email: '', password: '', role: ''})
+            this.props.navigation.goBack()
+            this.props.navigation.state.params.refresh(this.props.navigation.state.params.newPage)
+        }
+        catch (error) {
+            this.setState({error: true})
         }
     }
-  
+
     onCancelPress() {
         this.props.navigation.goBack()
         this.props.navigation.state.params.refresh(this.props.navigation.state.params.page)
@@ -141,7 +138,18 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
                     <Divider styleName="line"/>
                     <View styleName="horizontal flexible">
                         <Button 
-                            styleName="full-width"
+                            styleName={( 
+                                this.state.name === '' || 
+                                this.state.email === '' || 
+                                this.state.role === '' || 
+                                this.state.password === ''
+                            ) ? "full-width muted" : "full-width"}
+                            disabled= {( 
+                                this.state.name === '' || 
+                                this.state.email === '' || 
+                                this.state.role === '' || 
+                                this.state.password === ''
+                            ) ? true : false}
                             onPress={() => this.onDonePress()}
                         >
                             <Icon name="exit-to-app"/>
