@@ -8,6 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.android.projectjoao.model.ListData;
@@ -26,6 +29,7 @@ import retrofit2.Response;
 public class ListingActivity extends AppCompatActivity implements ItemAdapter.ListItemlickListener {
     private ItemAdapter mAdapter;
     private RecyclerView mItemsList;
+    private LinearLayout mLoadingIndicator;
     private List<ListData> users;
     private TaqtileApiHandler apiHandler;
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -45,16 +49,18 @@ public class ListingActivity extends AppCompatActivity implements ItemAdapter.Li
 
     public void setList() {
         mItemsList = (RecyclerView) findViewById(R.id.scroll_area);
+        mLoadingIndicator = (LinearLayout) findViewById(R.id.loadingPanel);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mItemsList.setLayoutManager(layoutManager);
 
-        listUsers(0, 20, initialUsersCallback);
+        listUsers(0, 15, initialUsersCallback);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                listUsers(page, 20, additionalUsersCallback);
+                mLoadingIndicator.setVisibility(View.VISIBLE);
+                listUsers(page, 15, additionalUsersCallback);
             }
         };
 
@@ -117,6 +123,7 @@ public class ListingActivity extends AppCompatActivity implements ItemAdapter.Li
                         @Override
                         public void run() {
                             mAdapter.notifyItemRangeInserted(currentSize, users.size() - 1);
+                            mLoadingIndicator.setVisibility(View.INVISIBLE);
                         }
                     });
                 } else if(response.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
@@ -164,6 +171,9 @@ public class ListingActivity extends AppCompatActivity implements ItemAdapter.Li
         if(selected == R.id.create_user) {
             Intent i = new Intent(ListingActivity.this, CreateActivity.class);
             startActivity(i);
+        }
+        else if(selected == android.R.id.home){
+            onBackPressed();
         }
         return true;
     }
