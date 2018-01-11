@@ -3,16 +3,16 @@ package com.example.android.projectjoao.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class LoginResponse {
+public class CreateResponse {
     @SerializedName("data")
     @Expose
-    private LoginData data;
+    private User data;
 
-    public LoginData getLoginData() {
+    public User getCreateData() {
         return data;
     }
 
-    public void setLoginData(LoginData loginData) {
-        this.data = loginData;
+    public void setCreateData(User createData) {
+        this.data = createData;
     }
 }

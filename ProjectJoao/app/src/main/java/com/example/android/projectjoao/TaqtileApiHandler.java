@@ -1,5 +1,6 @@
 package com.example.android.projectjoao;
 
+import com.example.android.projectjoao.model.CreateResponse;
 import com.example.android.projectjoao.model.ListResponse;
 import com.example.android.projectjoao.model.LoginResponse;
 import com.example.android.projectjoao.model.ShowResponse;
@@ -26,4 +27,7 @@ public interface TaqtileApiHandler {
 
     @GET("user/{id}")
     Call<ShowResponse> getUser(@Header("Authorization") String token, @Path("id") int id);
+
+    @POST("user")
+    Call<CreateResponse> createUser(@Header("Authorization") String token, @Body User user);
 }
