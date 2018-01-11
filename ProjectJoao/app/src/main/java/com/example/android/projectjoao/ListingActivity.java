@@ -26,7 +26,6 @@ import retrofit2.Response;
 public class ListingActivity extends AppCompatActivity implements ItemAdapter.ListItemlickListener {
     private ItemAdapter mAdapter;
     private RecyclerView mItemsList;
-    private Toast mToast;
     private List<ListData> users;
     private TaqtileApiHandler apiHandler;
     private EndlessRecyclerViewScrollListener scrollListener;
