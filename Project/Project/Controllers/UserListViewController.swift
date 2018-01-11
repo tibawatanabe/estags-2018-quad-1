@@ -17,6 +17,7 @@ class UserListViewController: UITableViewController {
     var currentUser: User?
     var endOfList: Bool?
     var currentPage: Int = 0
+    let windowSize = 10
     
     //MARK: Storyboard items
     @IBOutlet var userList: UITableView!
@@ -27,9 +28,10 @@ class UserListViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.getUsersFrom(TemplateAPIHandler.userListEndpoint, on: currentPage, showing: 10)
         super.viewWillAppear(animated)
+        self.initializeUserList()
     }
+    
     //MARK: UITableViewController
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -50,6 +52,13 @@ class UserListViewController: UITableViewController {
         cell.roleLabel.text = users[indexPath.row].role
         
         return cell
+    }
+    
+    func initializeUserList() {
+        self.users = [User]()
+        self.userList.reloadData()
+        currentPage = 0
+        self.getUsersFrom(TemplateAPIHandler.userListEndpoint, on: currentPage, showing: windowSize)
     }
     
     //MARK: Actions
