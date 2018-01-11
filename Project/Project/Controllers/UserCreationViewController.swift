@@ -35,20 +35,13 @@ class UserCreationViewController: UIViewController {
         let role = roleTextField.text ?? ""
         
         if emptyTextFields([name, password, email, role]) {
-            showAlert("Error" ,"Missing one or more fields")
+            AlertHandler.show("Error" ,"Missing one or more fields", sender: self)
         }
         
         self.createUser(name, password, email, role)
-        
     }
     
     //MARK: Private methods
-    func showAlert(_ tittle: String, _ alert: String) {
-        let alert = UIAlertController(title: tittle, message: alert, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
     func emptyTextFields(_ fields:[String]) -> Bool {
         for field in fields {
             if field.isEmpty {
@@ -79,11 +72,11 @@ class UserCreationViewController: UIViewController {
                 if errors != nil {
                     print((errors?.first!["name"])! + (errors?.first!["original"])!)
                 }
-                self.showAlert("Error", "User could not be created")
+                AlertHandler.show("Error", "User could not be created", sender: self)
                 return
             }
             
-            self.showAlert("Success!", "User created")
+            AlertHandler.show("Success!", "User created", sender: self)
         }
         
     }
