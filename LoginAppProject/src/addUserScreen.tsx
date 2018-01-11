@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 // tslint:disable-next-line:max-line-length
-import { Text, TextInput, View, StyleSheet, Button, Alert } from 'react-native'
+import { View, StyleSheet, Alert } from 'react-native'
+import { FormLabel, FormInput, Button } from 'react-native-elements';
 
 // Screens
 
@@ -52,7 +53,6 @@ export default class AddUserScreen extends Component<AddUserScreenProps, AddUser
       goBack()
     })
     .catch((error) => {
-      console.error(error)
       Alert.alert('New user couldn\'t be created')
     })
   }
@@ -60,31 +60,35 @@ export default class AddUserScreen extends Component<AddUserScreenProps, AddUser
   render() {
     return (
       <View style={styles.container}>
-        <Text>Email:</Text>
-        <TextInput
-          style={styles.inputBox}
-          placeholder='Email'
-          onChangeText={(email) => this.setState({email})}
+        <FormLabel>Email:</FormLabel>
+        <FormInput
+          onChangeText = {(email) => this.setState({email})}
+          placeholder = 'email@email.com'
         />
-        <Text>Password:</Text>
-        <TextInput style={styles.inputBox}
-          placeholder='Password'
-          onChangeText={(password) => this.setState({password})}
+        <FormLabel>Password:</FormLabel>
+        <FormInput
+          onChangeText = {(password) => this.setState({password})}
+          secureTextEntry
+          placeholder = '••••••••'
         />
-        <Text>Name:</Text>
-        <TextInput style={styles.inputBox}
-          placeholder='Name'
-          onChangeText={(name) => this.setState({name})}
+        <FormLabel>Name:</FormLabel>
+        <FormInput
+          onChangeText = {(name) => this.setState({name})}
+          placeholder = 'Name'
         />
-        <Text>Role:</Text>
-        <TextInput style={styles.inputBox}
-          placeholder='admin'
-          onChangeText={(role) => this.setState({role})}
+        <FormLabel>Role:</FormLabel>
+        <FormInput
+          onChangeText = {(role) => this.setState({role})}
+          placeholder = 'admin'
         />
-        <Button
-          onPress = {this.onPressButton}
-          title = 'Create new user'
-        />
+        <View style = {{paddingTop: 10}}>
+          <Button
+            onPress = {this.onPressButton}
+            raised
+            backgroundColor = 'lightskyblue'
+            title = 'Create new user'
+          />
+        </View>
       </View>
     )
   }
@@ -96,8 +100,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: 'flex-start',
+    alignItems: 'stretch'
   },
   inputBox: {
     height: 40,

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 // tslint:disable-next-line:max-line-length
 import { Text, View, StyleSheet, ActivityIndicator, FlatList, TouchableHighlight } from 'react-native'
 import axios from 'axios'
+import { ListItem, List, Button } from 'react-native-elements'
 interface ProfileScreenProps {
   navigation: any
 }
@@ -61,10 +62,17 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
     this.loadPage(0)
   }
 
-  refresh = () => {
+  pullRefresh = () => {
     this.setState({
       page: 1,
       isRefreshing: true
+    })
+    this.loadPage(0)
+  }
+
+  refresh = () => {
+    this.setState({
+      page: 1
     })
     this.loadPage(0)
   }
@@ -81,29 +89,33 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
     } else {
       // console.warn(this.state.list)
       return (
-        <View style = {{flex: 1}}>
-          <Text style = {{alignContent: 'center'}}>Welcome {params.data.user.name}</Text>
-          <Text>These are the users in the server database</Text>
-          <TouchableHighlight
-            onPress = {() => navigate('AddUser', {token: params.data.token, refresh: this.refresh})}
-            style = {{backgroundColor: 'skyblue'}}
-            underlayColor = 'powderblue'>
-            <Text style = {{padding: 10}}> Add user </Text>
-          </TouchableHighlight>
-          <FlatList
-            data = {this.state.data}
-            renderItem = {({item}) =>
-              <TouchableHighlight
-                onPress={() => navigate('Detail', {id: item.id, token: params.data.token, refresh: this.refresh})}
-                underlayColor = 'white'>
-                <Text style = {{padding: 25}}> {item.name} </Text>
-              </TouchableHighlight>
-            }
-            keyExtractor={(item) => item.id}
-            onEndReached={this.loadMore}
-            refreshing = {this.state.isRefreshing}
-            onRefresh = {this.refresh}
-          />
+        <View style = {styles.container}>
+          <View style = {{paddingTop: 40}}>
+            <FlatList
+              data = {this.state.data}
+              keyExtractor={(item) => item.id}
+              renderItem = {({item}) =>
+                <ListItem
+                  title = {item.name}
+                  subtitle = {item.email}
+                  onPress={() => navigate('Detail', {id: item.id, token: params.data.token, refresh: this.refresh})}
+                  underlayColor = 'white'
+                />
+              }
+              onEndReached={this.loadMore}
+              refreshing = {this.state.isRefreshing}
+              onRefresh = {this.pullRefresh}
+            />
+          </View>
+          <View style = {{paddingBottom: 40}}>
+            <Button
+              title = 'Add user'
+              raised
+              icon = {{name: 'user-plus', type: 'font-awesome'}}
+              onPress = {() => navigate('AddUser', {token: params.data.token, refresh: this.refresh})}
+              backgroundColor = 'lightskyblue'
+            />
+          </View>
         </View>
       )
     }
@@ -117,7 +129,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'stretch'
   },
   inputBox: {
     height: 40,

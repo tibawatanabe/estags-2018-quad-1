@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 // tslint:disable-next-line:max-line-length
-import { Text, TextInput, View, StyleSheet, Button, Alert } from 'react-native'
+import { Text, TextInput, View, StyleSheet, Alert } from 'react-native'
+import { FormLabel, FormInput, Button } from 'react-native-elements'
 
 // Screens
 
@@ -56,28 +57,29 @@ export default class EditUserScreen extends Component<EditUserScreenProps, EditU
     })
     .catch((error) => {
       Alert.alert('User couldn\'t be edited')
-      console.error(error)
     })
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>Email:</Text>
-        <TextInput
-          style={styles.inputBox}
-          placeholder='Email'
+        <FormLabel>Email:</FormLabel>
+        <FormInput
+          onChangeText = {(email) => this.setState({email})}
           value = {this.state.email}
-          onChangeText={(email) => this.setState({email})}
+          placeholder = 'email@email.com'
         />
-        <Text>Name:</Text>
-        <TextInput style={styles.inputBox}
-          placeholder='Name'
+        <FormLabel>Name:</FormLabel>
+        <FormInput
+          onChangeText = {(name) => this.setState({name})}
           value = {this.state.name}
-          onChangeText={(name) => this.setState({name})}
+          placeholder = 'Name'
         />
         <Button
           onPress = {this.onPressButton}
+          rounded
+          containerViewStyle = {{paddingTop: 10}}
+          backgroundColor = 'lightskyblue'
           title = 'Save changes'
         />
       </View>
@@ -91,8 +93,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: 'flex-start',
+    alignItems: 'stretch'
   },
   inputBox: {
     height: 40,

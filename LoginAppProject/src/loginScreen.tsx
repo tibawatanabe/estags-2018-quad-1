@@ -78,7 +78,6 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
           <FormLabel>Email:</FormLabel>
           <FormInput
             onChangeText = {(email) => this.setState({email})}
-            placeholder = ''
           />
           <FormLabel>Password:</FormLabel>
           <FormInput
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'stretch'
   },
   inputBox: {
