@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.projectjoao.model.ShowResponse;
 import com.example.android.projectjoao.model.User;
-
-import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
