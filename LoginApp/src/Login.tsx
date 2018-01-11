@@ -37,8 +37,9 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
                                 password: this.state.password,
                                 rememberMe: this.state.rememberMe
                             },
-                            { headers: 
-                                {'Content-Type': 'application/json' }
+                            { 
+                                headers: 
+                                    {'Content-Type': 'application/json' }
                             });
             this.setState({data: response.data});
             this.props.navigation.navigate('Logged', 

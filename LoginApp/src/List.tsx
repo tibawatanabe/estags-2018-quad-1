@@ -5,6 +5,7 @@ import { ScrollView, Button, TouchableOpacity, ListView, Icon, Row, Text, Divide
 import axios from 'axios';
 
 import UserDetail from '../artifacts/UserDetail';
+import UserReg from '../artifacts/UserReg';
 
 export interface UListProps {
     screenProps: any,
@@ -97,8 +98,9 @@ class UserList extends React.Component<UListProps, UListState> {
             page: 1
         }
     }
+
     async getList() {
-        let param={
+        let param = {
             page: this.state.page,
             window: 10
         };
@@ -113,7 +115,7 @@ class UserList extends React.Component<UListProps, UListState> {
                                 }
                             })
             let data = response.data.data;
-            let pagination= response.data.pagination;
+            let pagination = response.data.pagination;
             this.setState({loading: false, list: data, pagination: pagination, page: pagination.page})
         }
         catch (error) {
@@ -121,16 +123,27 @@ class UserList extends React.Component<UListProps, UListState> {
         }
     }
 
-    renderItem = ({name, email, role}) => {
+    showDetail(id) {
+        this.props.navigation.navigate('Detail',
+            {
+                id: id,
+                token: this.props.screenProps.state.params.data.token
+            }   
+        )
+    }
+
+    onCreatePress() {
+        this.props.navigation.navigate('Create',
+            {
+                token: this.props.screenProps.state.params.data.token
+            }
+        )
+    }
+
+    renderItem = ({id, name}) => {
         return (
             <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Detail',
-                    {
-                        name: name,
-                        email: email,
-                        role: role
-                    }   
-                )}
+                onPress={() => this.showDetail(id)}
             >
                 <Row styleName="small">
                     <Icon name="user-profile" />
@@ -153,14 +166,14 @@ class UserList extends React.Component<UListProps, UListState> {
     }
 
     render() {
-        console.log(this.state)
         if (this.state.loading) {
             this.getList();
             return (
                 <View
                     style={{alignItems: 'center',
                             flex: 1,
-                            justifyContent: 'space-around'}}
+                            justifyContent: 'space-around',
+                            backgroundColor: 'white'}}
                 >
                     <ActivityIndicator 
                         animating={true}
@@ -172,14 +185,19 @@ class UserList extends React.Component<UListProps, UListState> {
                 <View
                     style={{alignItems: 'center',
                             flex: 1,
-                            justifyContent: 'space-around'}}
+                            justifyContent: 'space-around',
+                            backgroundColor: 'white'}}
                 >
                     <Text>Failed to load content!</Text>
                 </View>
             );
         } else {
             return (
-                <ScrollView>
+                <ScrollView
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'white'}}
+                >
                     <ListView 
                         data={this.state.list}
                         renderRow={this.renderItem} 
@@ -189,6 +207,17 @@ class UserList extends React.Component<UListProps, UListState> {
                         previousPage={() => this.previousPage()}
                         nextPage={() => this.nextPage()}
                     />
+                    <Divider styleName="line"/>
+                    <View styleName="horizontal flexible">
+                        <Button 
+                            styleName="full-width"
+                            onPress={() => this.onCreatePress()}
+                        >
+                            <Icon name="add-friend" />
+                            <Text>Add user</Text>
+                        </Button>
+                    </View>
+                    <Divider styleName="line"/>
                 </ScrollView>
             );
         }
@@ -203,7 +232,16 @@ const ListNav = StackNavigator({
         }
     },
     Detail: {
-        screen: UserDetail
+        screen: UserDetail,
+        navigationOptions: {
+            header: null
+        }
+    },
+    Create: {
+        screen: UserReg,
+        navigationOptions: {
+            header: null
+        }
     }
 });
 
