@@ -35,21 +35,30 @@ class LoggedUser extends React.Component<UserProps, UserState> {
                             Welcome, {this.props.screenProps.state.params.data.user.name}
                         </Title>
                 </Tile>
-                <Divider styleName={'section-header'}>
+                <Divider 
+                    styleName={'section-header'}
+                    style={{backgroundColor: 'snow'}}
+                >
                     <Caption>E-mail</Caption>
                     <Text>{this.props.screenProps.state.params.data.user.email}</Text>
                 </Divider>
-                <Divider styleName={'section-header'}>
+                <Divider 
+                    styleName={'section-header'}
+                    style={{backgroundColor: 'snow'}}
+                >
                     <Caption>Role</Caption>
                     <Text>{this.props.screenProps.state.params.data.user.role}</Text>
                 </Divider>
+                <Divider styleName="line"/>
                 <View>
                     <Button
                         onPress={() => this.props.screenProps.navigate('Login')}
                     >
                         <Text>Log out</Text>
+                        <Icon name="exit-to-app"/>
                     </Button>
                 </View>
+                <Divider styleName="line"/>
             </ScrollView>
         );
     }

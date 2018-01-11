@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ActivityIndicator } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { ScrollView, Button, TouchableOpacity, ListView, Icon, Row, Text, Divider, View } from '@shoutem/ui';
+import { ScrollView, TextInput, Button, TouchableOpacity, ListView, Icon, Row, Text, Divider, View } from '@shoutem/ui';
 import axios from 'axios';
 
 import UserDetail from '../artifacts/UserDetail';
@@ -16,7 +16,9 @@ export interface UListState {
     list: any,
     error: boolean,
     pagination: any,
-    page: number
+    page: number,
+    search: string,
+    searching: boolean
 }
 export interface ListProps {
     screenProps: any,
@@ -24,7 +26,9 @@ export interface ListProps {
 export interface PageProps {
     pagination: any,
     previousPage: () => void,
-    nextPage: () => void
+    nextPage: () => void,
+    searching: boolean,
+    stopSearch: () => void
 }
 export interface State {}
 
@@ -33,6 +37,7 @@ class PageButton extends React.Component<PageProps, State> {
         const previousActive = (
             <Button 
                 styleName="full-width"
+                style={{backgroundColor: 'snow'}}
                 onPress={() => this.props.previousPage()}
             >
                 <Icon name="left-arrow"/>
@@ -41,7 +46,10 @@ class PageButton extends React.Component<PageProps, State> {
         );
         
         const previousInactive = (
-            <Button styleName="full-width muted">
+            <Button 
+                styleName="full-width muted"
+                style={{backgroundColor: 'snow'}}
+            >
                 <Icon name="left-arrow"/>
                 <Text>Previous</Text>
             </Button>
@@ -50,6 +58,7 @@ class PageButton extends React.Component<PageProps, State> {
         const nextActive = (
             <Button 
                 styleName="full-width"
+                style={{backgroundColor: 'snow'}}
                 onPress={() => this.props.nextPage()}
             >
                 <Text>Next</Text>
@@ -58,31 +67,48 @@ class PageButton extends React.Component<PageProps, State> {
         );
         
         const nextInactive = (
-            <Button styleName="full-width muted">
+            <Button 
+                styleName="full-width muted"
+                style={{backgroundColor: 'snow'}}
+            >
                 <Text>Next</Text>
                 <Icon name="right-arrow"/>                    
             </Button>
         );
-
-        let hasNext = true;
-        if (this.props.pagination.page === this.props.pagination.totalPages - 1) {
-            hasNext = false;
-        }
-
-        if (this.props.pagination.page === 1) {
+        if (this.props.searching === true) {
             return (
                 <View styleName="horizontal flexible">
-                    {previousInactive}
-                    {hasNext ? nextActive : nextInactive}
+                    <Button 
+                        styleName="full-width"
+                        style={{backgroundColor: 'snow'}}
+                        onPress={() => this.props.stopSearch()}
+                    >
+                        <Icon name="refresh"/>  
+                        <Text>Show All</Text>                     
+                    </Button>
                 </View>
             );
         } else {
-            return (
-                <View styleName="horizontal flexible">
-                    {previousActive}
-                    {hasNext ? nextActive : nextInactive}
-                </View>
-            );
+            let hasNext = true;
+            if (this.props.pagination.page === this.props.pagination.totalPages - 1) {
+                hasNext = false;
+            }
+
+            if (this.props.pagination.page === 1) {
+                return (
+                    <View styleName="horizontal flexible">
+                        {previousInactive}
+                        {hasNext ? nextActive : nextInactive}
+                    </View>
+                );
+            } else {
+                return (
+                    <View styleName="horizontal flexible">
+                        {previousActive}
+                        {hasNext ? nextActive : nextInactive}
+                    </View>
+                );
+            }
         }
     }
 }
@@ -95,14 +121,16 @@ class UserList extends React.Component<UListProps, UListState> {
             list: [],
             error: false,
             pagination: {},
-            page: 1
+            page: 1,
+            search: '',
+            searching: false
         }
     }
 
     async getList() {
         let param = {
-            page: this.state.page,
-            window: 10
+            page: (this.state.searching === true) ? 0 : this.state.page,
+            window: (this.state.searching === true) ? this.state.pagination.total : 10
         };
         try {
             let response = await axios.get('http://tq-template-node.herokuapp.com/users',
@@ -115,10 +143,20 @@ class UserList extends React.Component<UListProps, UListState> {
                                 }
                             })
             let data = response.data.data;
+            if(this.state.searching === true) {
+                let list = [];
+                data.forEach((user) => {
+                    if (user.name.includes(this.state.search) === true) {
+                        list.push(user);
+                    }
+                })
+                data = list;
+            }
             let pagination = response.data.pagination;
             this.setState({loading: false, list: data, pagination: pagination, page: pagination.page})
         }
         catch (error) {
+            console.log(error)
             this.setState({loading: false, error: true})
         }
     }
@@ -174,6 +212,18 @@ class UserList extends React.Component<UListProps, UListState> {
         this.setState({page: page, loading: true})
     }
 
+    setSearch(search) {
+        this.setState({search: search})
+    }
+
+    onSearchPress() {
+        this.setState({searching: true, loading: true})
+    }
+
+    stopSearch() {
+        this.setState({searching: false, loading: true, search: ''})
+    }
+
     render() {
         if (this.state.loading) {
             this.getList();
@@ -207,6 +257,30 @@ class UserList extends React.Component<UListProps, UListState> {
                         flex: 1,
                         backgroundColor: 'white'}}
                 >
+                    <View 
+                        style={{
+                            flexDirection: 'row',
+                            flex: 1,
+                            justifyContent: 'space-between'
+                        }}
+                    >
+                        <TextInput
+                            style={{ flex: 4 }}
+                            styleName="full-width"
+                            placeholder='Search'
+                            onChangeText={(search) => this.setSearch(search)}
+                        />
+                        <Button
+                            style={{ 
+                                flex: 1,
+                                backgroundColor: 'snow'
+                            }}
+                            onPress={() => this.onSearchPress()}
+                        >
+                            <Icon name="search" />
+                        </Button>
+                    </View>
+                    <Divider styleName="line"/>
                     <ListView 
                         data={this.state.list}
                         renderRow={this.renderItem} 
@@ -215,6 +289,8 @@ class UserList extends React.Component<UListProps, UListState> {
                         pagination={this.state.pagination}
                         previousPage={() => this.previousPage()}
                         nextPage={() => this.nextPage()}
+                        searching={this.state.searching}
+                        stopSearch={() => this.stopSearch()}
                     />
                     <Divider styleName="line"/>
                     <View styleName="horizontal flexible">

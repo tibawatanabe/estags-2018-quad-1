@@ -103,7 +103,10 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
                             <Text>New User</Text>
                         </View>
                     </Tile>
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}
+                    >
                         <Caption>Name</Caption>
                     </Divider>
                     <TextInput
@@ -111,7 +114,10 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
                         returnKeyType='next'
                         onChangeText={(name) => this.setName(name)}
                     />
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}
+                    >
                         <Caption>E-mail</Caption>
                     </Divider>
                     <TextInput
@@ -119,7 +125,10 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
                         returnKeyType='next'
                         onChangeText={(email) => this.setEmail(email)}
                     />
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}    
+                    >
                         <Caption>Password</Caption>
                     </Divider>
                     <TextInput
@@ -128,7 +137,10 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
                         returnKeyType='next'
                         onChangeText={(password) => this.setPassword(password)}
                     />
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}
+                    >
                         <Caption>Role</Caption>
                     </Divider>
                     <TextInput
@@ -138,6 +150,7 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
                     <Divider styleName="line"/>
                     <View styleName="horizontal flexible">
                         <Button 
+                            style={{backgroundColor: 'snow'}}
                             styleName={( 
                                 this.state.name === '' || 
                                 this.state.email === '' || 
@@ -156,6 +169,7 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
                             <Text>Done</Text>
                         </Button>
                         <Button 
+                            style={{backgroundColor: 'snow'}}
                             styleName="full-width"
                             onPress={() => this.onCancelPress()}
                         >

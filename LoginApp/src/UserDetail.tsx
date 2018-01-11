@@ -222,11 +222,17 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                         <Icon name="user-profile"/>
                         <Title>{this.state.data.name}</Title>
                     </Tile>
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}
+                    >
                         <Caption>E-mail</Caption>
                         <Text>{this.state.data.email}</Text>
                     </Divider>
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}
+                    >
                         <Caption>Role</Caption>
                         <Text>{this.state.data.role}</Text>
                     </Divider>
@@ -251,6 +257,7 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                     <View styleName="horizontal flexible">
                         <Button 
                             styleName="full-width"
+                            style={{backgroundColor: 'snow'}}
                             onPress={() => this.onDeletePress()}
                         >
                             <Icon name="clear-text" style={{color: 'red'}}/>

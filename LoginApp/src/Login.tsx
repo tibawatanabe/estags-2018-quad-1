@@ -138,8 +138,12 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
                         <Icon name="linkedin" />
                         <Heading>App</Heading>
                     </Tile>
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}
+                    >
                         <Caption>E-mail</Caption>
+
                     </Divider>
                     <TextInput
                         returnKeyType='next'
@@ -147,7 +151,10 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
                             ? this.state.email : 'Type here' }
                         onChangeText={(email) => this.setEmail(email)}
                     />
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}
+                    >
                         <Caption>Password</Caption>
                     </Divider>
                     <TextInput
@@ -173,8 +180,10 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
                     </View>
                     <Divider styleName="line"/>
                     <Button
+                        style={{backgroundColor: 'snow'}}
                         onPress={() => this.onButtonPress()}
                     >
+                        <Icon name="turn-off"/>
                         <Text>Log in</Text>
                     </Button>
                     <Divider styleName="line"/>
