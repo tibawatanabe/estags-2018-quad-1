@@ -85,7 +85,8 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                     },
                 }
             )
-            this.props.navigation.navigate('UserList')
+            this.props.navigation.goBack()
+            this.props.navigation.state.params.refresh(this.props.navigation.state.params.page)
         }
         catch (error) {
             this.setState({loading: true, error: true, editing: false})
@@ -101,7 +102,8 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
     }
 
     onReturnPress() {
-        this.props.navigation.navigate('UserList')
+        this.props.navigation.goBack()
+        this.props.navigation.state.params.refresh(this.props.navigation.state.params.page)
     }
 
     setName(name) {

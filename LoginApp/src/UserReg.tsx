@@ -50,7 +50,8 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
                     }
                 )
                 this.setState({name: '', email: '', password: '', role: ''})
-                this.props.navigation.navigate('UserList')
+                this.props.navigation.goBack()
+                this.props.navigation.state.params.refresh(this.props.navigation.state.params.newPage)
             }
             catch (error) {
                 this.setState({error: true})
@@ -59,7 +60,8 @@ export default class UserDetail extends React.Component<RegProps, RegState> {
     }
   
     onCancelPress() {
-        this.props.navigation.navigate('UserList')
+        this.props.navigation.goBack()
+        this.props.navigation.state.params.refresh(this.props.navigation.state.params.page)
     }
 
     setName(name) {

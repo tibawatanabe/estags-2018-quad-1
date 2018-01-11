@@ -123,11 +123,17 @@ class UserList extends React.Component<UListProps, UListState> {
         }
     }
 
+    refresh(page) {
+        this.setState({page: page, loading: true})
+    }
+
     showDetail(id) {
         this.props.navigation.navigate('Detail',
             {
                 id: id,
-                token: this.props.screenProps.state.params.data.token
+                token: this.props.screenProps.state.params.data.token,
+                page: this.state.page,
+                refresh: (page) => this.refresh(page)
             }   
         )
     }
@@ -135,7 +141,10 @@ class UserList extends React.Component<UListProps, UListState> {
     onCreatePress() {
         this.props.navigation.navigate('Create',
             {
-                token: this.props.screenProps.state.params.data.token
+                token: this.props.screenProps.state.params.data.token,
+                page: this.state.page,
+                newPage: this.state.pagination.totalPages - 1,
+                refresh: (page) => this.refresh(page)
             }
         )
     }
