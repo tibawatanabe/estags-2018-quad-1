@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Alert } from 'react-native';
 import { ScrollView, Tile, TextInput, Button, View, Icon, Divider, Caption, Text } from '@shoutem/ui';
 import axios from 'axios';
 
