@@ -28,7 +28,7 @@ public class CreateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create);
+        setContentView(R.layout.user_form);
 
         pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0); // 0 - for private mode
 
