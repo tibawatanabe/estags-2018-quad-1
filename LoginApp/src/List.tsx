@@ -5,6 +5,7 @@ import { ScrollView, Button, TouchableOpacity, ListView, Icon, Row, Text, Divide
 import axios from 'axios';
 
 import UserDetail from '../artifacts/UserDetail';
+import UserReg from '../artifacts/UserReg';
 
 export interface UListProps {
     screenProps: any,
@@ -131,6 +132,14 @@ class UserList extends React.Component<UListProps, UListState> {
         )
     }
 
+    onCreatePress() {
+        this.props.navigation.navigate('Create',
+            {
+                token: this.props.screenProps.state.params.data.token
+            }
+        )
+    }
+
     renderItem = ({id, name}) => {
         return (
             <TouchableOpacity
@@ -198,6 +207,17 @@ class UserList extends React.Component<UListProps, UListState> {
                         previousPage={() => this.previousPage()}
                         nextPage={() => this.nextPage()}
                     />
+                    <Divider styleName="line"/>
+                    <View styleName="horizontal flexible">
+                        <Button 
+                            styleName="full-width"
+                            onPress={() => this.onCreatePress()}
+                        >
+                            <Icon name="add-friend" />
+                            <Text>Add user</Text>
+                        </Button>
+                    </View>
+                    <Divider styleName="line"/>
                 </ScrollView>
             );
         }
@@ -213,6 +233,12 @@ const ListNav = StackNavigator({
     },
     Detail: {
         screen: UserDetail,
+        navigationOptions: {
+            header: null
+        }
+    },
+    Create: {
+        screen: UserReg,
         navigationOptions: {
             header: null
         }

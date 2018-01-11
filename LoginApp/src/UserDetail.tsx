@@ -195,16 +195,6 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                         </Button>
                     </View>
                     <Divider styleName="line"/>
-                    <View styleName="horizontal flexible">
-                        <Button 
-                            styleName="full-width"
-                            onPress={() => this.onDeletePress()}
-                        >
-                            <Icon name="clear-text" style={{color: 'red'}}/>
-                            <Text style={{color: 'red'}}>Delete user</Text>
-                        </Button>
-                    </View>
-                    <Divider styleName="line"/>
                 </ScrollView>
             );
         } else {
@@ -242,6 +232,16 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                         >
                             <Icon name="edit"/>
                             <Text>Edit</Text>
+                        </Button>
+                    </View>
+                    <Divider styleName="line"/>
+                    <View styleName="horizontal flexible">
+                        <Button 
+                            styleName="full-width"
+                            onPress={() => this.onDeletePress()}
+                        >
+                            <Icon name="clear-text" style={{color: 'red'}}/>
+                            <Text style={{color: 'red'}}>Delete user</Text>
                         </Button>
                     </View>
                     <Divider styleName="line"/>
