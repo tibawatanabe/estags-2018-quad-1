@@ -30,8 +30,8 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
     }
 
     componentWillMount() {
-        this.getEmail();
         this.getRememberMe();
+        this.getEmail();
     }
 
     async getRememberMe() {
@@ -46,14 +46,16 @@ class LoginScreen extends React.Component<LoginProps, LoginState> {
     }
 
     async getEmail() {
-        try {
-            const saved = await AsyncStorage.getItem('email');
-            let email = (saved !== null) ?  saved : '';
-            this.setState({email: email})
-        }
-        catch (error) {
-            console.log(error)
-        }
+        if(this.rememberMe) {
+            try {
+                const saved = await AsyncStorage.getItem('email');
+                let email = (saved !== null) ?  saved : '';
+                this.setState({email: email})
+            }
+            catch (error) {
+                console.log(error)
+            }
+        } 
     }
 
     async onButtonPress() {
