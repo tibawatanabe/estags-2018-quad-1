@@ -15,7 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="Usuário"/>
+        android:hint="Usuário"
+        android:inputType="textEmailAddress"
+        android:text="Macie23@gmail.com"/>
     <EditText
         android:id="@+id/password_field"
         android:layout_width="match_parent"
@@ -23,7 +25,8 @@
         android:hint="Senha"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:text="1111"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
