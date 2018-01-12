@@ -108,6 +108,7 @@ class UserListViewController: UITableViewController {
         currentPage = 0
         self.getUsersFrom(TemplateAPIHandler.userListEndpoint, on: currentPage, showing: windowSize)
     }
+    
     fileprivate func getUsersFrom(_ path: String, on page: Int, showing window: Int) {
         
         guard let urlComponents = URLComponents(string: path) else {
