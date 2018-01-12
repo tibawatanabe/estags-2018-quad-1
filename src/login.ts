@@ -27,13 +27,15 @@ class Login {
     this.express.use(bodyParser.json())
 
     // CREATE
-    this.express.post('/user', (req, res) => {
+    this.express.post('/user', async (req, res) => {
       var email : String = req.body.email;
       var password : String = req.body.password;
-      var newUser : User = new User(this.userList.length+1, email, password);
-      this.userList.push(newUser);
-      console.log("E-masil = "+email+", password is "+password);
-      res.end(console.log(this.userList));
+
+      let user = await this.userResource.create(email, password);
+      // var newUser : User = new User(this.userList.length+1, email, password);
+      // this.userList.push(newUser);
+      // console.log("E-masil = "+email+", password is "+password);
+      // res.end(console.log(this.userList));
     })
     
     // LIST.
@@ -64,6 +66,7 @@ class Login {
     this.express.delete('/user/:userID', async (req,res) => {
 
       let foundUser = await this.userResource.delete(req.params.userID);
+      debugger;
       if(foundUser){
         console.log("usuário deletado com sucesso");
       }

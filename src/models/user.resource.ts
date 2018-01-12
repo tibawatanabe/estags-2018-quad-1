@@ -3,6 +3,7 @@ import User from '../user';
 
 export class UserResource {
   private readonly db: DB;
+  private table: String = "users3"
   
   constructor() {
     this.db = new DB(process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/template');
@@ -10,20 +11,27 @@ export class UserResource {
   }
 
   async list(): Promise<any>{
-    const query = 'SELECT * FROM users2';
+    const query = 'SELECT * FROM '+this.table;
     const result = await this.db.query(query);
     return result;
   }
 
   async select(id: Number): Promise<any> {
-    const query = 'SELECT * FROM users2 where id = '+id;
+    const query = 'SELECT * FROM '+this.table+' where id = '+id;
     debugger;
     const result = await this.db.query(query);
     return result;
   }
 
   async delete(id: number): Promise<any>{
-    const query = 'DELETE FROM users2 WHERE id = '+id;
+    const query = 'DELETE FROM '+this.table+' WHERE id = '+id;
+    debugger;
+    const result = await this.db.query(query);
+    return result;
+  }
+
+  async create(email: String, password: String){
+    const query = "INSERT INTO "+this.table+" (email, password) VALUES ('"+email+"', '"+password+"');";
     debugger;
     const result = await this.db.query(query);
     return result;
