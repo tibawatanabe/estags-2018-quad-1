@@ -17,59 +17,34 @@ class Login {
   private jp: User = new User(2, 'jp@taqtile.com', '4321');
   private test: User = new User(3,'test@gmail.com', 'xxxxx');
   public userList: Array<User> = [this.pj, this.jp, this.test];
+
   private mountRoutes (): void {
-    // const router = express.Router()
-    // router.get('/', (req, res) => {
-    //   res.json({
-    //     message: 'Hello World!'
-    //   })
-    // })
-    // this.express.use('/', router)
-
-
     this.express.use(bodyParser.urlencoded({extended : true}))
     this.express.use(bodyParser.json())
 
     // CREATE
     this.express.post('/user', (req, res) => {
-      debugger;
       var email : String = req.body.email;
       var password : String = req.body.password;
       var newUser : User = new User(this.userList.length+1, email, password);
       this.userList.push(newUser);
       console.log("E-masil = "+email+", password is "+password);
       res.end(console.log(this.userList));
-      // var i : number = 0;
-      // res.json({
-      //   console.log(this.userList);
-      //   for(let user of userList){
-      //     console.log(user);
-      //   }
-      //   console.log()
-      // })
     })
     
     // LIST.
     this.express.get('/user', (req, res) => {
-      debugger;
       res.end(console.log(this.userList));
     })
 
     // GET (by id)
     this.express.get('/user/:userID', (req, res) => {
-      debugger;
       res.end(console.log(this.userList[req.params.userID-1]));
     })
 
     
     // DELETE
     this.express.delete('/user/:userID', (req,res) => {
-      debugger;
-      // function matchesID(element: User){
-      //   return element.id === req.params.userID
-      // }
-
-      // let foundUser = this.userList.find(matchesID);
 
       let foundUser = this.userList.find(user => user.id === +req.params.userID);
 
