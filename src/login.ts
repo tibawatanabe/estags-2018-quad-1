@@ -42,7 +42,12 @@ class Login {
     this.express.get('/user', async (req, res) => {
       debugger;
       let list = await this.userResource.list();
-      res.send(list);
+      let mapped = list.rows.map(el => ({
+        id: el.id,
+        email: el.email,
+      }));
+
+      res.send(mapped);
       // res.end(console.log(this.userList));
     })
 
@@ -50,22 +55,29 @@ class Login {
      this.express.get('/user/:userID', async (req, res) => {
       debugger;
       let list = await this.userResource.select(req.params.userID);
-
-      res.end(console.log(this.userList[req.params.userID-1]));
+      res.send(list);
+      // res.end(console.log(this.userList[req.params.userID-1]));
     })
 
     
     // DELETE
-    this.express.delete('/user/:userID', (req,res) => {
+    this.express.delete('/user/:userID', async (req,res) => {
 
-      let foundUser = this.userList.find(user => user.id === +req.params.userID);
-
-      if (foundUser) {
-        //
-        var index : number = this.userList.indexOf(foundUser);
-        this.userList.splice(index, 1);
+      let foundUser = await this.userResource.delete(req.params.userID);
+      if(foundUser){
+        console.log("usuário deletado com sucesso");
       }
-      res.end(console.log(this.userList));
+      else{
+        console.log("usuário não encontrado");
+      }
+      // let foundUser = this.userList.find(user => user.id === +req.params.userID);
+
+      // if (foundUser) {
+      //   //
+      //   var index : number = this.userList.indexOf(foundUser);
+      //   this.userList.splice(index, 1);
+      // }
+      // res.end(console.log(this.userList));
     })
 
     // UPDATE

@@ -9,15 +9,24 @@ export class UserResource {
     // this.db = new DB(process.env.DATABASE_URL || 'postgres://localhost:5432/template');
   }
 
-  list() {
+  async list(): Promise<any>{
     const query = 'SELECT * FROM users2';
-    return this.db.query(query);
+    const result = await this.db.query(query);
+    return result;
   }
 
   async select(id: Number): Promise<any> {
     const query = 'SELECT * FROM users2 where id = '+id;
     debugger;
     const result = await this.db.query(query);
+    return result;
+  }
+
+  async delete(id: number): Promise<any>{
+    const query = 'DELETE FROM users2 WHERE id = '+id;
+    debugger;
+    const result = await this.db.query(query);
+    return result;
   }
 }
 
