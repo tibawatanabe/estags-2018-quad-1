@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { StackNavigator } from 'react-navigation'
+import {FormLabel, FormInput, CheckBox, Button} from 'react-native-elements'
 import axios from 'axios'
 // tslint:disable-next-line:max-line-length
-import { Text, TextInput, View, StyleSheet, Button, ActivityIndicator, Alert, TouchableWithoutFeedback } from 'react-native'
+import { Text, View, StyleSheet, ActivityIndicator, Alert } from 'react-native'
 
 // Screens
 
@@ -13,7 +13,6 @@ interface LoginScreenStates {
   email: string ,
   password: string,
   rememberMe: boolean,
-  rememberMeBox: string,
   isLoading: boolean
 }
 
@@ -24,12 +23,11 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
       email: '',
       password: '',
       rememberMe: false,
-      rememberMeBox: '  ',
       isLoading: false
     }
   }
 
-  async onPressButton() {
+  onPressButton = async () => {
     this.setState({isLoading: true})
     await axios.post('https://tq-template-node.herokuapp.com/authenticate',
       {
@@ -53,8 +51,9 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
       const { navigate } = this.props.navigation
       navigate('Profile', {data: responseJson.data.data})
     })
-    .catch((error) => {
+    .catch(() => {
       Alert.alert('Wrong Email or Password')
+      // console.error(error)
       this.setState({isLoading: false})
     })
   }
@@ -69,37 +68,38 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
     } else {
       return (
         <View style={styles.container}>
-          <Text style = {{fontSize: 30, alignContent: 'flex-start'}}>
-            Welcome to BestApp
-          </Text>
-          <TextInput
-            style={styles.inputBox}
-            placeholder='Email'
-            onChangeText={(email) => this.setState({email})}
-          />
-          <TextInput style={styles.inputBox}
-            placeholder='Password'
-            secureTextEntry = {true}
-            onChangeText={(password) => this.setState({password})}
-          />
-          <TouchableWithoutFeedback
-            onPress={() => {
-              if (this.state.rememberMe) {
-                this.setState({rememberMeBox: '  ', rememberMe: false})
-              } else {
-                this.setState({rememberMeBox: 'X', rememberMe: true})
-              }
-            }}
-          >
-            <View>
-              <Text style={{padding: 20, alignContent: 'center'}}> Remember me: [{this.state.rememberMeBox}] </Text>
+          <View style= {{flexDirection: 'column', alignItems: 'center'}}>
+            <View style={{alignItems: 'flex-end'}}>
+              <Text style = {{fontSize: 30}}>Welcome</Text>
+              <Text style = {{fontSize: 30}}>to</Text>
+              <Text style = {{fontSize: 30}}>BestApp</Text>
             </View>
-          </TouchableWithoutFeedback>
-          <Button
-            onPress = {this.onPressButton.bind(this)}
-            title = 'Login'
-            // onPress = {() => navigate('Profile')}
+          </View>
+          <FormLabel>Email:</FormLabel>
+          <FormInput
+            onChangeText = {(email) => this.setState({email})}
           />
+          <FormLabel>Password:</FormLabel>
+          <FormInput
+            onChangeText = {(password) => this.setState({password})}
+            secureTextEntry = {true}
+          />
+          <CheckBox
+            title = 'Remember me'
+            checked = {this.state.rememberMe}
+            onPress = {() => {this.setState({rememberMe: !this.state.rememberMe})}}
+            containerStyle = {{backgroundColor: 'rgba(52, 52, 52, 0)'}}
+          />
+          <View style = {{alignItems: 'center'}}>
+          <Button
+              onPress = {this.onPressButton}
+              title = 'Login'
+              rounded
+              backgroundColor = 'lightskyblue'
+              containerViewStyle = {{width: 200}}
+              // onPress = {() => navigate('Profile')}
+            />
+          </View>
         </View>
       )
     }
@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: 'flex-start',
+    alignItems: 'stretch'
   },
   inputBox: {
     height: 40,

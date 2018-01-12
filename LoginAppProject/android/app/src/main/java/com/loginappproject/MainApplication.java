@@ -3,6 +3,7 @@ package com.loginappproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -14,10 +15,10 @@ import java.util.List;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-    @Override
+    /*@Override
     protected String getJSMainModuleName() {
       return "artifacts/index.android";
-    }
+    }*/
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
@@ -26,13 +27,14 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+          new MainReactPackage(),
+            new VectorIconsPackage()
       );
     }
 
     @Override
     protected String getJSMainModuleName() {
-      return "index";
+      return "artifacts/index";
     }
   };
 

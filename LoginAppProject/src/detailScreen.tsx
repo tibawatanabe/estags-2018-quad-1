@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { StackNavigator } from 'react-navigation'
 // tslint:disable-next-line:max-line-length
-import { Text, View, StyleSheet, TouchableHighlight, Alert } from 'react-native'
+import { Text, View, TouchableHighlight, Alert } from 'react-native'
 import axios from 'axios'
+import { Card, Button } from 'react-native-elements'
 
 interface DetailScreenProps {
   navigation: any
@@ -71,60 +71,39 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
     const {navigate} = this.props.navigation
     return(
       <View>
-        <Text> Name: {this.state.name} </Text>
-        <Text> Email: {this.state.email} </Text>
-        <Text> Id: {params.id} </Text>
-        <TouchableHighlight
-          style = {{backgroundColor: 'skyblue'}}
-          underlayColor = 'powderblue'
-          onPress = {() => navigate('EditUser',
-          {
-            refreshDetail: this.refresh,
-            refreshList: params.refresh,
-            token: params.token,
-            id: params.id,
-            name: this.state.name,
-            email: this.state.email
-          })}
-        >
-          <Text> Edit </Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style = {{backgroundColor: 'red'}}
-          underlayColor = 'crimson'
+        <Card title = {`${this.state.name}`}>
+          <Text> Name: {this.state.name} </Text>
+          <Text> Email: {this.state.email} </Text>
+          <Text> Id: {params.id} </Text>
+          <Button
+            title = 'Edit'
+            color = 'lightskyblue'
+            icon = {{name: 'pencil-square-o', type: 'font-awesome', color: 'lightskyblue'}}
+            transparent
+            onPress = {() => navigate('EditUser',
+            {
+              refreshDetail: this.refresh,
+              refreshList: params.refresh,
+              token: params.token,
+              id: params.id,
+              name: this.state.name,
+              email: this.state.email
+            })}
+          />
+        </Card>
+        <View style = {{paddingTop: 20}}>
+        <Button
+          title = 'Delete!'
+          raised
           onPress = {() => {
             this.deleteUser()
             params.refresh()
             goBack()
           }}
-        >
-          <Text> Delete! </Text>
-        </TouchableHighlight>
+          backgroundColor = 'red'
+        />
+        </View>
       </View>
     )
   }
 }
-
-// Styles
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  inputBox: {
-    height: 40,
-    width: 200
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44
-  },
-  activity: {
-    flex: 1,
-    paddingTop: 20
-  }
-})
