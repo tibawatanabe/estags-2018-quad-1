@@ -37,13 +37,20 @@ class Login {
     })
     
     // LIST.
-    this.express.get('/user', (req, res) => {
 
-      res.end(console.log(this.userList));
+
+    this.express.get('/user', async (req, res) => {
+      debugger;
+      let list = await this.userResource.list();
+      res.send(list);
+      // res.end(console.log(this.userList));
     })
 
     // GET (by id)
-    this.express.get('/user/:userID', (req, res) => {
+     this.express.get('/user/:userID', async (req, res) => {
+      debugger;
+      let list = await this.userResource.select(req.params.userID);
+
       res.end(console.log(this.userList[req.params.userID-1]));
     })
 
