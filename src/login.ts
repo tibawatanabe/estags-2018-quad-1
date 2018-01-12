@@ -32,10 +32,6 @@ class Login {
       var password : String = req.body.password;
 
       let user = await this.userResource.create(email, password);
-      // var newUser : User = new User(this.userList.length+1, email, password);
-      // this.userList.push(newUser);
-      // console.log("E-masil = "+email+", password is "+password);
-      // res.end(console.log(this.userList));
     })
     
     // LIST.
@@ -50,15 +46,16 @@ class Login {
       }));
 
       res.send(mapped);
-      // res.end(console.log(this.userList));
     })
 
     // GET (by id)
      this.express.get('/user/:userID', async (req, res) => {
       debugger;
       let list = await this.userResource.select(req.params.userID);
+      if(!list.rowCount){
+        console.log("usuário não encontrado.");
+      }
       res.send(list);
-      // res.end(console.log(this.userList[req.params.userID-1]));
     })
 
     
@@ -73,26 +70,22 @@ class Login {
       else{
         console.log("usuário não encontrado");
       }
-      // let foundUser = this.userList.find(user => user.id === +req.params.userID);
-
-      // if (foundUser) {
-      //   //
-      //   var index : number = this.userList.indexOf(foundUser);
-      //   this.userList.splice(index, 1);
-      // }
-      // res.end(console.log(this.userList));
     })
 
     // UPDATE
-    this.express.put('/user/:userID', (req, res) => {
-      let foundUser = this.userList.find(user => user.id === +req.params.userID);
-
-      if (foundUser) {
-        var index : number = this.userList.indexOf(foundUser);
-        this.userList[index].newEmail = 'changed';
-        this.userList[index].newPassword = 'thisChangedToo';
+    this.express.put('/user/:userID', async (req, res) => {
+      let email : String = req.body.email;
+      let password : String = req.body.password;
+      let id: number = req.params.userID;
+      let foundUser = await this.userResource.select(id);
+      let updatedUser;
+      if(foundUser.rowCount){
+        updatedUser = await this.userResource.update(id, email, password);
       }
-      res.end(console.log(this.userList));
+      else{
+        console.log("usuário não encontrado.");
+      }
+      res.send(updatedUser);
     })
   }
 }

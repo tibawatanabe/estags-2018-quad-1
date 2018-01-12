@@ -14,7 +14,7 @@ export class UserResource {
     const query = 'SELECT * FROM '+this.table;
     const result = await this.db.query(query);
     return result;
-  }
+  };
 
   async select(id: Number): Promise<any> {
     const query = 'SELECT * FROM '+this.table+' where id = '+id;
@@ -32,6 +32,13 @@ export class UserResource {
 
   async create(email: String, password: String){
     const query = "INSERT INTO "+this.table+" (email, password) VALUES ('"+email+"', '"+password+"');";
+    debugger;
+    const result = await this.db.query(query);
+    return result;
+  }
+
+  async update(id: number, email: String, password: String): Promise<any>{
+    const query = "UPDATE "+this.table+" SET email = '"+email+"', password = '"+password+"' WHERE id = "+id+";";
     debugger;
     const result = await this.db.query(query);
     return result;
