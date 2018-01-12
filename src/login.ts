@@ -16,20 +16,29 @@ class Login {
     this.mountRoutes()
   }
 
-  private pj: User = new User(1, 'pj@taqtile.com', '1234');
-  private jp: User = new User(2, 'jp@taqtile.com', '4321');
-  private test: User = new User(3,'test@gmail.com', 'xxxxx');
-  
-  public userList: Array<User> = [this.pj, this.jp, this.test];
-
   private mountRoutes (): void {
     this.express.use(bodyParser.urlencoded({extended : true}))
     this.express.use(bodyParser.json())
 
+    // LOGIN
+    this.express.post('/user/login', async (req, res) => {
+      let email: String = req.body.email;
+      let password: String = req.body.password;
+
+      let foundEmail = await this.userResource.login (email, password);
+      if(foundEmail.rowCount){
+        res.send("User was succesfully logged.");
+      }
+      else{
+        res.send("The email or password are incorrect.")
+      }
+
+    })
+
     // CREATE
     this.express.post('/user', async (req, res) => {
-      var email : String = req.body.email;
-      var password : String = req.body.password;
+      let email : String = req.body.email;
+      let password : String = req.body.password;
 
       let user = await this.userResource.create(email, password);
     })
@@ -53,7 +62,7 @@ class Login {
       debugger;
       let list = await this.userResource.select(req.params.userID);
       if(!list.rowCount){
-        console.log("usuário não encontrado.");
+        console.log("User not found..");
       }
       res.send(list);
     })
@@ -65,10 +74,10 @@ class Login {
       let foundUser = await this.userResource.delete(req.params.userID);
       debugger;
       if(foundUser){
-        console.log("usuário deletado com sucesso");
+        console.log("User was succesfully deleted.");
       }
       else{
-        console.log("usuário não encontrado");
+        console.log("User not found.");
       }
     })
 
@@ -83,7 +92,7 @@ class Login {
         updatedUser = await this.userResource.update(id, email, password);
       }
       else{
-        console.log("usuário não encontrado.");
+        console.log("User not found..");
       }
       res.send(updatedUser);
     })

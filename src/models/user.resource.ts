@@ -10,6 +10,15 @@ export class UserResource {
     // this.db = new DB(process.env.DATABASE_URL || 'postgres://localhost:5432/template');
   }
 
+  async login(email: String, password: String){
+    const query = "SELECT * FROM "+this.table+" WHERE email = '"+email+"' AND password = '"+password+"';";
+    const result = await this.db.query(query);
+    if(result.rowCount){
+
+    }
+    return result;
+  }
+
   async list(): Promise<any>{
     const query = 'SELECT * FROM '+this.table;
     const result = await this.db.query(query);
