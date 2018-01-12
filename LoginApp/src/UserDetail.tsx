@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ActivityIndicator } from 'react-native';
+import { Alert, ActivityIndicator } from 'react-native';
 import { ScrollView, Tile, Title, TextInput, Button, View, Icon, Divider, Caption, Text } from '@shoutem/ui';
 import axios from 'axios';
 
@@ -75,7 +75,7 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
         }
     }
 
-    async onDeletePress() {
+    async deleteUser() {
         let param = this.props.navigation.state.params.id;
         try {
             await axios.delete('http://tq-template-node.herokuapp.com/user/'+param,
@@ -85,11 +85,23 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                     },
                 }
             )
-            this.props.navigation.navigate('UserList')
+            this.props.navigation.goBack()
+            this.props.navigation.state.params.refresh(this.props.navigation.state.params.page)
         }
         catch (error) {
             this.setState({loading: true, error: true, editing: false})
         }
+    }
+
+    onDeletePress() {
+        Alert.alert(
+            'Delete user',
+            'Delete '+this.state.data.name+' from list?',
+            [
+                {text: 'Yes', onPress: () => this.deleteUser(), },
+                {text: 'No'}
+            ]
+        )
     }
 
     onEditPress() {
@@ -101,7 +113,8 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
     }
 
     onReturnPress() {
-        this.props.navigation.navigate('UserList')
+        this.props.navigation.goBack()
+        this.props.navigation.state.params.refresh(this.props.navigation.state.params.page)
     }
 
     setName(name) {
@@ -209,11 +222,17 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                         <Icon name="user-profile"/>
                         <Title>{this.state.data.name}</Title>
                     </Tile>
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}
+                    >
                         <Caption>E-mail</Caption>
                         <Text>{this.state.data.email}</Text>
                     </Divider>
-                    <Divider styleName={'section-header'}>
+                    <Divider 
+                        styleName={'section-header'}
+                        style={{backgroundColor: 'snow'}}
+                    >
                         <Caption>Role</Caption>
                         <Text>{this.state.data.role}</Text>
                     </Divider>
@@ -238,6 +257,7 @@ export default class UserDetail extends React.Component<DetailProps, DetailState
                     <View styleName="horizontal flexible">
                         <Button 
                             styleName="full-width"
+                            style={{backgroundColor: 'snow'}}
                             onPress={() => this.onDeletePress()}
                         >
                             <Icon name="clear-text" style={{color: 'red'}}/>
