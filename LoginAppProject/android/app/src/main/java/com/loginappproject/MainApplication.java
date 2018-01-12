@@ -15,10 +15,10 @@ import java.util.List;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-    @Override
+    /*@Override
     protected String getJSMainModuleName() {
       return "artifacts/index.android";
-    }
+    }*/
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
@@ -34,7 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected String getJSMainModuleName() {
-      return "index";
+      return "artifacts/index";
     }
   };
 
