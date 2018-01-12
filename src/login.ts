@@ -2,20 +2,24 @@ import { Express } from 'express';
 import * as express from 'express';
 import bodyParser = require('body-parser');
 import User from './user';
+import { UserResource } from './models';
 import * as pg from 'pg';
 const connectionString = 'postgresql://postgres:postgres@localhost:5432/template'; //verificar connection String.
 
 class Login {
   public express: Express;
+  private userResource: UserResource;
 
   constructor () {
     this.express = express()
+    this.userResource = new UserResource();
     this.mountRoutes()
   }
 
   private pj: User = new User(1, 'pj@taqtile.com', '1234');
   private jp: User = new User(2, 'jp@taqtile.com', '4321');
   private test: User = new User(3,'test@gmail.com', 'xxxxx');
+  
   public userList: Array<User> = [this.pj, this.jp, this.test];
 
   private mountRoutes (): void {
@@ -34,6 +38,7 @@ class Login {
     
     // LIST.
     this.express.get('/user', (req, res) => {
+
       res.end(console.log(this.userList));
     })
 
