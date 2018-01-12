@@ -23,13 +23,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login Screen" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="06J-WN-qfN">
-                                <rect key="frame" x="111.5" y="149" width="152.5" height="29"/>
+                                <rect key="frame" x="111" y="149" width="152.5" height="29"/>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KGg-8B-3Zf">
-                                <rect key="frame" x="16" y="218.5" width="343" height="70"/>
+                                <rect key="frame" x="16" y="218" width="343" height="70"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter username" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7YC-mJ-xFR">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="30"/>
@@ -46,14 +46,14 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6h-nY-XeO">
-                                <rect key="frame" x="168.5" y="398.5" width="38" height="30"/>
+                                <rect key="frame" x="168" y="398" width="38" height="30"/>
                                 <state key="normal" title="Login"/>
                                 <connections>
                                     <action selector="didPressLoginButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FD2-Wm-Hwc"/>
                                 </connections>
                             </button>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M0m-Bw-St5">
-                                <rect key="frame" x="163" y="347.5" width="51" height="31"/>
+                                <rect key="frame" x="163" y="347" width="51" height="31"/>
                                 <connections>
                                     <action selector="rememberMeSwitch:" destination="sUF-ce-GRU" eventType="valueChanged" id="yUR-nm-1uf"/>
                                 </connections>
@@ -91,7 +91,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <exit id="sUF-ce-GRU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="841" y="116"/>
+            <point key="canvasLocation" x="840.79999999999995" y="115.59220389805098"/>
         </scene>
         <!--Users-->
         <scene sceneID="4s5-uA-O5w">
@@ -132,6 +132,7 @@
                                         <constraint firstItem="vQu-Ba-TIg" firstAttribute="leading" secondItem="jHC-jd-dEl" secondAttribute="leadingMargin" id="FBN-RG-WcS"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <gestureRecognizers/>
                                 <connections>
                                     <outlet property="nameLabel" destination="79b-dq-R7J" id="E8R-9d-4J5"/>
                                     <outlet property="roleLabel" destination="FTe-iH-O96" id="vEZ-KZ-ED9"/>
@@ -143,13 +144,22 @@
                             <outlet property="delegate" destination="1Cy-1R-eZJ" id="7um-ZW-zUb"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Users" id="6Jj-BZ-gcZ">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Ce3-4F-WIm">
-                            <connections>
-                                <action selector="didPressAddButton:" destination="1Cy-1R-eZJ" id="g2y-QV-CgT"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="Ce3-4F-WIm">
+                                <connections>
+                                    <action selector="didPressAddButton:" destination="1Cy-1R-eZJ" id="g2y-QV-CgT"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="refresh" id="DMx-9m-x4K">
+                                <connections>
+                                    <action selector="didTapRefreshButton:" destination="1Cy-1R-eZJ" id="rYH-XR-iA2"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="userList" destination="hBi-Zh-e7o" id="iil-5R-uu4"/>
                         <segue destination="Zop-lE-IlH" kind="show" identifier="fromListToDetail" id="pbm-cw-bCf"/>

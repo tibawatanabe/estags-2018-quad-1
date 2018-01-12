@@ -54,16 +54,13 @@ class UserListViewController: UITableViewController {
         return cell
     }
     
-    func initializeUserList() {
-        self.users = [User]()
-        self.userList.reloadData()
-        currentPage = 0
-        self.getUsersFrom(TemplateAPIHandler.userListEndpoint, on: currentPage, showing: windowSize)
-    }
-    
     //MARK: Actions
     @IBAction func didPressAddButton(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "fromListToCreation", sender: self)
+    }
+    
+    @IBAction func didTapRefreshButton(_ sender: UIBarButtonItem) {
+        self.initializeUserList()
     }
     
     //MARK: Table Actions
@@ -105,6 +102,13 @@ class UserListViewController: UITableViewController {
     }
     
     //MARK: Private Methods
+    fileprivate func initializeUserList() {
+        self.users = [User]()
+        self.userList.reloadData()
+        currentPage = 0
+        self.getUsersFrom(TemplateAPIHandler.userListEndpoint, on: currentPage, showing: windowSize)
+    }
+    
     fileprivate func getUsersFrom(_ path: String, on page: Int, showing window: Int) {
         
         guard let urlComponents = URLComponents(string: path) else {

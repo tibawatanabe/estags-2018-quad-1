@@ -94,8 +94,8 @@ class UserViewController: UIViewController {
             UserItems.storeObject(String(self.userId!), forKey: "updatingUserId")
             self.editButton.isEnabled = true
             self.deleteButton.isEnabled = true
-
         }
+        
     }
     
     fileprivate func deleteUser() {
