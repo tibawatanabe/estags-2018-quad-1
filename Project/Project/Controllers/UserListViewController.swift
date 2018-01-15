@@ -120,36 +120,36 @@ class UserListViewController: UITableViewController {
             if response.result.error != nil {
                 fatalError("Error on json response")
             }
-            self.users += User.usersArrayFromResponse(response)
+//            self.users += User.usersArrayFromResponse(response)
             self.userList.reloadData()
-            self.endOfList = self.checkIfListHasEnded(response)
+//            self.endOfList = self.checkIfListHasEnded(response)
             self.currentPage += 1
         }
     }
     
-    fileprivate func checkIfListHasEnded(_ response: DataResponse<Any>) -> Bool {
-        guard let json = response.result.value as? [String: Any] else {
-            fatalError("Didn't get json dictionary")
-        }
-        
-        guard let pagination = json["pagination"] as? [String: Any] else {
-            fatalError("Error on json response")
-        }
-        
-        guard let page = pagination["page"] as? String else {
-            fatalError("Unable to identify page number")
-        }
-        
-        guard let totalPages = pagination["totalPages"] as? Int else {
-            fatalError("Unable to identify total number of pages")
-        }
-        
-        if Int(page)! < totalPages - 1 {
-            return false
-        }
-        
-        return true
-    }
+//    fileprivate func checkIfListHasEnded(_ response: DataResponse<Any>) -> Bool {
+//        guard let json = response.result.value as? [String: Any] else {
+//            fatalError("Didn't get json dictionary")
+//        }
+//
+//        guard let pagination = json["pagination"] as? [String: Any] else {
+//            fatalError("Error on json response")
+//        }
+//
+//        guard let page = pagination["page"] as? String else {
+//            fatalError("Unable to identify page number")
+//        }
+//
+//        guard let totalPages = pagination["totalPages"] as? Int else {
+//            fatalError("Unable to identify total number of pages")
+//        }
+//
+//        if Int(page)! < totalPages - 1 {
+//            return false
+//        }
+//
+//        return true
+//    }
     
     
 }

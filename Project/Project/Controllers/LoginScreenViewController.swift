@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import Alamofire
+import RxSwift
 
 class LoginScreenViewController: UIViewController {
     //MARK: Properties
@@ -36,7 +37,9 @@ class LoginScreenViewController: UIViewController {
         }
         let rememberMe = rememberMeSwitch.isOn
         
-        doLogin(username, password, rememberMe)
+        LoginUseCase.init().execute(username: username, password: password, rememberMe: rememberMe)
+   
+ 
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -49,31 +52,31 @@ class LoginScreenViewController: UIViewController {
         }
     }
     
-     //MARK: Login functions
+    
     func doLogin(_ user:String,_ password:String, _ rememberMe: Bool) {
-        guard let urlComponents = URLComponents(string: TemplateAPIHandler.loginEndpoint) else {
-            fatalError("Tried to load an invalid url")
-        }
-        
-        let loginParameters: [String: Any]? = ["email": user, "password": password, "rememberMe": rememberMe]
-        
-        Alamofire.request(urlComponents, method: .post, parameters: loginParameters, encoding: JSONEncoding.default).responseJSON {
-            response in
-            if response.result.error != nil {
-                fatalError("Error on json response")
-            }
-            
-            guard let json = response.result.value as? [String: Any] else {
-                fatalError("Didn't get json dictionary")
-            }
-            
-            guard let data = json["data"] as? [String: Any] else {
-                self.loginFailed()
-                return
-            }
-            self.token = (data["token"] as! String)
-            self.loginSucceeded()
-        }
+//        guard let urlComponents = URLComponents(string: TemplateAPIHandler.loginEndpoint) else {
+//            fatalError("Tried to load an invalid url")
+//        }
+//
+//        let loginParameters: [String: Any]? = ["email": user, "password": password, "rememberMe": rememberMe]
+//
+//        Alamofire.request(urlComponents, method: .post, parameters: loginParameters, encoding: JSONEncoding.default).responseJSON {
+//            response in
+//            if response.result.error != nil {
+//                fatalError("Error on json response")
+//            }
+//
+//            guard let json = response.result.value as? [String: Any] else {
+//                fatalError("Didn't get json dictionary")
+//            }
+//
+//            guard let data = json["data"] as? [String: Any] else {
+//                self.loginFailed()
+//                return
+//            }
+//            self.token = (data["token"] as! String)
+//            self.loginSucceeded()
+//        }
     }
     
     func loginSucceeded() {
