@@ -4,12 +4,15 @@ import bodyParser = require('body-parser');
 import User from './user';
 import { UserResource } from './models';
 import * as pg from 'pg';
+import * as jwt from 'jsonwebtoken';
+import { access } from 'fs';
+// import config from'../config';
 const connectionString = 'postgresql://postgres:postgres@localhost:5432/template'; //verificar connection String.
 
 class Login {
   public express: Express;
   private userResource: UserResource;
-
+  private secret: String = 'secret';
   constructor () {
     this.express = express()
     this.userResource = new UserResource();
@@ -17,17 +20,22 @@ class Login {
   }
 
   private mountRoutes (): void {
-    this.express.use(bodyParser.urlencoded({extended : true}))
+    this.express.use(bodyParser.urlencoded({extended : false}))
     this.express.use(bodyParser.json())
 
     // LOGIN
     this.express.post('/user/login', async (req, res) => {
       let email: String = req.body.email;
       let password: String = req.body.password;
-
+      debugger;
       let foundEmail = await this.userResource.login (email, password);
       if(foundEmail.rowCount){
-        res.send("User was succesfully logged.");
+        console.log("User was succesfully logged.");
+        let token = jwt.sign(email, 'secret');
+        res.json({
+          message:'Your token was generated',
+          token: token
+        });
       }
       else{
         res.send("The email or password are incorrect.")
@@ -39,13 +47,28 @@ class Login {
     this.express.post('/user', async (req, res) => {
       let email : String = req.body.email;
       let password : String = req.body.password;
-
       let user = await this.userResource.create(email, password);
     })
+
+    // Decode
+    this.express.get('/decode', (req, res) => {
+      var token = req.headers['x-access-token'];
+
+      if (!token) return res.status(401).send({ 
+        auth: false, 
+        message: 'No token provided.' 
+      });
+  
+      jwt.verify(token, this.secret, function(err, decoded) {
+       if (err) return res.status(500).send({ 
+         auth: false, 
+         message: 'Failed to authenticate token.' 
+        });
+         res.status(200).send(decoded);
+       });
+  })
     
     // LIST.
-
-
     this.express.get('/user', async (req, res) => {
       debugger;
       let list = await this.userResource.list();
@@ -92,7 +115,7 @@ class Login {
         updatedUser = await this.userResource.update(id, email, password);
       }
       else{
-        console.log("User not found..");
+        console.log("User not found.");
       }
       res.send(updatedUser);
     })
