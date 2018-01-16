@@ -26,7 +26,7 @@ public interface TaqtileApiHandler {
     Observable<Response<LoginResponse>> authenticateUser(@Body User user);
 
     @GET("users")
-    Call<ListResponse> getUsers(@Header("Authorization") String token, @QueryMap Map<String, Integer> pagination);
+    Observable<Response<ListResponse>> getUsers(@Header("Authorization") String token, @QueryMap Map<String, Integer> pagination);
 
     @GET("user/{id}")
     Call<DefaultResponse> getUser(@Header("Authorization") String token, @Path("id") int id);
