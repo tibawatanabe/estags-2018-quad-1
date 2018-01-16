@@ -2,7 +2,6 @@ package com.example.android.projectjoao;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,65 +14,95 @@ import android.widget.Toast;
 import com.example.android.projectjoao.data.models.ListResponse;
 import com.example.android.projectjoao.data.models.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class ListingActivity extends AppCompatActivity implements ItemAdapter.ListItemlickListener {
-    private ItemAdapter mAdapter;
+public class ListingActivity extends BaseActivity<ListResponse> implements ItemAdapter.ListItemlickListener {
+    //Ui elements
     private RecyclerView mItemsList;
     private LinearLayout mLoadingIndicator;
-    private List<User> users;
-    private TaqtileApiHandler apiHandler;
+    private LinearLayoutManager layoutManager;
+
+    //List data
+    private ItemAdapter mAdapter;
+    private List<User> users = new ArrayList<>();
     private EndlessRecyclerViewScrollListener scrollListener;
+
+    //Network config
+    private TaqtileApiHandler apiHandler;
+
+    //Storage between requests
     private SharedPreferences pref;
+
+    //Window size of requested data
+    private int WINDOW_SIZE = 20;
+
+    protected int setCorrespondingLayout() {
+        return R.layout.activity_listing;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing);
 
-        pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0); // 0 - for private mode
+        setSharedPreferences(); // 0 - for private mode
 
-        apiHandler = NetworkConnection.getConnection();
+        arrangeUiElements();
 
-        setList();
+        runActivity();
     }
 
-    public void setList() {
+    protected void setSharedPreferences() {
+        pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
+    }
+
+    protected void arrangeUiElements() {
         mItemsList = (RecyclerView) findViewById(R.id.scroll_area);
         mLoadingIndicator = (LinearLayout) findViewById(R.id.loadingPanel);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this);
         mItemsList.setLayoutManager(layoutManager);
+        mAdapter = new ItemAdapter(ListingActivity.this, users);
+        mItemsList.setAdapter(mAdapter);
+    }
 
-        listUsers(0, 15, initialUsersCallback);
+    protected void runActivity() {
+        listUsers(0);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 mLoadingIndicator.setVisibility(View.VISIBLE);
-                listUsers(page, 15, additionalUsersCallback);
+                listUsers(page);
             }
         };
 
         mItemsList.addOnScrollListener(scrollListener);
     }
 
-    private void listUsers(int page, int window, Callback<ListResponse> callback) {
-        Map<String, Integer> formattedPagination = formatPagination(page, window);
+    private void listUsers(int page) {
+        Map<String, Integer> formattedPagination = formatPagination(page, WINDOW_SIZE);
 
         String userToken = pref.getString("token", null);
 
-        Call<ListResponse> call = apiHandler.getUsers(userToken, formattedPagination);
+        apiHandler = NetworkConnection.getConnection();
 
-        call.enqueue(callback);
+        Observable<Response<ListResponse>> responseStream = apiHandler.getUsers(userToken, formattedPagination);
+
+        responseStream.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(listResponse -> processResponse(listResponse),
+                        e -> e.printStackTrace());
     }
 
     private Map<String, Integer> formatPagination(int page, int window) {
@@ -87,68 +116,31 @@ public class ListingActivity extends AppCompatActivity implements ItemAdapter.Li
         return pagination;
     }
 
-    Callback<ListResponse> initialUsersCallback = new Callback<ListResponse>() {
-            @Override
-            public void onResponse(Call<ListResponse> call, Response<ListResponse> response) {
-                if (response.isSuccessful()) {
-                    ListResponse listResponse = response.body();
-                    users = listResponse.getData();
-                    mAdapter = new ItemAdapter(ListingActivity.this, users);
-                    mItemsList.setAdapter(mAdapter);
-                } else if(response.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    showToastOnUserUnauthorized();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Erro na conexão", Toast.LENGTH_SHORT).show();
-                }
-            }
+    protected void processResponse(Response<ListResponse> listResponse) {
+        if (listResponse.code() == HttpsURLConnection.HTTP_OK) {
+            ListResponse listData = listResponse.body();
+            List<User> moreUsers = listData.getData();
+            users.addAll(moreUsers);
 
-            @Override
-            public void onFailure(Call<ListResponse> call, Throwable t) {
-                showToastOnUserFailure(t);
-            }
-        };
+            final int currentSize = mAdapter.getItemCount();
 
-    Callback<ListResponse> additionalUsersCallback = new Callback<ListResponse>() {
-            @Override
-            public void onResponse(Call<ListResponse> call, Response<ListResponse> response) {
-                if (response.isSuccessful()) {
-                    ListResponse listResponse = response.body();
-                    List<User> moreUsers = listResponse.getData();
-                    final int currentSize = mAdapter.getItemCount();
-                    users.addAll(moreUsers);
-
-                    mItemsList.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.notifyItemRangeInserted(currentSize, users.size() - 1);
-                            mLoadingIndicator.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                } else if(response.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    showToastOnUserUnauthorized();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Erro na conexão", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ListResponse> call, Throwable t) {
-                showToastOnUserFailure(t);
-            }
-        };
+            mItemsList.post(() -> {
+                mAdapter.notifyItemRangeInserted(currentSize, users.size() - 1);
+                mLoadingIndicator.setVisibility(View.INVISIBLE);
+            });
+        } else if(listResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+            showToastOnUserUnauthorized();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void showToastOnUserUnauthorized() {
-        Toast.makeText(getApplicationContext(), "Usuário expirou", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.expired_user_token, Toast.LENGTH_SHORT).show();
 
         Intent i = new Intent(ListingActivity.this, MainActivity.class);
         startActivity(i);
-    }
-
-    private void showToastOnUserFailure(Throwable t) {
-        Toast.makeText(getApplicationContext(), "Erro na conexão", Toast.LENGTH_SHORT).show();
-        t.printStackTrace();
     }
 
     @Override
