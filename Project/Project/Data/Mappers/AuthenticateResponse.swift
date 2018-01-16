@@ -22,7 +22,7 @@ class AuthenticateResponse: Mappable {
 }
 
 class LoginDataResponse: Mappable {
-    var user: [String: Any]?
+    var user: UserModel?
     var token: String?
     
     required init?(map: Map) {}

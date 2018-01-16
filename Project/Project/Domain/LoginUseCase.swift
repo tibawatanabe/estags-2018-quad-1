@@ -16,36 +16,41 @@ enum loginFields: String {
 }
 
 struct LoginUseCase {
-    func execute(username: String, password: String, rememberMe: Bool) {
-        let requestStream: Observable<String> = Observable.just(APIClient.baseUrl.rawValue)
-        
-        let loginParameters: [String: Any] = [loginFields.email.rawValue: username,
-                               loginFields.password.rawValue: password,
-                               loginFields.rememberMe.rawValue: rememberMe]
-        
-        let responseStream = requestStream.flatMap { (baseUrl) -> Observable<AuthenticateResponse> in
-            let requestBuilder = RequestBuilder.init(baseUrl: baseUrl)
+    
+    //MARK: Methods
+    func execute(username: String, password: String, rememberMe: Bool) -> Observable<LoginResponse> {
+        return Observable.create({ (observer)  in
+            let loginParameters: [String: Any] = [loginFields.email.rawValue: username,
+                                                  loginFields.password.rawValue: password,
+                                                  loginFields.rememberMe.rawValue: rememberMe]
+            let requestBuilder = RequestBuilder.init(baseUrl: APIClient.baseUrl.rawValue)
             let postRequest = requestBuilder.post(APIClient.loginEndpoint.rawValue, parameters: loginParameters, headers: nil).build()
             let httpClient = HTTPClient.init()
-            return httpClient.request(postRequest)
-        }
-        
-        let _ = responseStream.subscribe { event in
-            switch event {
-            case .next(let value):
-                guard let user = value.data?.user else {
-                    print(value.errors?.first?.original!)
-                    return
+            
+            let requestStream = httpClient.request(postRequest)
+            
+            let _ = requestStream.subscribe({ event in
+                switch event {
+                case .next(let value):
+                    guard let token = value.data?.token else {
+                        guard let errors = value.errors else {
+                            observer.onError(event.error!)
+                            return
+                        }
+                        observer.onNext(LoginResponse.init(error: true, message: errors.first?.original, token: nil))
+                        observer.onCompleted()
+                        return
+                    }
+                    observer.onNext(LoginResponse.init(error: false, message: nil, token: token))
+                    observer.onCompleted()
+                case .error(let error):
+                    observer.onError(error)
+                case .completed:
+                    observer.on(.completed)
                 }
-                UserRepository.init().saveToken((value.data?.token)!)
-            case .error(let error):
-                print (error)
-            case .completed:
-                return
-            }
-        }
-
-        
+            })
+            return Disposables.create()
+        })
     }
 }
 
