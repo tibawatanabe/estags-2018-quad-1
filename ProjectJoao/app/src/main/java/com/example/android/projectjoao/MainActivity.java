@@ -2,9 +2,6 @@ package com.example.android.projectjoao;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,7 +16,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity<LoginResponse> {
     //Ui elements
     EditText mUserName;
     EditText mPassword;
@@ -32,23 +29,11 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences pref; // 0 - for private mode
     SharedPreferences.Editor editor;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        setSharedPreferences();
-
-        getUiElements();
-
-        mConfirmationButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                requestUserAuthentication();
-            }
-        });
+    protected int setCorrespondingLayout() {
+        return R.layout.activity_main;
     }
 
-    private void setSharedPreferences() {
+    protected void setSharedPreferences() {
         pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
         editor  = pref.edit();
 
@@ -56,10 +41,14 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private void getUiElements() {
+    protected void arrangeUiElements() {
         mUserName = (EditText) findViewById(R.id.username);
         mPassword = (EditText) findViewById(R.id.password_field);
         mConfirmationButton = (Button) findViewById(R.id.confirmation_button);
+    }
+
+    protected void runActivity() {
+        mConfirmationButton.setOnClickListener(view -> requestUserAuthentication());
     }
 
     private void requestUserAuthentication() {
@@ -67,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         String password = mPassword.getText().toString();
 
         if(username.isEmpty() || password.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Preencha todos os dados", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.login_empty_data, Toast.LENGTH_SHORT).show();
         }
         else {
             User user = new User(username, password, false);
@@ -87,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
                         e -> e.printStackTrace());
     }
 
-    private void processResponse(Response<LoginResponse> loginResponse) {
+    protected void processResponse(Response<LoginResponse> loginResponse) {
         if(loginResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-            Toast.makeText(getApplicationContext(), "Usuário e/ou senha incorretos...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.login_incorrect_data, Toast.LENGTH_SHORT).show();
         }
         else {
             editor.putString("token", loginResponse.body().getLoginData().getToken());
