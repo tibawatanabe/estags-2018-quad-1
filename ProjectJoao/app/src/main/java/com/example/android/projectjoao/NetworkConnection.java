@@ -7,6 +7,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkConnection {
@@ -32,9 +33,10 @@ public class NetworkConnection {
 //        okHttpClient.addInterceptor(logging);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(TaqtileApiHandler.BASE_URL)
-                .client(okHttpClient.build())
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(okHttpClient.build())
+                .baseUrl(TaqtileApiHandler.BASE_URL)
                 .build();
 
         return retrofit.create(TaqtileApiHandler.class);
