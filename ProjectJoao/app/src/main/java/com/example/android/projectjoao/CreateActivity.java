@@ -5,87 +5,81 @@ import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.android.projectjoao.data.models.DefaultResponse;
 import com.example.android.projectjoao.data.models.User;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class CreateActivity extends AppCompatActivity {
+public class CreateActivity extends BaseActivity<DefaultResponse> {
+    //Ui elements
     private TextInputEditText mUsernameTextInput;
     private TextInputEditText mEmailTextInput;
     private TextInputEditText mRoleTextInput;
     private TextInputEditText mPasswordTextInput;
     private Button mConfirmationButton;
+
+    //Network config
     private TaqtileApiHandler apiHandler;
+
+    //Storage between requests
     private SharedPreferences pref;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_form);
 
-        pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0); // 0 - for private mode
-
-        apiHandler = NetworkConnection.getConnection();
-
-        createUser();
+    protected int setCorrespondingLayout() {
+        return R.layout.user_form;
     }
 
-    public void createUser() {
+    protected void setSharedPreferences() {
+        pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
+    }
+
+    protected void arrangeUiElements() {
         mUsernameTextInput = (TextInputEditText) findViewById(R.id.create_name_entry);
         mEmailTextInput = (TextInputEditText) findViewById(R.id.create_email_entry);
         mRoleTextInput = (TextInputEditText) findViewById(R.id.create_role_entry);
         mPasswordTextInput = (TextInputEditText) findViewById(R.id.create_password_entry);
         mConfirmationButton = (Button) findViewById(R.id.create_confirmation_button);
+    }
 
-        mConfirmationButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String username = mUsernameTextInput.getText().toString();
-                String email = mEmailTextInput.getText().toString();
-                String role = mRoleTextInput.getText().toString();
-                String password = mPasswordTextInput.getText().toString();
+    public void runActivity() {
+        mConfirmationButton.setOnClickListener(view -> {
+            String username = mUsernameTextInput.getText().toString();
+            String email = mEmailTextInput.getText().toString();
+            String role = mRoleTextInput.getText().toString();
+            String password = mPasswordTextInput.getText().toString();
 
-                if(username.isEmpty() || email.isEmpty() || role.isEmpty() || password.isEmpty()){
-                    Toast.makeText(getApplicationContext(), "Insira todos os dados do usuário", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    String userToken = pref.getString("token", null);
+            if(username.isEmpty() || email.isEmpty() || role.isEmpty() || password.isEmpty()){
+                Toast.makeText(getApplicationContext(), R.string.create_user_empty_data, Toast.LENGTH_SHORT).show();
+            }
+            else {
+                String userToken = pref.getString("token", null);
 
-                    User user = new User();
-                    user.setName(username);
-                    user.setEmail(email);
-                    user.setRole(role);
-                    user.setPassword(password);
+                User user = new User(username, email, role, password);
 
-                    apiHandler.createUser(userToken, user).enqueue(userCreationCallback);
-                }
+                apiHandler = NetworkConnection.getConnection();
+
+                Observable<Response<DefaultResponse>> responseStream = apiHandler.createUser(userToken, user);
+
+                responseStream.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(loginResponse -> processResponse(loginResponse),
+                                e -> e.printStackTrace());
             }
         });
     }
 
-    Callback<DefaultResponse> userCreationCallback = new Callback<DefaultResponse>() {
-        @Override
-        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
-            if (response.isSuccessful()) {
-                User user = response.body().getData();
-                Log.d("ID", user.getId().toString());
-                Toast.makeText(getApplicationContext(), "Usuário criado com sucesso", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(CreateActivity.this, ListingActivity.class);
-                startActivity(i);
-            } else {
-                Toast.makeText(getApplicationContext(), "Não foi possível criar o usuário", Toast.LENGTH_SHORT).show();
-            }
+    protected void processResponse(Response<DefaultResponse> createResponse) {
+        if (createResponse.isSuccessful()) {
+            Toast.makeText(getApplicationContext(), R.string.create_user_success_response, Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(CreateActivity.this, ListingActivity.class);
+            startActivity(i);
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.create_user_fail_response, Toast.LENGTH_SHORT).show();
         }
-
-        @Override
-        public void onFailure(Call<DefaultResponse> call, Throwable t) {
-            t.printStackTrace();
-        }
-    };
+    }
 }
