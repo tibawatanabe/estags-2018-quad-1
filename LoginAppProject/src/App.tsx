@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { StackNavigator } from 'react-navigation'
 // tslint:disable-next-line:max-line-length
-import LoginScreen from './loginScreen'
-import ProfileScreen from './profileScreen'
+import LoginScreen from './modules/loginScreen'
+import ProfileScreen from './modules/profileScreen'
 import DetailScreen from './detailScreen'
 import AddUserScreen from './addUserScreen'
 import EditUserScreen from './editUserScreen'
+import 'reflect-metadata'
 
 export default class App extends Component {
   render() {

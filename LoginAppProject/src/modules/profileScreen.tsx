@@ -2,16 +2,17 @@ import React, { Component } from 'react'
 // tslint:disable-next-line:max-line-length
 import { Text, View, StyleSheet, ActivityIndicator, FlatList, TouchableHighlight } from 'react-native'
 import axios from 'axios'
+import PageListLoader from '../domain/pageListLoader'
 import { ListItem, List, Button } from 'react-native-elements'
+import { Container } from 'typedi/Container'
+
 interface ProfileScreenProps {
   navigation: any
 }
 interface ProfileScreenStates {
   isLoading: boolean,
   isRefreshing: boolean,
-  page: number,
-  totalPages: number,
-  data: any
+  pageListLoader: any
 }
 
 export default class ProfileScreen extends Component <ProfileScreenProps, ProfileScreenStates> {
@@ -23,34 +24,22 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
     this.state = {
       isLoading: false,
       isRefreshing: false,
-      page: 1,
-      totalPages: 100,
-      data: []
+      pageListLoader: Container.get(PageListLoader)
     }
   }
 
   loadMore = () => {
-    if (this.state.page < this.state.totalPages) {
-      this.setState({page: this.state.page + 1})
-      this.loadPage(this.state.page)
-    }
+    this.state.pageListLoader.loadMore().then(() =>
+      this.setState({pageListLoader: this.state.pageListLoader})
+    )
   }
 
-  loadPage(page: number) {
-    const {params} = this.props.navigation.state
-    axios.get(`https://tq-template-node.herokuapp.com/users?pagination={"page": ${page} , "window": 10}`,
-      {
-        headers: {
-          Authorization: `${params.data.token}`
-        }
-      }
-    )
-    .then((responseJson) => {
+  loadPageZero() {
+    this.state.pageListLoader.getPage(0)
+    .then(() => {
       this.setState({
         isLoading: false,
-        isRefreshing: false,
-        data: page === 0 ? responseJson.data.data : this.state.data.concat(responseJson.data.data),
-        totalPages: responseJson.data.pagination.totalPages
+        isRefreshing: false
       })
     })
     .catch((error) => {
@@ -59,22 +48,22 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
   }
 
   componentDidMount() {
-    this.loadPage(0)
+    const {params} = this.props.navigation.state
+    this.state.pageListLoader.setToken(params.data.token)
+    this.loadPageZero()
   }
 
   pullRefresh = () => {
     this.setState({
-      page: 1,
       isRefreshing: true
     })
-    this.loadPage(0)
+    this.state.pageListLoader.reset()
+    this.loadPageZero()
   }
 
   refresh = () => {
-    this.setState({
-      page: 1
-    })
-    this.loadPage(0)
+    this.state.pageListLoader.reset()
+    this.loadPageZero()
   }
 
   render() {
@@ -92,7 +81,7 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
         <View style = {styles.container}>
           <View style = {{paddingTop: 40}}>
             <FlatList
-              data = {this.state.data}
+              data = {this.state.pageListLoader.data}
               keyExtractor={(item) => item.id}
               renderItem = {({item}) =>
                 <ListItem
