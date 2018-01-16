@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,10 +14,7 @@ import com.example.android.projectjoao.data.models.User;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.HTTP;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -43,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSharedPreferences();
 
-        setUiElements();
-
-        apiHandler = NetworkConnection.getConnection();
+        getUiElements();
 
         mConfirmationButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -53,29 +47,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-//    Callback<LoginResponse> userAuthenticationCallback = new Callback<LoginResponse>() {
-//        @Override
-//        public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-//            if (response.isSuccessful()) {
-//                LoginResponse loginResponse = response.body();
-//
-//                editor.putString("token", loginResponse.getLoginData().getToken());
-//                editor.commit();
-//
-//                Toast.makeText(getApplicationContext(), "Redirecionando...", Toast.LENGTH_SHORT).show();
-//                Intent i = new Intent(MainActivity.this, ListingActivity.class);
-//                startActivity(i);
-//            } else {
-//                Toast.makeText(getApplicationContext(), "Usuário e/ou senha incorretos...", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//
-//        @Override
-//        public void onFailure(Call<LoginResponse> call, Throwable t) {
-//            t.printStackTrace();
-//        }
-//    };
 
     private void setSharedPreferences() {
         pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
@@ -85,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private void setUiElements() {
+    private void getUiElements() {
         mUserName = (EditText) findViewById(R.id.username);
         mPassword = (EditText) findViewById(R.id.password_field);
         mConfirmationButton = (Button) findViewById(R.id.confirmation_button);
@@ -106,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendUserAuthenticationRequest(User user) {
+        apiHandler = NetworkConnection.getConnection();
+
         Observable<Response<LoginResponse>> responseStream = apiHandler.authenticateUser(user);
 
         responseStream.subscribeOn(Schedulers.io())
