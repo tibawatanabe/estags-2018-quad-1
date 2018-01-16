@@ -39,6 +39,13 @@ public class User {
         this.rememberMe = rememberMe;
     }
 
+    public User(String name, String email, String role, String password) {
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.password = password;
+    }
+
     public User() {
 
     }
