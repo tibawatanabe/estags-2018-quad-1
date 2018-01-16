@@ -7,17 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.projectjoao.model.ListData;
+import com.example.android.projectjoao.data.models.User;
 
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     private static final String TAG = ItemAdapter.class.getSimpleName();
-    private List<ListData> mDataset;
+    private List<User> mDataset;
 
     final private ListItemlickListener mOnClickListener;
 
-    public ItemAdapter(ListItemlickListener listener, List<ListData> myDataSet) {
+    public ItemAdapter(ListItemlickListener listener, List<User> myDataSet) {
         mOnClickListener = listener;
         mDataset = myDataSet;
     }
@@ -36,7 +36,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             itemView.setOnClickListener(this);
         }
 
-        void bind(ListData user) {
+        void bind(User user) {
             listItemView.setText(String.valueOf(user.getEmail()));
         }
 
