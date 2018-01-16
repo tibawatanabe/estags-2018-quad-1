@@ -12,9 +12,7 @@ import Alamofire
 
 class UserListViewController: UITableViewController {
     //MARK: Properties
-    var users = [User]()
-    var authorizationToken: String?
-    var currentUser: User?
+    var users = [UserModel2]()
     var endOfList: Bool?
     var currentPage: Int = 0
     let windowSize = 10
@@ -65,7 +63,7 @@ class UserListViewController: UITableViewController {
     
     //MARK: Table Actions
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        currentUser = users[indexPath.row]
+//        currentUser = users[indexPath.row]
         performSegue(withIdentifier: "fromListToDetail", sender: self)
     }
     
@@ -74,82 +72,51 @@ class UserListViewController: UITableViewController {
             if self.endOfList == nil {
                 return
             }
-            getUsersFrom(TemplateAPIHandler.userListEndpoint, on: self.currentPage, showing: 10)
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == nil {
-            return
-        }
-        switch segue.identifier! {
-        case "fromListToDetail":
-            let nextController = segue.destination as? UserViewController
-            guard currentUser != nil else {
-                return
+            else if !self.endOfList! {
+                self.getUserList(on: self.currentPage, showing: 10)
             }
-            nextController?.userId = currentUser!.id
-            nextController?.authorizationToken = self.authorizationToken!
-        case "fromListToCreation":
-            let nextController = segue.destination as? UserCreationViewController
-            guard self.authorizationToken != nil else {
-                return
-            }
-            nextController?.authorizationToken = self.authorizationToken!
-        default:
-            super.prepare(for: segue, sender: sender)
         }
     }
     
     //MARK: Private Methods
     fileprivate func initializeUserList() {
-        self.users = [User]()
+        self.users = [UserModel2]()
         self.userList.reloadData()
         currentPage = 0
-        self.getUsersFrom(TemplateAPIHandler.userListEndpoint, on: currentPage, showing: windowSize)
+        
+        self.getUserList(on: currentPage, showing: windowSize)
     }
     
-    fileprivate func getUsersFrom(_ path: String, on page: Int, showing window: Int) {
+    fileprivate func getUserList(on page: Int, showing window: Int) {
+        let userListStream = ListUsersUseCase.init().execute(page: page, window: window)
         
-        guard let urlComponents = URLComponents(string: path) else {
-            fatalError("Tried to load an invalid url")
-        }
-        
-        Alamofire.request(urlComponents, method: .get, parameters: ["pagination": ["page": page, "window": window]], encoding: URLEncoding.default, headers: ["Authorization": self.authorizationToken!]).responseJSON {
-            response in
-            if response.result.error != nil {
-                fatalError("Error on json response")
+        let _ = userListStream.subscribe({ result in
+            switch result {
+            case .next(let value):
+                if let response = value.data as? ListUsersResponse {
+                    self.users += response.data!
+                    self.endOfList = self.checkIfListHasEnded(pagination: response.pagination!)
+                    self.currentPage += 1
+                } else {
+                    fatalError("Unable to retrieve user list")
+                }
+            default:
+                return
             }
-//            self.users += User.usersArrayFromResponse(response)
-            self.userList.reloadData()
-//            self.endOfList = self.checkIfListHasEnded(response)
-            self.currentPage += 1
-        }
+        })
+        DispatchQueue.main.sync(execute: self.userList.reloadData)
     }
     
-//    fileprivate func checkIfListHasEnded(_ response: DataResponse<Any>) -> Bool {
-//        guard let json = response.result.value as? [String: Any] else {
-//            fatalError("Didn't get json dictionary")
-//        }
-//
-//        guard let pagination = json["pagination"] as? [String: Any] else {
-//            fatalError("Error on json response")
-//        }
-//
-//        guard let page = pagination["page"] as? String else {
-//            fatalError("Unable to identify page number")
-//        }
-//
-//        guard let totalPages = pagination["totalPages"] as? Int else {
-//            fatalError("Unable to identify total number of pages")
-//        }
-//
-//        if Int(page)! < totalPages - 1 {
-//            return false
-//        }
-//
-//        return true
-//    }
+    fileprivate func checkIfListHasEnded(pagination: Pagination) -> Bool {
+        guard let page = pagination.page, let totalPages = pagination.totalPages else {
+            fatalError("Unable to retrieve page information")
+        }
+        if page < totalPages - 1 {
+            return false
+        }
+        return true
+    }
+
     
     
 }

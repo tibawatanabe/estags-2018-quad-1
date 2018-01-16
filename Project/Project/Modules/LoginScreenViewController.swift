@@ -46,7 +46,7 @@ class LoginScreenViewController: UIViewController {
             switch result {
             case .next(let value):
                 if !value.error {
-                    self.loginSucceeded()
+                    self.loginSucceeded(token: value.token!)
                 } else {
                     self.loginFailed()
                 }
@@ -58,10 +58,11 @@ class LoginScreenViewController: UIViewController {
         })
     }
     
-    func loginSucceeded() {
+    func loginSucceeded(token: String) {
         print("Success!")
-//        dismiss(animated: true, completion: nil)
-//        performSegue(withIdentifier: "fromLoginToUserList", sender: self)
+        UserRepository.init().saveToken(token)
+        dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "fromLoginToUserList", sender: self)
     }
     
     func loginFailed() {

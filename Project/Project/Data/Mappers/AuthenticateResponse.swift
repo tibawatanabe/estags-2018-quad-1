@@ -16,8 +16,8 @@ class AuthenticateResponse: Mappable {
     required init?(map: Map) {}
     
     func mapping(map: Map) {
-        data <- map["data"]
-        errors <- map["errors"]
+        data    <- map["data"]
+        errors  <- map["errors"]
     }
 }
 
@@ -28,19 +28,24 @@ class LoginDataResponse: Mappable {
     required init?(map: Map) {}
     
     func mapping(map: Map) {
-        user <- map["user"]
-        token <- map["token"]
+        user    <- map["user"]
+        token   <- map["token"]
     }
 }
 
 class ErrorResponse: Mappable {
+    var httpCode: Int?
     var name: String?
+    var message: String?
     var original: String?
     
     required init?(map: Map) { }
     
     func mapping(map: Map) {
-        name <- map["name"]
-        original <- map["original"]
+        httpCode    <- map["httpCode"]
+        name        <- map["name"]
+        message     <- map["message"]
+        original    <- map["original"]
+        
     }
 }

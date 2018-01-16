@@ -8,6 +8,29 @@
 
 import Foundation
 
+
+struct APIResponse {
+    var data: Any? = nil
+    var error: ErrorContent? = nil
+    
+    init(data: Any?, error: ErrorContent?) {
+        self.data = data
+        self.error = error
+    }
+    
+}
+
+struct ErrorContent {
+    var tittle: String
+    var message: String
+    
+    init(tittle: String, message: String) {
+        self.tittle = tittle
+        self.message = message
+    }
+}
+
+
 class LoginResponse {
     var error: Bool
     var message: String?
@@ -19,6 +42,5 @@ class LoginResponse {
         self.token = token
     }
 }
-
 
 

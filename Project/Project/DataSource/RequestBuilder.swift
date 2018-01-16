@@ -38,6 +38,18 @@ class RequestBuilder {
         return self
     }
     
+    func get(_ url: String, parameters: [String: Any]?, headers: [String: String]?) -> RequestBuilder {
+        self.createRequest(.get, "\(self.baseUrl)\(url)", parameters, URLEncoding.default)
+        
+        if headers != nil {
+            for (key, value) in headers! {
+                self.appendHeader(key, with: value)
+            }
+        }
+        
+        return self
+    }
+    
     func appendHeader(_ key: String, with value: String) {
         self.httpRequest.headers[key] = value
     }

@@ -32,3 +32,12 @@ class UserModel: Mappable {
         role            <- map["role"]
     }
 }
+
+class UserModel2: UserModel {
+    var password: String?
+    
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        password <- map["password"]
+    }
+}

@@ -13,6 +13,8 @@
 		4D1FDF8020000D6A0087AE59 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FDF7F20000D6A0087AE59 /* UserTableViewCell.swift */; };
 		4D1FDF85200015040087AE59 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FDF84200015040087AE59 /* UserListViewController.swift */; };
 		4D1FDF8820001CCC0087AE59 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FDF8720001CCC0087AE59 /* User.swift */; };
+		4D2928E3200E2CB300BAFAE8 /* ListUsersUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2928E2200E2CB300BAFAE8 /* ListUsersUseCase.swift */; };
+		4D2928E5200E328700BAFAE8 /* ListUsersResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2928E4200E328700BAFAE8 /* ListUsersResponse.swift */; };
 		4D2966922006450900F9C0BB /* UserCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2966912006450900F9C0BB /* UserCreationViewController.swift */; };
 		4D2966962006A9EC00F9C0BB /* TemplateAPIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2966952006A9EC00F9C0BB /* TemplateAPIHandler.swift */; };
 		4D2BC26120078B1B0073BCED /* UserUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2BC26020078B1B0073BCED /* UserUpdateViewController.swift */; };
@@ -40,6 +42,8 @@
 		4D1FDF7F20000D6A0087AE59 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		4D1FDF84200015040087AE59 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
 		4D1FDF8720001CCC0087AE59 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		4D2928E2200E2CB300BAFAE8 /* ListUsersUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListUsersUseCase.swift; sourceTree = "<group>"; };
+		4D2928E4200E328700BAFAE8 /* ListUsersResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListUsersResponse.swift; sourceTree = "<group>"; };
 		4D2966912006450900F9C0BB /* UserCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCreationViewController.swift; sourceTree = "<group>"; };
 		4D2966952006A9EC00F9C0BB /* TemplateAPIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateAPIHandler.swift; sourceTree = "<group>"; };
 		4D2BC26020078B1B0073BCED /* UserUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUpdateViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 			children = (
 				4DEACA22200D39C70009DD1B /* UserModels.swift */,
 				4DEACA1D200CDBFD0009DD1B /* AuthenticateResponse.swift */,
+				4D2928E4200E328700BAFAE8 /* ListUsersResponse.swift */,
 			);
 			path = Mappers;
 			sourceTree = "<group>";
@@ -225,6 +230,7 @@
 			children = (
 				4DEACA25200D3F260009DD1B /* LoginUseCase.swift */,
 				4DEACA27200D4A450009DD1B /* APIResponse.swift */,
+				4D2928E2200E2CB300BAFAE8 /* ListUsersUseCase.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -374,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DEACA1C200CC9830009DD1B /* RequestBuilder.swift in Sources */,
+				4D2928E3200E2CB300BAFAE8 /* ListUsersUseCase.swift in Sources */,
 				4D36273F1FFE813100342117 /* LoginScreenViewController.swift in Sources */,
 				4D09F0482005450E000904FD /* UserFields.swift in Sources */,
 				4DEACA1E200CDBFD0009DD1B /* AuthenticateResponse.swift in Sources */,
@@ -385,6 +392,7 @@
 				4D1FDF85200015040087AE59 /* UserListViewController.swift in Sources */,
 				4DEACA26200D3F260009DD1B /* LoginUseCase.swift in Sources */,
 				4D2BC26120078B1B0073BCED /* UserUpdateViewController.swift in Sources */,
+				4D2928E5200E328700BAFAE8 /* ListUsersResponse.swift in Sources */,
 				4D2BC263200792D30073BCED /* UserLocalData.swift in Sources */,
 				4DEACA28200D4A450009DD1B /* APIResponse.swift in Sources */,
 				4D1FDF8020000D6A0087AE59 /* UserTableViewCell.swift in Sources */,

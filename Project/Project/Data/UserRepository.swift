@@ -18,4 +18,11 @@ class UserRepository {
     func saveToken(_ authorizationToken: String) {
         local?.save(authorizationToken, forKey: UserFields.token.rawValue)
     }
+    
+    func retrieveToken() -> String {
+        guard let token = local?.retrieve(forKey: UserFields.token.rawValue) as? String else {
+            fatalError("Unable to retrieve token")
+        }
+        return token
+    }
 }

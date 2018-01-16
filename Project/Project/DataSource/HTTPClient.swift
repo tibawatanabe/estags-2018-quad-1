@@ -16,7 +16,7 @@ enum APIClient: String {
     case baseUrl = "https://tq-template-node.herokuapp.com/"
     case loginEndpoint = "authenticate"
     case userDataEndpoint = "user"
-    case userListPoint = "users"
+    case userListEndpoint = "users?"
 }
 
 class HTTPClient {
@@ -33,11 +33,11 @@ class HTTPClient {
         return manager
     }()
 
-    func request(_ httpRequest: HTTPRequest) -> Observable<AuthenticateResponse> {
+    func request<TResponse: Mappable>(_ httpRequest: HTTPRequest) -> Observable<TResponse> {
         return Observable.create({ (observer) -> Disposable in
             let request = Alamofire.request(httpRequest.url, method: httpRequest.method,
                                                       parameters: httpRequest.parameters, encoding: httpRequest.encoding, headers: httpRequest.headers)
-                .responseObject{ (response: Alamofire.DataResponse<AuthenticateResponse>) -> Void in
+                .responseObject{ (response: Alamofire.DataResponse<TResponse>) -> Void in
                     guard let data = response.result.value else {
                         observer.onError(response.result.error!)
                         return

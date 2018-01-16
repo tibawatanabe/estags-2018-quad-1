@@ -27,7 +27,7 @@ struct LoginUseCase {
             let postRequest = requestBuilder.post(APIClient.loginEndpoint.rawValue, parameters: loginParameters, headers: nil).build()
             let httpClient = HTTPClient.init()
             
-            let requestStream = httpClient.request(postRequest)
+            let requestStream = httpClient.request(postRequest) as Observable<AuthenticateResponse>
             
             let _ = requestStream.subscribe({ event in
                 switch event {
