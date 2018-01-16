@@ -32,7 +32,7 @@ public interface TaqtileApiHandler {
     Call<DefaultResponse> getUser(@Header("Authorization") String token, @Path("id") int id);
 
     @POST("user")
-    Call<DefaultResponse> createUser(@Header("Authorization") String token, @Body User user);
+    Observable<Response<DefaultResponse>> createUser(@Header("Authorization") String token, @Body User user);
 
     @DELETE("user/{id}")
     Call<DefaultResponse> deleteUser(@Header("Authorization") String token, @Path("id") int id);
