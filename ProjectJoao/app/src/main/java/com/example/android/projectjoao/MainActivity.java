@@ -22,7 +22,7 @@ public class MainActivity extends BaseActivity<LoginResponse> {
     EditText mPassword;
     Button mConfirmationButton;
 
-    //Element to connect to the api
+    //Network config
     TaqtileApiHandler apiHandler;
 
     //Storage between requests
