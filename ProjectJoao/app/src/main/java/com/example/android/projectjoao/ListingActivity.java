@@ -50,18 +50,6 @@ public class ListingActivity extends BaseActivity<ListResponse> implements ItemA
         return R.layout.activity_listing;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listing);
-
-        setSharedPreferences(); // 0 - for private mode
-
-        arrangeUiElements();
-
-        runActivity();
-    }
-
     protected void setSharedPreferences() {
         pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
     }
