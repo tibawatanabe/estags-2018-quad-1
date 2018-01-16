@@ -3,7 +3,7 @@ import { StackNavigator } from 'react-navigation'
 // tslint:disable-next-line:max-line-length
 import LoginScreen from './modules/loginScreen'
 import ProfileScreen from './modules/profileScreen'
-import DetailScreen from './detailScreen'
+import DetailScreen from './modules/detailScreen'
 import AddUserScreen from './addUserScreen'
 import EditUserScreen from './editUserScreen'
 import 'reflect-metadata'

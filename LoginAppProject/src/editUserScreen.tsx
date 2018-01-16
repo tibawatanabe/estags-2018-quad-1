@@ -16,7 +16,7 @@ interface EditUserScreenStates {
 
 export default class EditUserScreen extends Component<EditUserScreenProps, EditUserScreenStates> {
   static navigationOptions = {
-    title: 'Edit User'
+    title: 'Edit user'
   }
   constructor(props) {
     super(props)

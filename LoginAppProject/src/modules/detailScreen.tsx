@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 // tslint:disable-next-line:max-line-length
-import { Text, View, TouchableHighlight, Alert } from 'react-native'
-import axios from 'axios'
+import { Text, View, Alert } from 'react-native'
 import { Card, Button } from 'react-native-elements'
+import UserDetailUseCase from '../domain/userDetailUseCase'
+import {Container} from 'typedi'
+import User from '../model/user'
+
+const userDetailUseCase = Container.get(UserDetailUseCase)
 
 interface DetailScreenProps {
   navigation: any
 }
 interface DetailScreenStates {
-  name: string,
-  email: string,
+  user: any,
   isLoading: boolean
 }
 
@@ -20,8 +23,7 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
   constructor(props) {
     super(props)
     this.state = {
-      name: '',
-      email: '',
+      user: {},
       isLoading: false
     }
   }
@@ -29,16 +31,11 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
   componentDidMount() {
     this.setState({ isLoading: true })
     const {params} = this.props.navigation.state
-    axios.get(`https://tq-template-node.herokuapp.com/user/${params.id}`,
-      {
-        headers: {Authorization: `${params.token}`}
-      }
-    )
-    .then((responseJson) => {
+    userDetailUseCase.getDetail(params.token, params.id)
+    .then((userDetail) => {
       this.setState({
         isLoading: false,
-        name: responseJson.data.data.name,
-        email: responseJson.data.data.email
+        user: userDetail
       })
     })
     .catch((error) => {
@@ -52,13 +49,9 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
 
   async deleteUser() {
     const { params } = this.props.navigation.state
-    await axios.delete(`https://tq-template-node.herokuapp.com/user/${params.id}`,
-      {
-        headers: { Authorization: `${params.token}`}
-      }
-    )
+    userDetailUseCase.delete(params.token, params.id)
     .then(() => {
-      Alert.alert(`User: ${this.state.name} deleted`)
+      Alert.alert(`User: ${this.state.user.name} deleted`)
     })
     .catch((error) => {
       console.error(error)
@@ -71,9 +64,9 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
     const {navigate} = this.props.navigation
     return(
       <View>
-        <Card title = {`${this.state.name}`}>
-          <Text> Name: {this.state.name} </Text>
-          <Text> Email: {this.state.email} </Text>
+        <Card title = {`${this.state.user.name}`}>
+          <Text> Name: {this.state.user.name} </Text>
+          <Text> Email: {this.state.user.email} </Text>
           <Text> Id: {params.id} </Text>
           <Button
             title = 'Edit'
@@ -86,8 +79,8 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
               refreshList: params.refresh,
               token: params.token,
               id: params.id,
-              name: this.state.name,
-              email: this.state.email
+              name: this.state.user.name,
+              email: this.state.user.email
             })}
           />
         </Card>
