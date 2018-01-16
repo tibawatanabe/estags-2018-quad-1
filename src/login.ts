@@ -6,7 +6,7 @@ import { UserResource } from './models';
 import * as pg from 'pg';
 import * as jwt from 'jsonwebtoken';
 import { access } from 'fs';
-// import config from'../config';
+// import * as config from'../config';
 const connectionString = 'postgresql://postgres:postgres@localhost:5432/template'; //verificar connection String.
 
 class Login {
@@ -19,6 +19,28 @@ class Login {
     this.mountRoutes()
   }
 
+  private verifyToken(req, res, next) {
+    debugger;
+    var token = req.headers['x-access-token'];
+    jwt.verify(token, this.secret, function(err, result){
+      if(err){
+        return res.status(500).send({auth: false, message: 'failed to authenticate token'});
+      }
+      next();
+    })
+  }
+
+  private verifyToken2 = (req, res, next) => {
+    debugger;
+    var token = req.headers['x-access-token'];
+    jwt.verify(token, this.secret, function(err, result){
+      if(err){
+        return res.status(500).send({auth: false, message: 'failed to authenticate token'});
+      }
+      next();
+    })
+  }
+
   private mountRoutes (): void {
     this.express.use(bodyParser.urlencoded({extended : false}))
     this.express.use(bodyParser.json())
@@ -28,7 +50,7 @@ class Login {
       let email: String = req.body.email;
       let password: String = req.body.password;
       debugger;
-      let foundEmail = await this.userResource.login (email, password);
+      let foundEmail = await this.userResource.login(email, password);
       if(foundEmail.rowCount){
         console.log("User was succesfully logged.");
         let token = jwt.sign(email, 'secret');
@@ -66,10 +88,13 @@ class Login {
         });
          res.status(200).send(decoded);
        });
-  })
+   })
+
+  
     
     // LIST.
-    this.express.get('/user', async (req, res) => {
+    this.express.get('/user', this.verifyToken2,  async (req, res) => {
+    // this.express.get('/user', (req, res, next) => this.verifyToken(req, res, next),  async (req, res) => {
       debugger;
       let list = await this.userResource.list();
       let mapped = list.rows.map(el => ({
