@@ -4,4 +4,8 @@
     <string name="login_incorrect_data">Usuário e/ou senha incorretos...</string>
     <string name="connection_error">Erro na conexão</string>
     <string name="expired_user_token">Usuário expirou</string>
+    <string name="create_user_success_response">Usuário criado com sucesso</string>
+    <string name="create_user_fail_response">Não foi possível criar o usuário</string>
+    <string name="create_user_empty_data">Insira todos os dados do usuário</string>
+
 </resources>
