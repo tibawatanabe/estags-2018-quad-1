@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {FormLabel, FormInput, CheckBox, Button} from 'react-native-elements'
-import axios from 'axios'
+import LoginUseCase from '../domain/loginUseCase'
 // tslint:disable-next-line:max-line-length
 import { Text, View, StyleSheet, ActivityIndicator, Alert } from 'react-native'
 
@@ -13,7 +13,7 @@ interface LoginScreenStates {
   email: string ,
   password: string,
   rememberMe: boolean,
-  isLoading: boolean
+  isLoading: boolean,
 }
 
 export default class LoginScreen extends Component<LoginScreenProps, LoginScreenStates> {
@@ -27,29 +27,15 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
     }
   }
 
-  onPressButton = async () => {
+  onPressButton = () => {
     this.setState({isLoading: true})
-    await axios.post('https://tq-template-node.herokuapp.com/authenticate',
-      {
-        email: this.state.email,
-        password: this.state.password,
-        rememberMe: this.state.rememberMe
-      },
-      {
-        headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-        }
-      }
-    )
+    let login = new LoginUseCase
+    login.authentication(this.state.email, this.state.password, this.state.rememberMe)
     .then((responseJson) => {
       this.setState({
         isLoading: false
-        // data: responseJson.data // data is being sent to the next screen with navigate
-        // name: responseJson.data.user.name
       })
-      const { navigate } = this.props.navigation
-      navigate('Profile', {data: responseJson.data.data})
+      this.props.navigation.navigate('Profile', {data: responseJson.data.data})
     })
     .catch(() => {
       Alert.alert('Wrong Email or Password')
