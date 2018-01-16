@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -13,11 +13,14 @@ import android.widget.Toast;
 import com.example.android.projectjoao.model.CreateResponse;
 import com.example.android.projectjoao.model.User;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity {
+    private User user;
     private TextInputEditText mUsernameTextInput;
     private TextInputEditText mEmailTextInput;
     private TextInputEditText mRoleTextInput;
@@ -25,6 +28,7 @@ public class CreateActivity extends AppCompatActivity {
     private Button mConfirmationButton;
     private TaqtileApiHandler apiHandler;
     private SharedPreferences pref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,15 +38,24 @@ public class CreateActivity extends AppCompatActivity {
 
         apiHandler = NetworkConnection.getConnection();
 
-        createUser();
+        setUiComponents();
+
+        editUser();
     }
 
-    public void createUser() {
+    public void setUiComponents() {
         mUsernameTextInput = (TextInputEditText) findViewById(R.id.create_name_entry);
         mEmailTextInput = (TextInputEditText) findViewById(R.id.create_email_entry);
         mRoleTextInput = (TextInputEditText) findViewById(R.id.create_role_entry);
         mPasswordTextInput = (TextInputEditText) findViewById(R.id.create_password_entry);
         mConfirmationButton = (Button) findViewById(R.id.create_confirmation_button);
+    }
+
+    public void editUser() {
+        final Intent intent = getIntent();
+        mUsernameTextInput.setText(intent.getStringExtra("username"));
+        mEmailTextInput.setText(intent.getStringExtra("email"));
+        mRoleTextInput.setText(intent.getStringExtra("role"));
 
         mConfirmationButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -52,40 +65,59 @@ public class CreateActivity extends AppCompatActivity {
                 String password = mPasswordTextInput.getText().toString();
 
                 if(username.isEmpty() || email.isEmpty() || role.isEmpty() || password.isEmpty()){
-                    Toast.makeText(getApplicationContext(), "Insira todos os dados do usuário", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Todos os dados são obrigatórios", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     String userToken = pref.getString("token", null);
 
-                    User user = new User();
+                    user = new User();
                     user.setName(username);
                     user.setEmail(email);
                     user.setRole(role);
                     user.setPassword(password);
 
-                    apiHandler.createUser(userToken, user).enqueue(userCreationCallback);
+                    int userId = Integer.valueOf(intent.getStringExtra("id"));
+
+                    apiHandler.editUser(userToken, userId, user).enqueue(userEditionCallback);
                 }
             }
         });
     }
 
-    Callback<CreateResponse> userCreationCallback = new Callback<CreateResponse>() {
+    Callback<CreateResponse> userEditionCallback = new Callback<CreateResponse>() {
         @Override
         public void onResponse(Call<CreateResponse> call, Response<CreateResponse> response) {
             if (response.isSuccessful()) {
-                User user = response.body().getCreateData();
-                Log.d("ID", user.getId().toString());
-                Toast.makeText(getApplicationContext(), "Usuário criado com sucesso", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(CreateActivity.this, ListingActivity.class);
+                int userId = response.body().getCreateData().getId();
+
+                Toast.makeText(getApplicationContext(), "Usuário atualizado com sucesso", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(EditActivity.this, ShowActivity.class);
+                i.putExtra("id", String.valueOf(userId));
                 startActivity(i);
-            } else {
-                Toast.makeText(getApplicationContext(), "Não foi possível criar o usuário", Toast.LENGTH_SHORT).show();
+            } else if(response.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                Toast.makeText(getApplicationContext(), "Usuário expirou", Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(EditActivity.this, MainActivity.class);
+                startActivity(i);
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Erro na conexão", Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void onFailure(Call<CreateResponse> call, Throwable t) {
+            Toast.makeText(getApplicationContext(), "Erro na conexão", Toast.LENGTH_SHORT).show();
             t.printStackTrace();
         }
     };
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int selected = item.getItemId();
+            if(selected == android.R.id.home) {
+                onBackPressed();
+            }
+        return true;
+    }
 }

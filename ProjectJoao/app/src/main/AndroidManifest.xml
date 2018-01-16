@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.android.projectjoao.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,35 +19,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ListingActivity"
+            android:name="com.example.android.projectjoao.ListingActivity"
             android:label="Lista de usuários"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.example.android.projectjoao.MainActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="com.example.android.projectjoao.MainActivity" />
         </activity>
         <activity
-            android:name=".ShowActivity"
+            android:name="com.example.android.projectjoao.ShowActivity"
             android:label="Detalhe do usuário"
-            android:parentActivityName=".ListingActivity">
+            android:parentActivityName="com.example.android.projectjoao.ListingActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListingActivity" />
+                android:value="com.example.android.projectjoao.ListingActivity" />
         </activity>
         <activity
-            android:name=".CreateActivity"
+            android:name="com.example.android.projectjoao.CreateActivity"
             android:label="Criar usuário"
-            android:parentActivityName=".ListingActivity">
+            android:parentActivityName="com.example.android.projectjoao.ListingActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListingActivity" />
+                android:value="com.example.android.projectjoao.ListingActivity" />
+        </activity>
+        <activity
+            android:name="com.example.android.projectjoao.EditActivity"
+            android:label="Editar usuário"
+            android:parentActivityName="com.example.android.projectjoao.ShowActivity">
+
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.projectjoao.ShowActivity" />
         </activity>
     </application>
-
 </manifest>
