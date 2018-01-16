@@ -3,9 +3,9 @@ import {FormLabel, FormInput, CheckBox, Button} from 'react-native-elements'
 import LoginUseCase from '../domain/loginUseCase'
 // tslint:disable-next-line:max-line-length
 import { Text, View, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { Container, Inject } from 'typedi'
 
 // Screens
-
 interface LoginScreenProps {
   navigation: any
 }
@@ -29,7 +29,7 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
 
   onPressButton = () => {
     this.setState({isLoading: true})
-    let login = new LoginUseCase
+    let login = Container.get(LoginUseCase)
     login.authentication(this.state.email, this.state.password, this.state.rememberMe)
     .then((responseJson) => {
       this.setState({

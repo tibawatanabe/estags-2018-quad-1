@@ -24,7 +24,7 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
     this.state = {
       isLoading: false,
       isRefreshing: false,
-      pageListLoader: Container.get(PageListLoader)
+      pageListLoader: new PageListLoader
     }
   }
 

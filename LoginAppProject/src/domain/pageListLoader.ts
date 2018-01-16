@@ -1,7 +1,6 @@
 import UserListDataSource from '../data/userListDataSource'
-import { Container, Service } from 'typedi'
+import { Container } from 'typedi'
 
-@Service()
 export default class PageListLoader {
   page: number
   totalPages: number
@@ -11,9 +10,9 @@ export default class PageListLoader {
     this.page = 0
     this.totalPages = 100
   }
-  getPage(page: number): Promise<any> {
+  async getPage(page: number): Promise<any> {
     let userListDataSource = Container.get(UserListDataSource)
-    return userListDataSource.getUserList(this.token, page)
+    let list = await userListDataSource.getUserList(this.token, page)
     .then((responseJson) => {
       this.data = (page === 0) ? responseJson.data.data : this.data.concat(responseJson.data.data)
       this.totalPages = responseJson.data.pagination.totalPages
