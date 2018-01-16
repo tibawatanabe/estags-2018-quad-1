@@ -15,7 +15,7 @@ import RxSwift
 enum APIClient: String {
     case baseUrl = "https://tq-template-node.herokuapp.com/"
     case loginEndpoint = "authenticate"
-    case userDataEndpoint = "user"
+    case userDataEndpoint = "user/"
     case userListEndpoint = "users?"
 }
 

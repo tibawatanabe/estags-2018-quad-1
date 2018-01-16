@@ -41,3 +41,13 @@ class UserModel2: UserModel {
         password <- map["password"]
     }
 }
+
+class UserDetailResponse: Mappable {
+    var data: UserModel2?
+    
+    required init?(map: Map) {}
+    
+    func mapping(map: Map) {
+        data <- map["data"]
+    }
+}

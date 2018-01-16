@@ -16,7 +16,7 @@ class UserRepository {
     }
     
     func saveToken(_ authorizationToken: String) {
-        local?.save(authorizationToken, forKey: UserFields.token.rawValue)
+        self.local?.save(authorizationToken, forKey: UserFields.token.rawValue)
     }
     
     func retrieveToken() -> String {
@@ -24,5 +24,16 @@ class UserRepository {
             fatalError("Unable to retrieve token")
         }
         return token
+    }
+    
+    func saveUserId(_ id: Int) {
+        self.local?.save(id, forKey: UserFields.id.rawValue)
+    }
+    
+    func retriveUserId() -> Int {
+        guard let id = local?.retrieve(forKey: UserFields.id.rawValue) as? Int else {
+            fatalError("Unable to retrieve user id")
+        }
+        return id
     }
 }

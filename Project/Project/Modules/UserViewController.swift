@@ -33,6 +33,7 @@ class UserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.editButton.isEnabled = false
         self.deleteButton.isEnabled = false
+        
         self.getUserDetails()
         super.viewWillAppear(animated)
     }
@@ -60,11 +61,35 @@ class UserViewController: UIViewController {
     
     //MARK: Private methods
     fileprivate func getUserDetails() {
-        //TODO
+        let id = UserRepository.init().retriveUserId()
+        
+        let requestStream = UserDetailUseCase.init().execute(id: id)
+        
+        let _ = requestStream.subscribe({ result in
+            switch result {
+            case .next(let value):
+                guard let userDetails = value.data as? UserModel else {
+                    fatalError("Unable to retrieve user details")
+                }
+                self.fillTextFields(with: userDetails)
+            default:
+                return
+            }
+            
+        })
     }
     
     fileprivate func deleteUser() {
         //TODO
+    }
+    
+    fileprivate func fillTextFields(with userDetails: UserModel) {
+        self.nameLabel.text = "Name: " + userDetails.name!
+        self.roleLabel.text = "Role: " + userDetails.role!
+        self.emailLabel.text = "Email: " + userDetails.email!
+        self.activeLabel.text = "Active: " + (userDetails.active != nil ? String(describing: userDetails.active!) : " - ")
+        self.createdAt.text = "Created: " + (userDetails.createdAt ?? " - ")
+        self.updatedAt.text = "Last update: " + (userDetails.updatedAt ?? " - ")
     }
 }
 

@@ -59,7 +59,6 @@ class LoginScreenViewController: UIViewController {
     }
     
     func loginSucceeded(token: String) {
-        print("Success!")
         UserRepository.init().saveToken(token)
         dismiss(animated: true, completion: nil)
         performSegue(withIdentifier: "fromLoginToUserList", sender: self)

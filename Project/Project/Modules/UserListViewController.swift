@@ -63,7 +63,10 @@ class UserListViewController: UITableViewController {
     
     //MARK: Table Actions
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        currentUser = users[indexPath.row]
+        guard let id = users[indexPath.row].id else {
+            return
+        }
+        UserRepository.init().saveUserId(id)
         performSegue(withIdentifier: "fromListToDetail", sender: self)
     }
     
@@ -95,6 +98,7 @@ class UserListViewController: UITableViewController {
             case .next(let value):
                 if let response = value.data as? ListUsersResponse {
                     self.users += response.data!
+                    self.userList.reloadData()
                     self.endOfList = self.checkIfListHasEnded(pagination: response.pagination!)
                     self.currentPage += 1
                 } else {
@@ -104,7 +108,6 @@ class UserListViewController: UITableViewController {
                 return
             }
         })
-        DispatchQueue.main.sync(execute: self.userList.reloadData)
     }
     
     fileprivate func checkIfListHasEnded(pagination: Pagination) -> Bool {
