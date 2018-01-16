@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.android.projectjoao.model.CreateResponse;
-import com.example.android.projectjoao.model.User;
+import com.example.android.projectjoao.data.models.DefaultResponse;
+import com.example.android.projectjoao.data.models.User;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -84,11 +84,11 @@ public class EditActivity extends AppCompatActivity {
         });
     }
 
-    Callback<CreateResponse> userEditionCallback = new Callback<CreateResponse>() {
+    Callback<DefaultResponse> userEditionCallback = new Callback<DefaultResponse>() {
         @Override
-        public void onResponse(Call<CreateResponse> call, Response<CreateResponse> response) {
+        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
             if (response.isSuccessful()) {
-                int userId = response.body().getCreateData().getId();
+                int userId = response.body().getData().getId();
 
                 Toast.makeText(getApplicationContext(), "Usuário atualizado com sucesso", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(EditActivity.this, ShowActivity.class);
@@ -106,7 +106,7 @@ public class EditActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFailure(Call<CreateResponse> call, Throwable t) {
+        public void onFailure(Call<DefaultResponse> call, Throwable t) {
             Toast.makeText(getApplicationContext(), "Erro na conexão", Toast.LENGTH_SHORT).show();
             t.printStackTrace();
         }
