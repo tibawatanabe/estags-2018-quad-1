@@ -1,7 +1,9 @@
-package com.example.android.projectjoao.model;
+package com.example.android.projectjoao.data.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.net.URL;
 
 public class User {
     @SerializedName("id")
@@ -30,6 +32,16 @@ public class User {
     private String role;
     String password;
     boolean rememberMe;
+
+    public User(String email, String password, boolean rememberMe) {
+        this.email = email;
+        this.password = password;
+        this.rememberMe = rememberMe;
+    }
+
+    public User() {
+
+    }
 
     public String getPassword() {
         return password;

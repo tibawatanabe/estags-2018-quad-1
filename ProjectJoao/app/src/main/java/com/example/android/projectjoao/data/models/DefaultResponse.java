@@ -1,9 +1,9 @@
-package com.example.android.projectjoao.model;
+package com.example.android.projectjoao.data.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ShowResponse {
+public class DefaultResponse {
 
     @SerializedName("data")
     @Expose

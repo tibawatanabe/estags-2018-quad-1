@@ -1,4 +1,4 @@
-package com.example.android.projectjoao.model;
+package com.example.android.projectjoao.data.models;
 
 import java.util.List;
 
@@ -9,16 +9,16 @@ public class ListResponse {
 
     @SerializedName("data")
     @Expose
-    private List<ListData> data = null;
+    private List<User> data = null;
     @SerializedName("pagination")
     @Expose
     private Pagination pagination;
 
-    public List<ListData> getData() {
+    public List<User> getData() {
         return data;
     }
 
-    public void setData(List<ListData> data) {
+    public void setData(List<User> data) {
         this.data = data;
     }
 

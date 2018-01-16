@@ -1,4 +1,4 @@
-package com.example.android.projectjoao.model;
+package com.example.android.projectjoao.data.models;
 
 public class LoginData {
     User user;
