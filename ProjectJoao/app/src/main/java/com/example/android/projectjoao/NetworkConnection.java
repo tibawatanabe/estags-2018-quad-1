@@ -18,16 +18,13 @@ public class NetworkConnection {
 
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder();
 
-        okHttpClient.addInterceptor(new Interceptor() {
-            @Override
-            public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request originalRequest = chain.request();
+        okHttpClient.addInterceptor(chain -> {
+            Request originalRequest = chain.request();
 
-                Request.Builder builder = originalRequest.newBuilder();
+            Request.Builder builder = originalRequest.newBuilder();
 
-                Request newRequest = builder.build();
-                return chain.proceed(newRequest);
-            }
+            Request newRequest = builder.build();
+            return chain.proceed(newRequest);
         });
 
 //        okHttpClient.addInterceptor(logging);
