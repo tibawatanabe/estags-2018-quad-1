@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.android.projectjoao.model.CreateResponse;
-import com.example.android.projectjoao.model.User;
+import com.example.android.projectjoao.data.models.DefaultResponse;
+import com.example.android.projectjoao.data.models.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -69,11 +69,11 @@ public class CreateActivity extends AppCompatActivity {
         });
     }
 
-    Callback<CreateResponse> userCreationCallback = new Callback<CreateResponse>() {
+    Callback<DefaultResponse> userCreationCallback = new Callback<DefaultResponse>() {
         @Override
-        public void onResponse(Call<CreateResponse> call, Response<CreateResponse> response) {
+        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
             if (response.isSuccessful()) {
-                User user = response.body().getCreateData();
+                User user = response.body().getData();
                 Log.d("ID", user.getId().toString());
                 Toast.makeText(getApplicationContext(), "Usuário criado com sucesso", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(CreateActivity.this, ListingActivity.class);
@@ -84,7 +84,7 @@ public class CreateActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFailure(Call<CreateResponse> call, Throwable t) {
+        public void onFailure(Call<DefaultResponse> call, Throwable t) {
             t.printStackTrace();
         }
     };

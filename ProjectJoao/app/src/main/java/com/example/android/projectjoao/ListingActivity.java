@@ -10,11 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.android.projectjoao.model.ListData;
-import com.example.android.projectjoao.model.ListResponse;
+import com.example.android.projectjoao.data.models.ListResponse;
+import com.example.android.projectjoao.data.models.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,7 @@ public class ListingActivity extends AppCompatActivity implements ItemAdapter.Li
     private ItemAdapter mAdapter;
     private RecyclerView mItemsList;
     private LinearLayout mLoadingIndicator;
-    private List<ListData> users;
+    private List<User> users;
     private TaqtileApiHandler apiHandler;
     private EndlessRecyclerViewScrollListener scrollListener;
     private SharedPreferences pref;
@@ -115,7 +114,7 @@ public class ListingActivity extends AppCompatActivity implements ItemAdapter.Li
             public void onResponse(Call<ListResponse> call, Response<ListResponse> response) {
                 if (response.isSuccessful()) {
                     ListResponse listResponse = response.body();
-                    List<ListData> moreUsers = listResponse.getData();
+                    List<User> moreUsers = listResponse.getData();
                     final int currentSize = mAdapter.getItemCount();
                     users.addAll(moreUsers);
 

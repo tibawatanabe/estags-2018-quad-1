@@ -12,9 +12,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.projectjoao.model.CreateResponse;
-import com.example.android.projectjoao.model.ShowResponse;
-import com.example.android.projectjoao.model.User;
+import com.example.android.projectjoao.data.models.DefaultResponse;
+import com.example.android.projectjoao.data.models.User;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -56,12 +55,12 @@ public class ShowActivity extends AppCompatActivity {
         apiHandler.getUser(pref.getString("token", null), Integer.valueOf(id)).enqueue(getUserCallback);
     }
 
-    Callback<ShowResponse> getUserCallback = new Callback<ShowResponse>() {
+    Callback<DefaultResponse> getUserCallback = new Callback<DefaultResponse>() {
         @Override
-        public void onResponse(Call<ShowResponse> call, Response<ShowResponse> response) {
+        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
             if (response.isSuccessful()) {
-                ShowResponse showResponse = response.body();
-                user = showResponse.getData();
+                DefaultResponse defaultResponse = response.body();
+                user = defaultResponse.getData();
 
                 mUsernameTextView.setText(user.getName());
                 mIdTextView.setText("Id: " + user.getId().toString());
@@ -81,7 +80,7 @@ public class ShowActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFailure(Call<ShowResponse> call, Throwable t) {
+        public void onFailure(Call<DefaultResponse> call, Throwable t) {
             Toast.makeText(getApplicationContext(), "Erro na conexão", Toast.LENGTH_SHORT).show();
             t.printStackTrace();
         }
@@ -128,9 +127,9 @@ public class ShowActivity extends AppCompatActivity {
         newFragment.dismiss();
     }
 
-    Callback<CreateResponse> deleteUserCallback = new Callback<CreateResponse>() {
+    Callback<DefaultResponse> deleteUserCallback = new Callback<DefaultResponse>() {
         @Override
-        public void onResponse(Call<CreateResponse> call, Response<CreateResponse> response) {
+        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
             if(response.isSuccessful()) {
                 newFragment.dismiss();
                 Intent i = new Intent(ShowActivity.this, ListingActivity.class);
@@ -143,7 +142,7 @@ public class ShowActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFailure(Call<CreateResponse> call, Throwable t) {
+        public void onFailure(Call<DefaultResponse> call, Throwable t) {
             t.printStackTrace();
         }
     };
