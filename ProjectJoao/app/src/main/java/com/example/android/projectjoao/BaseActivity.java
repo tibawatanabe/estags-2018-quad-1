@@ -10,16 +10,10 @@ import retrofit2.Response;
  */
 
 public abstract class BaseActivity<ResponseCode> extends AppCompatActivity {
-    static int layout = 0;
-
-    public BaseActivity() {
-        layout = setCorrespondingLayout();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layout);
+        setContentView(getCorrespondingLayout());
 
         setSharedPreferences();
 
@@ -28,7 +22,7 @@ public abstract class BaseActivity<ResponseCode> extends AppCompatActivity {
         runActivity();
     }
 
-    protected abstract int setCorrespondingLayout();
+    protected abstract int getCorrespondingLayout();
     protected abstract void setSharedPreferences();
     protected abstract void arrangeUiElements();
     protected abstract void runActivity();
