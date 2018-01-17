@@ -7,5 +7,13 @@
     <string name="create_user_success_response">Usuário criado com sucesso</string>
     <string name="create_user_fail_response">Não foi possível criar o usuário</string>
     <string name="create_user_empty_data">Insira todos os dados do usuário</string>
-
+    <string name="show_user_id_text">Id: %1$d</string>
+    <string name="show_user_email_text">Email: %1$s</string>
+    <string name="show_user_role_text">Cargo: %1$s</string>
+    <string name="show_user_created_at_text">Criado em: %1$s</string>
+    <string name="show_user_updated_at_text">Atualizado em: %1$s</string>
+    <string name="delete_user_successful_text">Usuário removido com sucesso</string>
+    <string name="delete_user_failed_text">Não foi possível remover o usuário</string>
+    <string name="update_user_missing_data">Todos os dados são obrigatórios</string>
+    <string name="update_user_successful_operation">Usuário atualizado com sucesso</string>
 </resources>
