@@ -1,5 +1,5 @@
 import { TabNavigator } from 'react-navigation';
-import { LoggedUser } from '../userInfo';
+import { LoggedUser } from '../info';
 import { ListNav } from './list-navigator';
 import { tabsBar } from './tabs-navibar'
 

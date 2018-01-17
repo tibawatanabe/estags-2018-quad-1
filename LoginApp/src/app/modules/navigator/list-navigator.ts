@@ -1,7 +1,7 @@
 import { StackNavigator } from 'react-navigation';
 import { UserList } from '../list';
-import { UserDetail } from '../userDetail';
-import { UserReg } from '../userReg';
+import { UserDetail } from '../detail';
+import { UserReg } from '../reg';
 
 export const ListNav = StackNavigator({
     UserList: {

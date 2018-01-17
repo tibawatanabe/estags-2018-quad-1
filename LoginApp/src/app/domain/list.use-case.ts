@@ -1,5 +1,5 @@
 import { UserDataSource } from '../data/user.datasource';
-import { DataStorage } from '../data/dataStorage';
+import { DataStorage } from '../data/user.datastorage';
 import { Service } from 'typedi';
 
 import { ListState } from '../interfaces/list.interfaces';
