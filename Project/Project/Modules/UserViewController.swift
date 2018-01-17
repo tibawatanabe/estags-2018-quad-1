@@ -40,7 +40,6 @@ class UserViewController: UIViewController {
     
     //MARK: Actions
     @IBAction func didPressEditButton(_ sender: UIBarButtonItem) {
-//        UserItems.storeObject(self.authorizationToken!, forKey: "authorizationToken")
         performSegue(withIdentifier: "fromDetailToUpdate", sender: self)
     }
     
@@ -72,6 +71,7 @@ class UserViewController: UIViewController {
                     fatalError("Unable to retrieve user details")
                 }
                 self.fillTextFields(with: userDetails)
+                UserRepository.init().saveUserInfo(userDetails)
             default:
                 return
             }
@@ -90,6 +90,9 @@ class UserViewController: UIViewController {
         self.activeLabel.text = "Active: " + (userDetails.active != nil ? String(describing: userDetails.active!) : " - ")
         self.createdAt.text = "Created: " + (userDetails.createdAt ?? " - ")
         self.updatedAt.text = "Last update: " + (userDetails.updatedAt ?? " - ")
+        
+        self.deleteButton.isEnabled = true
+        self.editButton.isEnabled = true
     }
 }
 

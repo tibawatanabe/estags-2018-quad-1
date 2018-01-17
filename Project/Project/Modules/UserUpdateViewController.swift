@@ -23,7 +23,7 @@ class UserUpdateViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        self.fillTextFields()
+        self.fillTextFields()
     }
     
     //MARK: Actions
@@ -38,20 +38,17 @@ class UserUpdateViewController: UIViewController {
         }
         
         self.updateUser(name, password, email, role)
-        navigationController?.popViewController(animated: true)
+//        navigationController?.popViewController(animated: true)
     }
     
     //MARK: Private methods
-//    fileprivate func fillTextFields() {
-//        guard let userInfo = UserItems.getObject(forKey: "updatingUser") as? [String: String] else {
-//            AlertHandler.show("Error", "Unable to retrieve user information", sender: self)
-//            return
-//        }
-//
-//        nameTextField.text = userInfo[UserFields.name.rawValue]
-//        emailTextField.text = userInfo[UserFields.email.rawValue]
-//        roleTextField.text = userInfo[UserFields.role.rawValue]
-//    }
+    fileprivate func fillTextFields() {
+        let userInfo = UserRepository.init().retrieveUserInfo()
+        
+        nameTextField.text = userInfo.name
+        emailTextField.text = userInfo.email
+        roleTextField.text = userInfo.role
+    }
     
     func emptyTextFields(_ fields:[String]) -> Bool {
         for field in fields {
@@ -63,47 +60,6 @@ class UserUpdateViewController: UIViewController {
     }
     
     func updateUser(_ name: String, _ password: String, _ email: String, _ role: String) {
-//        guard let userId = UserItems.getObject(forKey: "updatingUserId") as? String else {
-//            AlertHandler.show("Error", "Unable to recover user id", sender: self)
-//            return
-//        }
-//        
-//        let url = TemplateAPIHandler.userEndpoint + userId
-//        
-//        guard let urlComponents = URLComponents(string: url) else {
-//            AlertHandler.show("Error", "Invalid url", sender: self)
-//            return
-//        }
         
-//        guard let token = UserItems.getObject(forKey: "authorizationToken") as? String else {
-//            AlertHandler.show("Error", "Unable to recover authorization token", sender: self)
-//            return
-//        }
-        
-        let userParameters = [UserFields.name.rawValue: name, UserFields.password.rawValue: password, UserFields.email.rawValue: email, UserFields.role.rawValue: role]
-        
-//        let headerParameters = ["Authorization": token]
-//        
-//        Alamofire.request(urlComponents, method: .put, parameters: userParameters, encoding: JSONEncoding.default, headers: headerParameters).responseJSON { response in
-//            if response.result.error != nil {
-//                fatalError("Error on json response")
-//            }
-//            
-//            guard let json = response.result.value as? [String: Any] else {
-//                fatalError("Didn't get json dictionary")
-//            }
-//            
-//            guard let _ = json["data"] as? [String: Any] else {
-//                let errors = json["errors"] as? [[String: String]]
-//                if errors != nil {
-//                    print((errors?.first!["name"])! + (errors?.first!["original"])!)
-//                }
-//                AlertHandler.show("Error", "User details could not be changed", sender: self)
-//                return
-//            }
-//            
-//            AlertHandler.show("Success!", "User details updated", sender: self)
-//            
-//        }
     }
 }

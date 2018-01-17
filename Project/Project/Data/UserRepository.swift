@@ -9,7 +9,11 @@
 import Foundation
 
 class UserRepository {
+    //MARK: Properties
     private var local: UserLocalData?
+    
+    //MARK: Private constants
+    private let userInfoKey = "user_detail_info"
     
     required init() {
         self.local = UserLocalData.init()
@@ -35,5 +39,22 @@ class UserRepository {
             fatalError("Unable to retrieve user id")
         }
         return id
+    }
+    
+    func saveUserInfo(_ user: UserModel) {
+        let userDictionary = [UserFields.name.rawValue: user.name,
+                              UserFields.email.rawValue: user.email,
+                              UserFields.role.rawValue: user.role]
+        self.local?.save(userDictionary, forKey: userInfoKey)
+    }
+    
+    func retrieveUserInfo() -> UserModel {
+        guard let userInfo = local?.retrieve(forKey: userInfoKey) as? [String: Any] else {
+            fatalError("Unable to retrieve user information")
+        }
+        guard let user = UserModel(JSON: userInfo) else {
+            fatalError("Could not map json object to UserModel")
+        }
+        return user
     }
 }
