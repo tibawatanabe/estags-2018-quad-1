@@ -3,8 +3,11 @@ import axios from 'axios'
 // tslint:disable-next-line:max-line-length
 import { Text, TextInput, View, StyleSheet, Alert } from 'react-native'
 import { FormLabel, FormInput, Button } from 'react-native-elements'
+import UserEditUseCase from '../domain/userEditUseCase'
+import User from '../model/user'
+import { Container } from 'typedi'
 
-// Screens
+const userEditUserCase = Container.get(UserEditUseCase)
 
 interface EditUserScreenProps {
   navigation: any
@@ -29,27 +32,15 @@ export default class EditUserScreen extends Component<EditUserScreenProps, EditU
   componentWillMount() {
     const {params} = this.props.navigation.state
     this.setState({
-      name: params.name,
-      email: params.email
+      name: params.user.name,
+      email: params.user.email
     })
   }
 
-  onPressButton = async () => {
+  onPressButton = () => {
     const {goBack} = this.props.navigation
     const {params} = this.props.navigation.state
-    await axios.put(`https://tq-template-node.herokuapp.com/user/${params.id}`,
-      {
-        email: this.state.email,
-        name: this.state.name
-      },
-      {
-        headers: {
-          Authorization: `${params.token}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
-    )
+    userEditUserCase.editUser(params.token, params.user.id, this.state.email, this.state.name)
     .then(() => {
       params.refreshDetail()
       params.refreshList()
@@ -66,6 +57,13 @@ export default class EditUserScreen extends Component<EditUserScreenProps, EditU
         <FormLabel>Email:</FormLabel>
         <FormInput
           onChangeText = {(email) => this.setState({email})}
+          // onChangeText = {(prevEmail) => this.setState(
+          //   (prevState) => ({
+          //     user: Object.assign({}, prevState.user, {
+          //       email: prevEmail
+          //     })
+          //   })
+          // )
           value = {this.state.email}
           placeholder = 'email@email.com'
         />

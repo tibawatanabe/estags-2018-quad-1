@@ -4,8 +4,8 @@ import { StackNavigator } from 'react-navigation'
 import LoginScreen from './modules/loginScreen'
 import ProfileScreen from './modules/profileScreen'
 import DetailScreen from './modules/detailScreen'
-import AddUserScreen from './addUserScreen'
-import EditUserScreen from './editUserScreen'
+import AddUserScreen from './modules/addUserScreen'
+import EditUserScreen from './modules/editUserScreen'
 import 'reflect-metadata'
 
 export default class App extends Component {

@@ -28,10 +28,10 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({ isLoading: true })
     const {params} = this.props.navigation.state
-    userDetailUseCase.getDetail(params.token, params.id)
+    await userDetailUseCase.getDetail(params.token, params.id)
     .then((userDetail) => {
       this.setState({
         isLoading: false,
@@ -78,9 +78,7 @@ export default class DetailScreen extends Component <DetailScreenProps, DetailSc
               refreshDetail: this.refresh,
               refreshList: params.refresh,
               token: params.token,
-              id: params.id,
-              name: this.state.user.name,
-              email: this.state.user.email
+              user: this.state.user
             })}
           />
         </Card>

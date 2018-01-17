@@ -27,10 +27,10 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
     }
   }
 
-  onPressButton = () => {
+  onPressButton = async () => {
     this.setState({isLoading: true})
     let login = Container.get(LoginUseCase)
-    login.authentication(this.state.email, this.state.password, this.state.rememberMe)
+    await login.authentication(this.state.email, this.state.password, this.state.rememberMe)
     .then((responseJson) => {
       this.setState({
         isLoading: false

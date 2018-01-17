@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import axios from 'axios'
 // tslint:disable-next-line:max-line-length
 import { View, StyleSheet, Alert } from 'react-native'
-import { FormLabel, FormInput, Button } from 'react-native-elements';
+import { FormLabel, FormInput, Button } from 'react-native-elements'
+import { Container } from 'typedi'
+import UserCreateDataSource from '../domain/userCreateUseCase'
 
-// Screens
+const userCreateDataSource = Container.get(UserCreateDataSource)
 
 interface AddUserScreenProps {
   navigation: any
@@ -33,26 +35,13 @@ export default class AddUserScreen extends Component<AddUserScreenProps, AddUser
   onPressButton = async () => {
     const {goBack} = this.props.navigation
     const {params} = this.props.navigation.state
-    await axios.post('https://tq-template-node.herokuapp.com/user',
-      {
-        email: this.state.email,
-        password: this.state.password,
-        name: this.state.name,
-        role: this.state.role
-      },
-      {
-        headers: {
-          Authorization: `${params.token}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
-    )
+    await userCreateDataSource.createUser(params.token, this.state.email, this.state.password, this.state.name, this.state.role)
     .then(() => {
       params.refresh()
       goBack()
     })
     .catch((error) => {
+      console.warn(error)
       Alert.alert('New user couldn\'t be created')
     })
   }
