@@ -3,8 +3,6 @@ package com.example.android.projectjoao;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -24,26 +22,24 @@ public class CreateActivity extends BaseActivity<DefaultResponse> {
     private TextInputEditText mPasswordTextInput;
     private Button mConfirmationButton;
 
-    //Network config
-    private TaqtileApiHandler apiHandler;
-
     //Storage between requests
-    private SharedPreferences pref;
+    private String userToken;
 
-    protected int setCorrespondingLayout() {
+    protected int getCorrespondingLayout() {
         return R.layout.user_form;
     }
 
     protected void setSharedPreferences() {
-        pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
+        userToken = pref.getString("token", null);
     }
 
     protected void arrangeUiElements() {
-        mUsernameTextInput = (TextInputEditText) findViewById(R.id.create_name_entry);
-        mEmailTextInput = (TextInputEditText) findViewById(R.id.create_email_entry);
-        mRoleTextInput = (TextInputEditText) findViewById(R.id.create_role_entry);
-        mPasswordTextInput = (TextInputEditText) findViewById(R.id.create_password_entry);
-        mConfirmationButton = (Button) findViewById(R.id.create_confirmation_button);
+        mUsernameTextInput = findViewById(R.id.create_name_entry);
+        mEmailTextInput = findViewById(R.id.create_email_entry);
+        mRoleTextInput = findViewById(R.id.create_role_entry);
+        mPasswordTextInput = findViewById(R.id.create_password_entry);
+        mConfirmationButton = findViewById(R.id.create_confirmation_button);
     }
 
     public void runActivity() {
@@ -57,18 +53,16 @@ public class CreateActivity extends BaseActivity<DefaultResponse> {
                 Toast.makeText(getApplicationContext(), R.string.create_user_empty_data, Toast.LENGTH_SHORT).show();
             }
             else {
-                String userToken = pref.getString("token", null);
-
                 User user = new User(username, email, role, password);
 
-                apiHandler = NetworkConnection.getConnection();
+                TaqtileApiHandler apiHandler = NetworkConnection.getConnection();
 
                 Observable<Response<DefaultResponse>> responseStream = apiHandler.createUser(userToken, user);
 
                 responseStream.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(loginResponse -> processResponse(loginResponse),
-                                e -> e.printStackTrace());
+                        .subscribe(this::processResponse,
+                                Throwable::printStackTrace);
             }
         });
     }
