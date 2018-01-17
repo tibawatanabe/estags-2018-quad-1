@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-// tslint:disable-next-line:max-line-length
 import { View, StyleSheet, Alert } from 'react-native'
 import { FormLabel, FormInput, Button } from 'react-native-elements'
 import { Container } from 'typedi'

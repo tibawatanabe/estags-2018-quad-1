@@ -1,41 +1,43 @@
 import React, { Component } from 'react'
 // tslint:disable-next-line:max-line-length
-import { Text, View, StyleSheet, ActivityIndicator, FlatList, TouchableHighlight } from 'react-native'
-import axios from 'axios'
-import PageListLoader from '../domain/pageListLoader'
-import { ListItem, List, Button } from 'react-native-elements'
-import { Container } from 'typedi/Container'
+import { View, StyleSheet, ActivityIndicator, FlatList } from 'react-native'
+import { PageLoaderFactory } from '../domain/pageLoader'
+import { ModelType } from '../model/modelType'
+import { ListItem, Button } from 'react-native-elements'
+import { Service, Container, Inject } from 'typedi'
 
-interface ProfileScreenProps {
+interface UserListScreenProps {
   navigation: any
 }
-interface ProfileScreenStates {
+interface UserListScreenStates {
   isLoading: boolean,
   isRefreshing: boolean,
-  pageListLoader: any
+  userListLoader: any
 }
 
-export default class ProfileScreen extends Component <ProfileScreenProps, ProfileScreenStates> {
+export default class UserListScreen extends Component <UserListScreenProps, UserListScreenStates> {
   static navigationOptions = {
     title: 'Your profile'
   }
+
+  pageListLoader = new PageLoaderFactory
+
   constructor(props) {
     super(props)
     this.state = {
       isLoading: false,
       isRefreshing: false,
-      pageListLoader: new PageListLoader
+      userListLoader: this.pageListLoader.build(ModelType.User)
     }
   }
-
   loadMore = () => {
-    this.state.pageListLoader.loadMore().then(() =>
-      this.setState({pageListLoader: this.state.pageListLoader})
-    )
+    this.state.userListLoader.loadMore().then(() => {
+      this.setState({userListLoader: this.state.userListLoader})
+    })
   }
 
   loadPageZero() {
-    this.state.pageListLoader.getPage(0)
+    this.state.userListLoader.getPage(0)
     .then(() => {
       this.setState({
         isLoading: false,
@@ -49,7 +51,7 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
 
   componentDidMount() {
     const {params} = this.props.navigation.state
-    this.state.pageListLoader.setToken(params.data.token)
+    this.state.userListLoader.setToken(params.data.token)
     this.loadPageZero()
   }
 
@@ -57,12 +59,12 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
     this.setState({
       isRefreshing: true
     })
-    this.state.pageListLoader.reset()
+    this.state.userListLoader.reset()
     this.loadPageZero()
   }
 
   refresh = () => {
-    this.state.pageListLoader.reset()
+    this.state.userListLoader.reset()
     this.loadPageZero()
   }
 
@@ -81,7 +83,7 @@ export default class ProfileScreen extends Component <ProfileScreenProps, Profil
         <View style = {styles.container}>
           <View style = {{paddingTop: 40}}>
             <FlatList
-              data = {this.state.pageListLoader.data}
+              data = {this.state.userListLoader.data}
               keyExtractor={(item) => item.id}
               renderItem = {({item}) =>
                 <ListItem

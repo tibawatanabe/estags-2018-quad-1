@@ -35,7 +35,7 @@ export default class LoginScreen extends Component<LoginScreenProps, LoginScreen
       this.setState({
         isLoading: false
       })
-      this.props.navigation.navigate('Profile', {data: responseJson.data.data})
+      this.props.navigation.navigate('UserList', {data: responseJson.data.data})
     })
     .catch(() => {
       Alert.alert('Wrong Email or Password')
