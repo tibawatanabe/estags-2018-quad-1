@@ -29,14 +29,14 @@ public interface TaqtileApiHandler {
     Observable<Response<ListResponse>> getUsers(@Header("Authorization") String token, @QueryMap Map<String, Integer> pagination);
 
     @GET("user/{id}")
-    Call<DefaultResponse> getUser(@Header("Authorization") String token, @Path("id") int id);
+    Observable<Response<DefaultResponse>> getUser(@Header("Authorization") String token, @Path("id") int id);
 
     @POST("user")
     Observable<Response<DefaultResponse>> createUser(@Header("Authorization") String token, @Body User user);
 
     @DELETE("user/{id}")
-    Call<DefaultResponse> deleteUser(@Header("Authorization") String token, @Path("id") int id);
+    Observable<Response<DefaultResponse>> deleteUser(@Header("Authorization") String token, @Path("id") int id);
 
     @PUT("user/{id}")
-    Call<DefaultResponse> editUser(@Header("Authorization") String token, @Path("id") int id, @Body User user);
+    Observable<Response<DefaultResponse>> editUser(@Header("Authorization") String token, @Path("id") int id, @Body User user);
 }
