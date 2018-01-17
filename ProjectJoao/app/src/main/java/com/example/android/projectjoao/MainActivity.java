@@ -29,7 +29,7 @@ public class MainActivity extends BaseActivity<LoginResponse> {
     SharedPreferences pref; // 0 - for private mode
     SharedPreferences.Editor editor;
 
-    protected int setCorrespondingLayout() {
+    protected int getCorrespondingLayout() {
         return R.layout.activity_main;
     }
 
