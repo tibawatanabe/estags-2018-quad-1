@@ -27,8 +27,6 @@ class UserCreationViewController: UIViewController {
     
     //MARK: Actions
     @IBAction func didPressCreateButton(_ sender: Any) {
-//        createButton.isEnabled = false
-        
         let name = nameTextField.text ?? ""
         let password = passwordTextField.text ?? ""
         let email = emailTextField.text ?? ""
@@ -42,7 +40,7 @@ class UserCreationViewController: UIViewController {
     }
     
     //MARK: Private methods
-    func emptyTextFields(_ fields:[String]) -> Bool {
+    fileprivate func emptyTextFields(_ fields:[String]) -> Bool {
         for field in fields {
             if field.isEmpty {
                 return true
@@ -51,33 +49,24 @@ class UserCreationViewController: UIViewController {
         return false
     }
     
-    func createUser(_ name: String, _ password: String, _ email: String, _ role: String){
-        guard let urlComponents = URLComponents(string: TemplateAPIHandler.userEndpoint) else {
-            fatalError("Tried to load an invalid url")
-        }
+    fileprivate func createUser(_ name: String, _ password: String, _ email: String, _ role: String) {
+        let params = [UserFields.name.rawValue: name,
+                      UserFields.password.rawValue: password,
+                      UserFields.email.rawValue: email,
+                      UserFields.role.rawValue: role]
         
-        let userParameters = [UserFields.name.rawValue: name, UserFields.password.rawValue: password, UserFields.email.rawValue: email, UserFields.role.rawValue: role]
-        
-        Alamofire.request(urlComponents, method: .post, parameters: userParameters, encoding: JSONEncoding.default, headers: ["Authorization": self.authorizationToken!]).responseJSON{ response in
-            if response.result.error != nil {
-                fatalError("Error on json response")
-            }
-            
-            guard let json = response.result.value as? [String: Any] else {
-                fatalError("Didn't get json dictionary")
-            }
-            
-            guard let _ = json["data"] as? [String: Any] else {
-                let errors = json["errors"] as? [[String: String]]
-                if errors != nil {
-                    print((errors?.first!["name"])! + (errors?.first!["original"])!)
+        let createUserStream = CreateUserUseCase.init().execute(userParameters: params)
+        let _ = createUserStream.subscribe({ result in
+            switch result {
+            case .next(let value):
+                guard let _ = value.data as? UserModel else {
+                    AlertHandler.show("Error", "Unable to create user", sender: self)
+                    return
                 }
-                AlertHandler.show("Error", "User could not be created", sender: self)
+                AlertHandler.show("Success", "User created", sender: self)
+            default:
                 return
             }
-            
-            AlertHandler.show("Success!", "User created", sender: self)
-        }
-        
+        })
     }
 }

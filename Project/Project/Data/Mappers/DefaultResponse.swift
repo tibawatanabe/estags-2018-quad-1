@@ -20,3 +20,15 @@ class UserDetailResponse: Mappable {
         errors <- map["errors"]
     }
 }
+
+class CreateUserResponse: Mappable {
+    var data: UserModel?
+    var errors: ErrorResponse?
+    
+    required init?(map: Map) {}
+    
+    func mapping(map: Map) {
+        data <- map["data"]
+        errors <- map["errors"]
+    }
+}
