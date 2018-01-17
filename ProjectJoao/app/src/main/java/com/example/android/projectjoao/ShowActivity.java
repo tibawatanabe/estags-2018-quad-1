@@ -4,8 +4,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.content.res.Resources;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,74 +16,95 @@ import com.example.android.projectjoao.data.models.User;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class ShowActivity extends AppCompatActivity {
-    private TaqtileApiHandler apiHandler;
-    private User user;
+public class ShowActivity extends BaseActivity<DefaultResponse> {
+    //Ui elements
     private TextView mUsernameTextView;
     private TextView mIdTextView;
     private TextView mEmailTextView;
     private TextView mRoleTextView;
     private TextView mCreatedAtTextView;
     private TextView mUpdatedAtTextView;
-    private SharedPreferences pref;
+    private TaqtileApiHandler apiHandler;
     private DialogFragment newFragment;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show);
+    //User data
+    private User user;
 
-        mUsernameTextView = (TextView) findViewById(R.id.name);
-        mIdTextView = (TextView) findViewById(R.id.id);
-        mEmailTextView = (TextView) findViewById(R.id.email);
-        mRoleTextView = (TextView) findViewById(R.id.role);
-        mCreatedAtTextView = (TextView) findViewById(R.id.created_at);
-        mUpdatedAtTextView = (TextView) findViewById(R.id.updated_at);
+    //Network config
+    private String userToken;
 
+    protected int getCorrespondingLayout() {
+        return R.layout.activity_show;
+    }
+
+    protected void setSharedPreferences() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
+        userToken = pref.getString("token", null);
+    }
+
+    protected void arrangeUiElements() {
+        mUsernameTextView = findViewById(R.id.name);
+        mIdTextView = findViewById(R.id.id);
+        mEmailTextView = findViewById(R.id.email);
+        mRoleTextView = findViewById(R.id.role);
+        mCreatedAtTextView = findViewById(R.id.created_at);
+        mUpdatedAtTextView = findViewById(R.id.updated_at);
+    }
+
+    protected void runActivity() {
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
 
-        pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0); // 0 - for private mode
-
         apiHandler = NetworkConnection.getConnection();
 
-        apiHandler.getUser(pref.getString("token", null), Integer.valueOf(id)).enqueue(getUserCallback);
+        Observable<Response<DefaultResponse>> responseStream = apiHandler.getUser(userToken, Integer.valueOf(id));
+
+        responseStream.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::processResponse,
+                        Throwable::printStackTrace);
     }
 
-    Callback<DefaultResponse> getUserCallback = new Callback<DefaultResponse>() {
-        @Override
-        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
-            if (response.isSuccessful()) {
-                DefaultResponse defaultResponse = response.body();
+    protected void processResponse(Response<DefaultResponse> showResponse) {
+        if (showResponse.isSuccessful()) {
+            DefaultResponse defaultResponse = showResponse.body();
+            if (defaultResponse != null) {
                 user = defaultResponse.getData();
-
-                mUsernameTextView.setText(user.getName());
-                mIdTextView.setText("Id: " + user.getId().toString());
-                mEmailTextView.setText("Email: " + user.getEmail());
-                mRoleTextView.setText("Cargo: " + user.getRole());
-                mCreatedAtTextView.setText("Criado em: " + user.getCreatedAt());
-                mUpdatedAtTextView.setText("Atualizado em: " + user.getUpdatedAt());
-            } else if(response.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                Toast.makeText(getApplicationContext(), "Usuário expirou", Toast.LENGTH_SHORT).show();
-
-                Intent i = new Intent(ShowActivity.this, MainActivity.class);
-                startActivity(i);
             }
-            else{
-                Toast.makeText(getApplicationContext(), "Erro na conexão", Toast.LENGTH_SHORT).show();
-            }
-        }
 
-        @Override
-        public void onFailure(Call<DefaultResponse> call, Throwable t) {
-            Toast.makeText(getApplicationContext(), "Erro na conexão", Toast.LENGTH_SHORT).show();
-            t.printStackTrace();
+            showUserInformation(user);
+        } else if(showResponse.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+            Toast.makeText(getApplicationContext(), R.string.expired_user_token, Toast.LENGTH_SHORT).show();
+
+            Intent i = new Intent(ShowActivity.this, MainActivity.class);
+            startActivity(i);
         }
-    };
+        else{
+            Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showUserInformation(User user) {
+        Resources res = getResources();
+
+        String textId = res.getString(R.string.show_user_id_text, user.getId());
+        String textEmail = res.getString(R.string.show_user_email_text, user.getEmail());
+        String textRole = res.getString(R.string.show_user_role_text, user.getRole());
+        String textCreatedAt = res.getString(R.string.show_user_created_at_text, user.getCreatedAt());
+        String textUpdatedAt = res.getString(R.string.show_user_updated_at_text, user.getUpdatedAt());
+
+        mUsernameTextView.setText(user.getName());
+        mIdTextView.setText(textId);
+        mEmailTextView.setText(textEmail);
+        mRoleTextView.setText(textRole);
+        mCreatedAtTextView.setText(textCreatedAt);
+        mUpdatedAtTextView.setText(textUpdatedAt);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,30 +140,26 @@ public class ShowActivity extends AppCompatActivity {
 
     public void doPositiveClick() {
         int id = user.getId();
-        apiHandler.deleteUser(pref.getString("token", null), Integer.valueOf(id)).enqueue(deleteUserCallback);
+        Observable<Response<DefaultResponse>> responseStream = apiHandler.deleteUser(userToken, id);
+        responseStream.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::deleteUser,
+                        Throwable::printStackTrace);
+    }
+
+    private void deleteUser(Response<DefaultResponse> deleteResponse) {
+        if(deleteResponse.isSuccessful()) {
+            newFragment.dismiss();
+            Intent i = new Intent(ShowActivity.this, ListingActivity.class);
+            startActivity(i);
+            Toast.makeText(getApplicationContext(), R.string.delete_user_successful_text, Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), R.string.delete_user_failed_text, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void doNegativeClick() {
         newFragment.dismiss();
     }
-
-    Callback<DefaultResponse> deleteUserCallback = new Callback<DefaultResponse>() {
-        @Override
-        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
-            if(response.isSuccessful()) {
-                newFragment.dismiss();
-                Intent i = new Intent(ShowActivity.this, ListingActivity.class);
-                startActivity(i);
-                Toast.makeText(getApplicationContext(), "Usuário removido com sucesso", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "Não foi possível remover o usuário", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void onFailure(Call<DefaultResponse> call, Throwable t) {
-            t.printStackTrace();
-        }
-    };
 }
