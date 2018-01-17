@@ -46,7 +46,6 @@ class ErrorResponse: Mappable {
         name        <- map["name"]
         message     <- map["message"]
         original    <- map["original"]
-        
     }
 }
 

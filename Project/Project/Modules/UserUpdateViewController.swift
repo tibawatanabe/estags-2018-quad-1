@@ -60,6 +60,26 @@ class UserUpdateViewController: UIViewController {
     }
     
     func updateUser(_ name: String, _ password: String, _ email: String, _ role: String) {
+        let params = [UserFields.name.rawValue: name,
+                      UserFields.password.rawValue: password,
+                      UserFields.email.rawValue: email,
+                      UserFields.role.rawValue: role]
+        let userId = UserRepository.init().retriveUserId()
         
+        let userUpdateStream = UserUpdateUseCase.init().execute(id: userId, userParameters: params)
+        
+        let _ = userUpdateStream.subscribe({ result in
+            switch result {
+            case .next(let value):
+                guard let _ = value.data as? UserModel2 else {
+                    AlertHandler.show("Error", "Unable to update user info", sender: self)
+                    return
+                }
+                AlertHandler.show("Success", "User details updated", sender: self)
+            default:
+                return
+            }
+            
+        })
     }
 }

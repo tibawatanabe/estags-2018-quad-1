@@ -27,8 +27,8 @@ class UserDetailUseCase {
             
             let requestStream = httpClient.request(getRequest) as Observable<UserDetailResponse>
             
-            let _ = requestStream.subscribe({result in
-                switch result {
+            let _ = requestStream.subscribe({response in
+                switch response {
                 case .next(let value):
                     observer.onNext(APIResponse.init(data: value.data, error: nil))
                 default:

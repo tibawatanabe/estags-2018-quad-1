@@ -19,6 +19,7 @@ class UserRepository {
         self.local = UserLocalData.init()
     }
     
+    //MARK: Methods
     func saveToken(_ authorizationToken: String) {
         self.local?.save(authorizationToken, forKey: UserFields.token.rawValue)
     }

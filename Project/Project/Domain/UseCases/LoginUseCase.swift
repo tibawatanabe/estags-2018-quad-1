@@ -29,12 +29,12 @@ struct LoginUseCase {
             
             let requestStream = httpClient.request(postRequest) as Observable<AuthenticateResponse>
             
-            let _ = requestStream.subscribe({ event in
-                switch event {
+            let _ = requestStream.subscribe({ response in
+                switch response {
                 case .next(let value):
                     guard let token = value.data?.token else {
                         guard let errors = value.errors else {
-                            observer.onError(event.error!)
+                            observer.onError(response.error!)
                             return
                         }
                         observer.onNext(LoginResponse.init(error: true, message: errors.first?.original, token: nil))

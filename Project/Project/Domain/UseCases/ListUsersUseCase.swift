@@ -37,8 +37,8 @@ class ListUsersUseCase {
             
             let requestStream = httpClient.request(getRequest) as Observable<ListUsersResponse>
             
-            let _ = requestStream.subscribe({ event in
-                switch event {
+            let _ = requestStream.subscribe({ response in
+                switch response {
                 case .next(let value):
                     if value.data != nil {
                         observer.onNext(APIResponse.init(data: value, error: nil))
