@@ -2,7 +2,6 @@ package com.example.android.projectjoao;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -35,28 +34,22 @@ public class ListingActivity extends BaseActivity<ListResponse> implements ItemA
     //List data
     private ItemAdapter mAdapter;
     private List<User> users = new ArrayList<>();
-    private EndlessRecyclerViewScrollListener scrollListener;
-
-    //Network config
-    private TaqtileApiHandler apiHandler;
 
     //Storage between requests
-    private SharedPreferences pref;
+    private String userToken;
 
-    //Window size of requested data
-    private int WINDOW_SIZE = 20;
-
-    protected int setCorrespondingLayout() {
+    protected int getCorrespondingLayout() {
         return R.layout.activity_listing;
     }
 
     protected void setSharedPreferences() {
-        pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("SharedPreferences", 0);
+        userToken = pref.getString("token", null);
     }
 
     protected void arrangeUiElements() {
-        mItemsList = (RecyclerView) findViewById(R.id.scroll_area);
-        mLoadingIndicator = (LinearLayout) findViewById(R.id.loadingPanel);
+        mItemsList = findViewById(R.id.scroll_area);
+        mLoadingIndicator = findViewById(R.id.loadingPanel);
 
         layoutManager = new LinearLayoutManager(this);
         mItemsList.setLayoutManager(layoutManager);
@@ -67,7 +60,7 @@ public class ListingActivity extends BaseActivity<ListResponse> implements ItemA
     protected void runActivity() {
         listUsers(0);
 
-        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 mLoadingIndicator.setVisibility(View.VISIBLE);
@@ -79,18 +72,18 @@ public class ListingActivity extends BaseActivity<ListResponse> implements ItemA
     }
 
     private void listUsers(int page) {
+        int WINDOW_SIZE = 20;
+
         Map<String, Integer> formattedPagination = formatPagination(page, WINDOW_SIZE);
 
-        String userToken = pref.getString("token", null);
-
-        apiHandler = NetworkConnection.getConnection();
+        TaqtileApiHandler apiHandler = NetworkConnection.getConnection();
 
         Observable<Response<ListResponse>> responseStream = apiHandler.getUsers(userToken, formattedPagination);
 
         responseStream.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(listResponse -> processResponse(listResponse),
-                        e -> e.printStackTrace());
+                .subscribe(this::processResponse,
+                        Throwable::printStackTrace);
     }
 
     private Map<String, Integer> formatPagination(int page, int window) {
@@ -107,7 +100,12 @@ public class ListingActivity extends BaseActivity<ListResponse> implements ItemA
     protected void processResponse(Response<ListResponse> listResponse) {
         if (listResponse.code() == HttpsURLConnection.HTTP_OK) {
             ListResponse listData = listResponse.body();
-            List<User> moreUsers = listData.getData();
+            List<User> moreUsers = new ArrayList<>();
+
+            if (listData != null) {
+                moreUsers = listData.getData();
+            }
+
             users.addAll(moreUsers);
 
             final int currentSize = mAdapter.getItemCount();
