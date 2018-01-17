@@ -62,6 +62,18 @@ class RequestBuilder {
         return self
     }
     
+    func delete(_ url: String, headers: [String: String]?) -> RequestBuilder {
+        self.createRequest(.delete, "\(self.baseUrl)\(url)", nil, JSONEncoding.default)
+        
+        if headers != nil {
+            for (key, value) in headers! {
+                self.appendHeader(key, with: value)
+            }
+        }
+        
+        return self
+    }
+    
     func appendHeader(_ key: String, with value: String) {
         self.httpRequest.headers[key] = value
     }

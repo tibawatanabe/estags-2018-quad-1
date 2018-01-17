@@ -80,7 +80,21 @@ class UserViewController: UIViewController {
     }
     
     fileprivate func deleteUser() {
-        //TODO
+        let id = UserRepository.init().retriveUserId()
+        let deleteUserStream = DeleteUsersUseCase.init().execute(id: id)
+        
+        let _ = deleteUserStream.subscribe({ result in
+            switch result {
+            case .next(let value):
+                guard let _ = value.data as? UserModel else {
+                    AlertHandler.show("Error", "Unable to delete user", sender: self)
+                    return
+                }
+                AlertHandler.show("Success", "User has been removed", sender: self)
+            default:
+                return
+            }
+        })
     }
     
     fileprivate func fillTextFields(with userDetails: UserModel) {
