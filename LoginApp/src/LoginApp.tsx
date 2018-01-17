@@ -1,16 +1,15 @@
+import 'reflect-metadata';
+
+import { LoginNav } from './app/modules/navigator/login-navigator';
+
 import * as React from 'react';
 import { AppRegistry } from 'react-native';
 
-import Login from '../artifacts/Login';
-
-interface Props {}
-interface State {}
-
-export default class LoginApp extends React.Component<Props, State> {
+export default class LoginApp extends React.Component<any, any> {
     render() {
-        return (
-            <Login />
-        );
+      return (
+        <LoginNav />
+      );
     }
 }
 
