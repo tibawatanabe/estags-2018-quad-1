@@ -2,10 +2,9 @@ import * as React from 'react';
 import { Icon } from '@shoutem/ui';
 import { Container } from 'typedi';
 
-import { UserInfoState } from '../interfaces/user.interfaces';
-import { Error } from '../../components/screen/error-screen';
-import { Info, EditInfo } from '../../components/screen/user-screen';
-import { UserUseCase } from '../domain/user.use-case';
+import { UserInfoState } from '../interfaces';
+import { Error, Info, EditInfo } from '../../components/screen';
+import { UserUseCase } from '../domain';
 
 export class LoggedUser extends React.Component<any, UserInfoState> {
   static navigationOptions = {

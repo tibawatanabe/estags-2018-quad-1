@@ -3,11 +3,9 @@ import { Alert } from 'react-native';
 import { Icon } from '@shoutem/ui';
 import { Container } from 'typedi';
 
-import { UserUseCase } from '../domain/user.use-case';
-import { DetailState } from '../interfaces/detail.interfaces';
-import { Loading } from '../../components/screen/loading-screen';
-import { Error } from '../../components/screen/error-screen';
-import { Detail, EditDetail } from '../../components/screen/detail-screen';
+import { UserUseCase } from '../domain';
+import { DetailState } from '../interfaces';
+import { Loading, Error, Detail, EditDetail } from '../../components/screen';
 
 export class UserDetail extends React.Component<any, DetailState> {
   static navigationOptions = {

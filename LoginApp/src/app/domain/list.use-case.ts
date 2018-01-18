@@ -1,8 +1,7 @@
-import { UserDataSource } from '../data/user.datasource';
-import { DataStorage } from '../data/user.datastorage';
+import { UserDataSource, DataStorage } from '../data';
 import { Service } from 'typedi';
 
-import { ListState } from '../interfaces/list.interfaces';
+import { ListState } from '../interfaces';
 
 @Service()
 export class ListUseCase {

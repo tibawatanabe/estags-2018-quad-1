@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Icon, Tile, Divider, Caption, TextInput, Text, View } from '@shoutem/ui';
 
-import { DefaultScroll } from '../view/scroll.style';
+import { DefaultScroll } from '../view';
 
 interface RegProps {
   setName: (name) => void,

@@ -2,10 +2,9 @@ import * as React from 'react';
 import { Icon } from '@shoutem/ui';
 import { Container } from 'typedi';
 
-import { UserRegState } from '../interfaces/user.interfaces';
-import { UserUseCase } from '../domain/user.use-case';
-import { Error } from '../../components/screen/error-screen';
-import { Reg } from '../../components/screen/reg-screen';
+import { UserRegState } from '../interfaces';
+import { UserUseCase } from '../domain';
+import { Error, Reg } from '../../components/screen';
 
 export class UserReg extends React.Component<any, UserRegState> {
   static navigationOptions = {

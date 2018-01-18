@@ -3,9 +3,9 @@ import * as React from 'react';
 import { Alert } from 'react-native';
 import { Container } from 'typedi';
 
-import { LoginState } from '../interfaces/login.interfaces';
-import { LoginUseCase } from '../domain/login.use-case';
-import { Login } from '../../components/screen/login-screen';
+import { LoginState } from '../interfaces';
+import { LoginUseCase } from '../domain';
+import { Login } from '../../components/screen';
 
 export class LoginScreen extends React.Component<any, LoginState> {
   constructor(props) {

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Button, Icon, ListView, Divider, TextInput, Text, View } from '@shoutem/ui';
 
-import { DefaultScroll } from '../view/scroll.style';
-import { RowView } from '../view/view.style';
+import { DefaultScroll, RowView } from '../view';
 import { PageButton } from '../button/page-button';
 
 interface ListProps {

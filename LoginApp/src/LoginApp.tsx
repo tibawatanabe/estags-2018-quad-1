@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { LoginNav } from './app/modules/navigator/login-navigator';
+import { LoginNav } from './app/modules';
 
 import * as React from 'react';
 import { AppRegistry } from 'react-native';
