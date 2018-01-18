@@ -1,67 +1,63 @@
-import axios from 'axios'
 import User from '../model/user'
 import {CRUDDataSource} from './CRUDDataSource'
 import { Service } from 'typedi'
+import { HttpRequestBuilder } from './httpRequestBuilder'
 
 @Service()
 export class UserCRUDDataSource implements CRUDDataSource {
+  baseURL = 'https://tq-template-node.herokuapp.com/'
+  httpRequestBuilder = new HttpRequestBuilder
+
   async create(token: string, email: string, password: string, name: string, role: string) {
-    return axios.post('https://tq-template-node.herokuapp.com/user',
-      {
+    return this.httpRequestBuilder
+      .method('post')
+      .url(this.baseURL + 'user')
+      .headers({
+        Authorization: `${token}`,
+        Accept: 'application/json'
+      })
+      .data({
         email: email,
         password: password,
         name: name,
         role: role
-      },
-      {
-        headers:
-        {
-          Authorization: `${token}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
-    )
+      })
+      .execute()
   }
   async delete(token: string, id: number) {
-    return await axios.delete(`https://tq-template-node.herokuapp.com/user/${id}`,
-      {
-        headers: {Authorization: `${token}`}
-      }
-    )
+    return this.httpRequestBuilder
+      .method('delete')
+      .url(this.baseURL + `user/${id}`)
+      .headers({Authorization: `${token}`})
+      .execute()
   }
   async getDetail(token: string, id: number) {
-    return await axios.get(`https://tq-template-node.herokuapp.com/user/${id}`,
-      {
-        headers: {Authorization: `${token}`}
-      }
-    ).then((response) => {
-      let user: User
-      return user = response.data.data
-    })
+    return this.httpRequestBuilder
+      .method('get')
+      .url(this.baseURL + `user/${id}`)
+      .headers({Authorization: `${token}`})
+      .execute()
+      .then((response) => {
+        let user: User
+        return user = response.data.data
+      })
   }
   async edit(token: string, id: number, email: string, name: string) {
-    return axios.put(`https://tq-template-node.herokuapp.com/user/${id}`,
-      {
+    return this.httpRequestBuilder
+      .method('get')
+      .url(this.baseURL + `user/${id}`)
+      .headers({Authorization: `${token}`})
+      .data({
         email: email,
         name: name
-      },
-      {
-        headers: {
-          Authorization: `${token}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
-    )
+      })
+      .execute()
   }
   async getList (token: string, page: number) {
-    return axios.get(`https://tq-template-node.herokuapp.com/users?pagination={"page": ${page} , "window": 10}`,
-      {
-        headers: {
-          Authorization: `${token}`
-        }
-      }
-    )
+    return this.httpRequestBuilder
+      .url(this.baseURL + `users?pagination={"page": ${page} , "window": 10}`)
+      .method('get')
+      .headers({ Authorization: `${token}` })
+      .execute()
   }
 }
