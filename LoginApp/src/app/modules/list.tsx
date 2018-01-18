@@ -2,11 +2,9 @@ import * as React from 'react';
 import { TouchableOpacity, Icon, Row, Text, Divider } from '@shoutem/ui';
 import { Container } from 'typedi';
 
-import { ListUseCase } from '../domain/list.use-case';
-import { ListState } from '../interfaces/list.interfaces';
-import { Loading } from '../../components/screen/loading-screen';
-import { Error } from '../../components/screen/error-screen';
-import { List } from '../../components/screen/list-screen';
+import { ListUseCase } from '../domain';
+import { ListState } from '../interfaces';
+import { Loading, Error, List } from '../../components/screen';
 
 export class UserList extends React.Component<any, ListState> {
   static navigationOptions = {

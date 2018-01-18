@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Icon, Tile, Heading, Divider, Caption, TextInput, Text, View } from '@shoutem/ui';
 
-import { MainView } from '../view/view.style';
+import { MainView } from '../view';
 
 interface LoginProps {
   email: string,

@@ -1,5 +1,4 @@
-import { UserDataSource } from '../data/user.datasource';
-import { DataStorage } from '../data/user.datastorage';
+import { UserDataSource, DataStorage } from '../data';
 import { Service } from 'typedi';
 
 import { User, UserInfo, UserReg } from '../interfaces/user.interfaces';

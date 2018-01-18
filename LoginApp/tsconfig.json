@@ -3,10 +3,10 @@
     "target": "es2015",
     "module": "es2015",
     "moduleResolution": "node",
-    "jsx": "react",
+    "jsx": "react-native",
     "outDir": "dist",
     "rootDir": "src",
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": false,
     "noImplicitAny": false,
     "preserveConstEnums": true,
     "emitDecoratorMetadata": true,
@@ -20,14 +20,11 @@
     "paths": {
       "@app": ["app"],
       "@app/*": ["app/*"],
-      "@assets": ["assets"],
-      "@assets/*": ["assets/*"],
       "@components": ["components"],
       "@components/*": ["components/*"]
     }
   },
   "filesGlob": [
-    "typings/LoginApp.ts",
     "src/**/*.ts",
     "src/**/*.tsx"
   ],
@@ -43,5 +40,5 @@
     "node_modules",
     "dist"
   ],
-  "compileOnSave": false
+  "compileOnSave": true
 }

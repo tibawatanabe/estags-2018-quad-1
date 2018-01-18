@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Icon, TextInput, Tile, Text, Title, Divider, Caption, View } from '@shoutem/ui';
 
-import { DefaultScroll } from '../view/scroll.style';
+import { DefaultScroll } from '../view';
 
 interface DetailProps {
   name: string,

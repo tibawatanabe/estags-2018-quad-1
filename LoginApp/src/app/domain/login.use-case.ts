@@ -1,5 +1,4 @@
-import { UserAuthentication } from '../data/authentication';
-import { DataStorage } from '../data/user.datastorage';
+import { UserAuthentication, DataStorage } from '../data';
 import { Service } from 'typedi';
 
 @Service()
