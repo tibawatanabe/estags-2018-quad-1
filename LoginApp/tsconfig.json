@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "jsx": "react-native",
+    "outDir": "dist",
+    "rootDir": "src",
+    "allowSyntheticDefaultImports": false,
+    "noImplicitAny": false,
+    "preserveConstEnums": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "baseUrl": "src",
+    "paths": {
+      "@app": ["app"],
+      "@app/*": ["app/*"],
+      "@components": ["components"],
+      "@components/*": ["components/*"]
+    }
+  },
+  "filesGlob": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "types": [
+    "react",
+    "react-native",
+    "jest"
+  ],
+  "exclude": [
+    "android",
+    "ios",
+    "build",
+    "node_modules",
+    "dist"
+  ],
+  "compileOnSave": true
+}
